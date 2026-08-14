@@ -1,4 +1,4 @@
-Malpas Cricket Club Statistics Centre
+British Police Cricket Club Statistics Centre
 This is a static cricket statistics website inspired by the Newport Fugitives Stat Centre.
 What is included
 Overview dashboard
@@ -23,10 +23,9 @@ with your CSV URL.
 Commit the file to GitHub.
 Enable GitHub Pages for the repository.
 The website will fetch the spreadsheet in the visitor's browser, so updating the Google Sheet updates the statistics without rebuilding the site.
-Important
-The supplied player data is DEMO DATA only. Replace it with real Malpas Cricket Club statistics before publishing.
+
 Recommended future additions
-Malpas club logo
+BPCC club logo
 Season-by-season statistics
 Teams / age groups
 Match results and scorecards
