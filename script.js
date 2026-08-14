@@ -8,7 +8,8 @@ const DATA_URL =
 let allData = [];
 let filteredData = [];
 
-// Fetch CSV → array of objects
+// ---------- Utility ----------
+
 async function loadCSV() {
   const response = await fetch(DATA_URL);
   const text = await response.text();
@@ -24,18 +25,17 @@ async function loadCSV() {
   });
 }
 
-// Build sortable table
 function buildTable(data, columns, tableIdPrefix) {
   let html = "<table><thead><tr>";
 
-  columns.forEach((col, idx) => {
-    html += `<th data-col="${col}" data-table="${tableIdPrefix}" data-index="${idx}">${col}</th>`;
+  columns.forEach((col) => {
+    html += `<th data-col="${col}" data-table="${tableIdPrefix}">${col}</th>`;
   });
 
   html += "</tr></thead><tbody>";
 
-  data.forEach((row, rowIndex) => {
-    html += `<tr data-player="${row["Player"] || ""}" data-row="${rowIndex}">`;
+  data.forEach((row) => {
+    html += `<tr data-player="${row["Player"] || ""}">`;
     columns.forEach((col) => {
       html += `<td>${row[col] || ""}</td>`;
     });
@@ -46,7 +46,8 @@ function buildTable(data, columns, tableIdPrefix) {
   return html;
 }
 
-// Render tables
+// ---------- Rendering main tables ----------
+
 function renderTables(data) {
   const battingColumns = [
     "Player",
@@ -84,13 +85,13 @@ function renderTables(data) {
   attachRowClickProfiles();
 }
 
-// Sorting
+// ---------- Sorting ----------
+
 function attachSorting() {
   const headers = document.querySelectorAll("th[data-col]");
   headers.forEach((th) => {
     th.addEventListener("click", () => {
       const col = th.getAttribute("data-col");
-      const table = th.getAttribute("data-table");
 
       let dataToSort = [...filteredData];
 
@@ -102,17 +103,20 @@ function attachSorting() {
         const bn = parseFloat(bv);
 
         if (!isNaN(an) && !isNaN(bn)) {
-          return an - bn;
+          return bn - an; // descending
         }
         return av.localeCompare(bv);
       });
 
       renderTables(dataToSort);
+      renderTop10Tables(dataToSort);
+      renderCharts(dataToSort);
     });
   });
 }
 
-// Filter current players
+// ---------- Filters ----------
+
 function applyFilterCurrent() {
   filteredData = allData.filter(
     (row) =>
@@ -120,16 +124,31 @@ function applyFilterCurrent() {
       (row["current"] || "").toLowerCase() === "y"
   );
   renderTables(filteredData);
+  renderTop10Tables(filteredData);
   renderCharts(filteredData);
 }
 
 function applyFilterAll() {
   filteredData = [...allData];
   renderTables(filteredData);
+  renderTop10Tables(filteredData);
   renderCharts(filteredData);
 }
 
-// Player profile modal
+// ---------- Search ----------
+
+function applySearch(term) {
+  term = term.toLowerCase();
+  filteredData = allData.filter((row) =>
+    (row["Player"] || "").toLowerCase().includes(term)
+  );
+  renderTables(filteredData);
+  renderTop10Tables(filteredData);
+  renderCharts(filteredData);
+}
+
+// ---------- Player profile modal ----------
+
 function attachRowClickProfiles() {
   const rows = document.querySelectorAll("table tbody tr[data-player]");
   rows.forEach((row) => {
@@ -169,7 +188,55 @@ function attachRowClickProfiles() {
   };
 }
 
-// Simple charts (runs & wickets)
+// ---------- Top 10 tables ----------
+
+function renderTop10Tables(data) {
+  // Top 10 batters by runs
+  const batters = [...data]
+    .filter((p) => parseFloat(p["runs"] || "0") > 0)
+    .sort((a, b) => parseFloat(b["runs"] || "0") - parseFloat(a["runs"] || "0"))
+    .slice(0, 10);
+
+  const topBattingColumns = [
+    "Player",
+    "matches",
+    "innings",
+    "runs",
+    "average",
+    "highScore",
+    "fifties",
+    "hundreds"
+  ];
+
+  const battersHTML = buildTable(batters, topBattingColumns, "top10batters");
+  document.getElementById("top10-batters-table").innerHTML = battersHTML;
+
+  // Top 10 bowlers by wickets
+  const bowlers = [...data]
+    .filter((p) => parseFloat(p["wickets"] || "0") > 0)
+    .sort(
+      (a, b) =>
+        parseFloat(b["wickets"] || "0") - parseFloat(a["wickets"] || "0")
+    )
+    .slice(0, 10);
+
+  const topBowlingColumns = [
+    "Player",
+    "overs",
+    "wickets",
+    "bowlingAverage",
+    "economy",
+    "best"
+  ];
+
+  const bowlersHTML = buildTable(bowlers, topBowlingColumns, "top10bowlers");
+  document.getElementById("top10-bowlers-table").innerHTML = bowlersHTML;
+
+  attachRowClickProfiles();
+}
+
+// ---------- Charts ----------
+
 function renderCharts(data) {
   const runsCanvas = document.getElementById("runs-chart");
   const wicketsCanvas = document.getElementById("wickets-chart");
@@ -182,11 +249,9 @@ function renderCharts(data) {
   const runs = data.map((p) => parseFloat(p["runs"] || "0"));
   const wickets = data.map((p) => parseFloat(p["wickets"] || "0"));
 
-  // Clear
   runsCtx.clearRect(0, 0, runsCanvas.width, runsCanvas.height);
   wicketsCtx.clearRect(0, 0, wicketsCanvas.width, wicketsCanvas.height);
 
-  // Simple bar chart renderer
   function drawBarChart(ctx, values, labels, color) {
     const width = ctx.canvas.width;
     const height = ctx.canvas.height;
@@ -211,16 +276,29 @@ function renderCharts(data) {
   drawBarChart(wicketsCtx, wickets, labels, "#ff7c2b");
 }
 
-// Init
+// ---------- Page switching ----------
+
+function showPage(pageId) {
+  const pages = document.querySelectorAll(".page");
+  pages.forEach((p) => p.classList.remove("active"));
+
+  const target = document.getElementById(`page-${pageId}`);
+  if (target) target.classList.add("active");
+}
+
+// ---------- Init ----------
+
 async function init() {
   allData = await loadCSV();
   filteredData = [...allData];
 
   renderTables(filteredData);
+  renderTop10Tables(filteredData);
   renderCharts(filteredData);
 
   const filterCurrentBtn = document.getElementById("filter-current");
   const filterAllBtn = document.getElementById("filter-all");
+  const searchInput = document.getElementById("search-input");
 
   if (filterCurrentBtn) {
     filterCurrentBtn.addEventListener("click", applyFilterCurrent);
@@ -228,6 +306,19 @@ async function init() {
   if (filterAllBtn) {
     filterAllBtn.addEventListener("click", applyFilterAll);
   }
+  if (searchInput) {
+    searchInput.addEventListener("input", (e) => {
+      const term = e.target.value;
+      if (term.trim() === "") {
+        applyFilterAll();
+      } else {
+        applySearch(term);
+      }
+    });
+  }
+
+  // Default page
+  showPage("stats");
 }
 
 init();
