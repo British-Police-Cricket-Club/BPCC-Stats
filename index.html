@@ -1,41 +1,252 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>British Police Cricket Club – Player Statistics</title>
-  <link rel="stylesheet" href="style.css">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>BPCC Player Statistics</title>
+
+<style>
+  body {
+    font-family: Arial, sans-serif;
+    background: #f4f6fa;
+    margin: 0;
+    padding: 0;
+  }
+
+  #container {
+    width: 1000px;
+    margin: 0 auto;
+    background: white;
+    padding: 20px;
+  }
+
+  h1 {
+    text-align: center;
+    color: #001f3f;
+  }
+
+  .logo {
+    display: block;
+    margin: 0 auto 10px auto;
+    height: 80px;
+  }
+
+  h2 {
+    margin-top: 40px;
+    color: #001f3f;
+  }
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 10px;
+    font-size: 14px;
+  }
+
+  th, td {
+    padding: 8px;
+    border: 1px solid #ccc;
+  }
+
+  th {
+    background: #001f3f;
+    color: white;
+    cursor: pointer;
+  }
+
+  tr:nth-child(even) {
+    background: #f0f4ff;
+  }
+
+  tr:nth-child(odd) {
+    background: #ffffff;
+  }
+
+  tr:hover {
+    background: #e3edff;
+  }
+</style>
 </head>
+
 <body>
 
-  <header class="header">
-    <img src="logo.png" alt="BPCC Logo" class="logo">
-    <h1>British Police Cricket Club – Player Statistics</h1>
-  </header>
+<div id="container">
 
-  <main class="main">
+  <img src="logo.png" class="logo" alt="BPCC Logo">
+  <h1>British Police Cricket Club – Player Statistics</h1>
 
-    <section>
-      <h2>Batting Statistics</h2>
-      <div id="batting-table"></div>
-    </section>
+  <h2>Batting Statistics</h2>
+  <div id="batting"></div>
 
-    <section>
-      <h2>Bowling Statistics</h2>
-      <div id="bowling-table"></div>
-    </section>
+  <h2>Bowling Statistics</h2>
+  <div id="bowling"></div>
 
-    <section>
-      <h2>Fielding Statistics</h2>
-      <div id="fielding-table"></div>
-    </section>
+  <h2>Fielding Statistics</h2>
+  <div id="fielding"></div>
 
-  </main>
+</div>
 
-  <footer class="footer">
-    <p>British Police Cricket Club</p>
-  </footer>
+<script>
+// CSV URL
+const DATA_URL =
+  "https://docs.google.com/spreadsheets/d/e/2PACX-1vQlS2BceCsyAkRFmAuwA0QDJR8wPjuLZyquKAeszxD2-FM7gFTzEQrVTqPxtph-z55FZNU01tMnpvQv/pub?output=csv";
 
-  <script src="script.js"></script>
+// Exact BPCC headers
+const HEADERS = [
+  "Player",
+  "Number",
+  "Years",
+  "Matches",
+  "Innings",
+  "Runs",
+  "Average",
+  "High Score",
+  "Fifties",
+  "Hundreds",
+  "Overs",
+  "Wickets",
+  "Bowling Average",
+  "Economy",
+  "Best",
+  "Catches",
+  "Stumpings",
+  "Current"
+];
+
+let allData = [];
+
+// Load CSV
+async function loadCSV() {
+  const res = await fetch(DATA_URL);
+  const text = await res.text();
+
+  const lines = text.trim().split("\n");
+  const headers = lines[0].split(",").map(h => h.trim());
+
+  return lines.slice(1).map(line => {
+    const cols = line.split(",");
+    const obj = {};
+    headers.forEach((h, i) => {
+      obj[h] = (cols[i] || "").trim();
+    });
+    return obj;
+  });
+}
+
+// Build table HTML
+function buildTable(data, columns) {
+  let html = "<table><thead><tr>";
+  columns.forEach(col => {
+    html += `<th data-col="${col}">${col}</th>`;
+  });
+  html += "</tr></thead><tbody>";
+
+  data.forEach(row => {
+    html += "<tr>";
+    columns.forEach(col => {
+      html += `<td>${row[col] || ""}</td>`;
+    });
+    html += "</tr>";
+  });
+
+  html += "</tbody></table>";
+  return html;
+}
+
+// Render all tables
+function renderTables() {
+  // Batting table columns
+  const battingCols = [
+    "Player",
+    "Number",
+    "Years",
+    "Matches",
+    "Innings",
+    "Runs",
+    "Average",
+    "High Score",
+    "Fifties",
+    "Hundreds"
+  ];
+
+  // Bowling table columns
+  const bowlingCols = [
+    "Player",
+    "Overs",
+    "Wickets",
+    "Bowling Average",
+    "Economy",
+    "Best"
+  ];
+
+  // Fielding table columns
+  const fieldingCols = [
+    "Player",
+    "Catches",
+    "Stumpings",
+    "Current"
+  ];
+
+  document.getElementById("batting").innerHTML =
+    buildTable(allData, battingCols);
+
+  document.getElementById("bowling").innerHTML =
+    buildTable(allData, bowlingCols);
+
+  document.getElementById("fielding").innerHTML =
+    buildTable(allData, fieldingCols);
+
+  attachSorting();
+}
+
+// Sorting logic
+function attachSorting() {
+  const headers = document.querySelectorAll("th[data-col]");
+  headers.forEach(th => {
+    th.addEventListener("click", () => {
+      const col = th.getAttribute("data-col");
+
+      const numericCols = [
+        "Matches",
+        "Innings",
+        "Runs",
+        "Average",
+        "High Score",
+        "Fifties",
+        "Hundreds",
+        "Overs",
+        "Wickets",
+        "Bowling Average",
+        "Economy",
+        "Catches",
+        "Stumpings"
+      ];
+
+      const sorted = [...allData].sort((a, b) => {
+        const av = a[col] || "";
+        const bv = b[col] || "";
+
+        if (numericCols.includes(col)) {
+          return (parseFloat(bv) || 0) - (parseFloat(av) || 0);
+        }
+
+        return av.localeCompare(bv);
+      });
+
+      allData = sorted;
+      renderTables();
+    });
+  });
+}
+
+// Init
+async function init() {
+  allData = await loadCSV();
+  renderTables();
+}
+
+init();
+</script>
+
 </body>
 </html>
