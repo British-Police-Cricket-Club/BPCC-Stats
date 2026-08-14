@@ -1,0 +1,250 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>British Police Cricket Club — Statistics Centre</title>
+<meta name="description" content="British Police Cricket Club statistics centre">
+<style>
+:root{
+  --bg:#f4f6f8;--card:#fff;--ink:#18212b;--muted:#657180;
+  --accent:#176b3a;--accent2:#0d4f2b;--line:#dfe5ea;--soft:#eaf3ed;
+  --danger:#a13b3b;--shadow:0 8px 28px rgba(18,31,43,.08)
+}
+*{box-sizing:border-box}
+body{margin:0;font-family:Inter,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;background:var(--bg);color:var(--ink)}
+header{background:linear-gradient(135deg,var(--accent2),var(--accent));color:#fff;padding:28px 18px 22px}
+.wrap{max-width:1180px;margin:auto}
+.brand{display:flex;align-items:center;gap:16px}
+.logo{width:68px;height:68px;border-radius:16px;background:#fff;color:var(--accent);display:grid;place-items:center;font-size:30px;font-weight:900;box-shadow:0 4px 14px rgba(0,0,0,.15)}
+h1{margin:0;font-size:clamp(26px,5vw,42px);letter-spacing:-1px}
+.subtitle{margin:5px 0 0;opacity:.88}
+nav{margin-top:22px;display:flex;gap:8px;overflow:auto;padding-bottom:2px}
+nav button,.action{border:0;border-radius:10px;padding:10px 14px;background:rgba(255,255,255,.13);color:#fff;font-weight:700;cursor:pointer;white-space:nowrap}
+nav button.active,nav button:hover{background:#fff;color:var(--accent2)}
+main{padding:24px 18px 50px}
+.grid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:20px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:18px;box-shadow:var(--shadow)}
+.metric{font-size:30px;font-weight:850;margin-top:5px}.label{font-size:12px;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);font-weight:800}
+.toolbar{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin-bottom:14px}
+input,select{border:1px solid var(--line);border-radius:10px;padding:11px 12px;background:#fff;color:var(--ink);font:inherit}
+input{min-width:220px;flex:1}.button{border:0;border-radius:10px;padding:11px 14px;background:var(--accent);color:#fff;font-weight:800;cursor:pointer}
+.section{display:none}.section.active{display:block}
+.table-wrap{overflow:auto;border:1px solid var(--line);border-radius:14px;background:#fff}
+table{width:100%;border-collapse:collapse;min-width:720px}
+th,td{padding:11px 12px;border-bottom:1px solid var(--line);text-align:left}
+th{background:#f8fafb;color:#4f5c68;font-size:12px;text-transform:uppercase;letter-spacing:.04em;position:sticky;top:0}
+tr:last-child td{border-bottom:0}
+.player{color:var(--accent);font-weight:800;cursor:pointer}.player:hover{text-decoration:underline}
+.badge{display:inline-block;padding:4px 8px;border-radius:999px;background:var(--soft);color:var(--accent2);font-size:12px;font-weight:800}
+.cards{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+.rank{font-size:12px;color:var(--muted);font-weight:800}
+.team-card h3{margin:5px 0 12px}
+.team-card ol{margin:0;padding-left:22px}.team-card li{padding:5px 0}
+.notice{background:#fff8e5;border:1px solid #eedca5;padding:13px 15px;border-radius:12px;margin-bottom:15px;color:#69531b}
+footer{max-width:1180px;margin:auto;padding:0 18px 30px;color:var(--muted);font-size:13px}
+.modal{position:fixed;inset:0;background:rgba(0,0,0,.55);display:none;align-items:center;justify-content:center;padding:18px;z-index:10}
+.modal.open{display:flex}.modalbox{background:#fff;max-width:720px;width:100%;max-height:90vh;overflow:auto;border-radius:18px;padding:22px}
+.modalhead{display:flex;justify-content:space-between;gap:15px;align-items:start}
+.close{border:0;background:#eef1f3;border-radius:9px;padding:8px 11px;cursor:pointer;font-weight:800}
+.profile-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:16px}
+.profile-stat{padding:12px;background:#f6f8f9;border-radius:10px}.profile-stat b{display:block;font-size:20px;margin-top:3px}
+.small{font-size:13px;color:var(--muted)}
+.error{color:var(--danger);font-weight:700}
+@media(max-width:850px){.grid{grid-template-columns:repeat(2,1fr)}.cards{grid-template-columns:1fr 1fr}}
+@media(max-width:560px){.grid,.cards{grid-template-columns:1fr}.profile-grid{grid-template-columns:1fr 1fr}.logo{width:65px;height:54px;font-size:24px}}
+</style>
+</head>
+<body>
+<header>
+<div class="wrap">
+  <div class="brand">
+    <div class="logo">BPCC</div>
+    <div><h1>British Police Cricket Club</h1><div class="subtitle">Club Statistics Centre</div></div>
+  </div>
+  <nav>
+    <button class="active" data-tab="overview">Overview</button>
+    <button data-tab="batting">Batting</button>
+    <button data-tab="bowling">Bowling</button>
+    <button data-tab="fielding">Fielding</button>
+    <button data-tab="players">Players</button>
+    <button data-tab="records">Records</button>
+    <button data-tab="teams">Greatest XIs</button>
+  </nav>
+</div>
+</header>
+
+<main class="wrap">
+  <div id="notice" class="notice">Loading club statistics…</div>
+
+  <section id="overview" class="section active">
+    <div class="grid">
+      <div class="card"><div class="label">Players</div><div class="metric" id="mPlayers">—</div></div>
+      <div class="card"><div class="label">Matches</div><div class="metric" id="mMatches">—</div></div>
+      <div class="card"><div class="label">Runs</div><div class="metric" id="mRuns">—</div></div>
+      <div class="card"><div class="label">Wickets</div><div class="metric" id="mWickets">—</div></div>
+    </div>
+    <div class="cards">
+      <div class="card"><div class="label">Top Run Scorer</div><h2 id="topRuns">—</h2><div id="topRunsMeta" class="small"></div></div>
+      <div class="card"><div class="label">Top Wicket Taker</div><h2 id="topWickets">—</h2><div id="topWicketsMeta" class="small"></div></div>
+      <div class="card"><div class="label">Highest Score</div><h2 id="highScore">—</h2><div id="highScoreMeta" class="small"></div></div>
+    </div>
+  </section>
+
+  <section id="batting" class="section">
+    <div class="card">
+      <div class="toolbar"><input id="batSearch" placeholder="Search players…"><select id="batSort"><option value="runs">Runs</option><option value="average">Average</option><option value="highScore">High score</option><option value="hundreds">100s</option><option value="fifties">50s</option></select></div>
+      <div class="table-wrap"><table><thead><tr><th>#</th><th>Player</th><th>Mat</th><th>Inns</th><th>Runs</th><th>Avg</th><th>HS</th><th>100s</th><th>50s</th></tr></thead><tbody id="batBody"></tbody></table></div>
+    </div>
+  </section>
+
+  <section id="bowling" class="section">
+    <div class="card">
+      <div class="toolbar"><input id="bowlSearch" placeholder="Search players…"><select id="bowlSort"><option value="wickets">Wickets</option><option value="average">Average</option><option value="economy">Economy</option><option value="best">Best</option></select></div>
+      <div class="table-wrap"><table><thead><tr><th>#</th><th>Player</th><th>Mat</th><th>Overs</th><th>Wkts</th><th>Avg</th><th>Econ</th><th>Best</th></tr></thead><tbody id="bowlBody"></tbody></table></div>
+    </div>
+  </section>
+
+  <section id="fielding" class="section">
+    <div class="card"><div class="toolbar"><input id="fieldSearch" placeholder="Search players…"></div>
+      <div class="table-wrap"><table><thead><tr><th>#</th><th>Player</th><th>Mat</th><th>Catches</th><th>Stumpings</th><th>Dismissals</th></tr></thead><tbody id="fieldBody"></tbody></table></div>
+    </div>
+  </section>
+
+  <section id="players" class="section">
+    <div class="card"><div class="toolbar"><input id="playerSearch" placeholder="Search by player name…"><select id="playerStatus"><option value="">All players</option><option value="current">Current players</option><option value="former">Former players</option></select></div>
+      <div class="table-wrap"><table><thead><tr><th>Player</th><th>Debut</th><th>Matches</th><th>Runs</th><th>Wickets</th><th>Status</th></tr></thead><tbody id="playerBody"></tbody></table></div>
+    </div>
+  </section>
+
+  <section id="records" class="section">
+    <div class="cards">
+      <div class="card"><div class="label">Run milestones</div><div id="runMilestones"></div></div>
+      <div class="card"><div class="label">Wicket milestones</div><div id="wicketMilestones"></div></div>
+      <div class="card"><div class="label">Club records</div><div id="clubRecords"></div></div>
+    </div>
+  </section>
+
+  <section id="teams" class="section">
+    <div class="card">
+      <h2>Greatest XIs</h2><p class="small">A transparent statistical selection. The algorithm favours sustained appearances, batting output, bowling output and specialist wicketkeeping.</p>
+      <div id="teamCards" class="cards"></div>
+    </div>
+  </section>
+</main>
+
+<footer>British Police Cricket Club Statistics Centre · Data can be connected to a live Google Sheet.</footer>
+
+<div id="modal" class="modal"><div class="modalbox">
+  <div class="modalhead"><div><div class="label">Player profile</div><h2 id="profileName">—</h2><div id="profileSub" class="small"></div></div><button class="close" onclick="closeProfile()">Close</button></div>
+  <div id="profileGrid" class="profile-grid"></div>
+</div></div>
+
+<script>
+/*
+  SET THIS to your published Google Sheets CSV URL when ready.
+  Google Sheets: File > Share > Publish to web > select the sheet > CSV.
+*/
+const CSV_URL = https://docs.google.com/spreadsheets/d/e/2PACX-1vQlS2BceCsyAkRFmAuwA0QDJR8wPjuLZyquKAeszxD2-FM7gFTzEQrVTqPxtph-z55FZNU01tMnpvQv/pubhtml;
+
+let players=[];
+
+function parseCSV(text){
+  const lines=text.trim().split(/\r?\n/);
+  const headers=lines.shift().split(",").map(x=>x.trim());
+  return lines.map(line=>{
+    const vals=[]; let cur="", quote=false;
+    for(let i=0;i<line.length;i++){const c=line[i]; if(c==='"'){quote=!quote}else if(c===","&&!quote){vals.push(cur);cur=""}else cur+=c}
+    vals.push(cur);
+    const o={}; headers.forEach((h,i)=>o[h]=vals[i]??"");
+    const nums=["number","debut","matches","innings","runs","average","highScore","fifties","hundreds","overs","wickets","bowlingAverage","economy","catches","stumpings"];
+    nums.forEach(k=>o[k]=Number(o[k])||0); o.current=String(o.current).toLowerCase()==="true"; o.dismissals=o.catches+o.stumpings;
+    return o;
+  });
+}
+function fmt(n){return Number(n||0).toLocaleString("en-GB")}
+function avg(n){return Number(n||0).toFixed(2)}
+function playerLink(p){return `<span class="player" onclick="openProfile('${String(p.name).replaceAll("'","\\'")}')">${p.name}</span>`}
+function sorted(arr,key,desc=true){return [...arr].sort((a,b)=>(Number(b[key])||0)-(Number(a[key])||0)*(desc?1:-1))}
+function render(){
+  document.getElementById("notice").style.display="none";
+  const totalRuns=players.reduce((s,p)=>s+p.runs,0), totalW=players.reduce((s,p)=>s+p.wickets,0), totalM=Math.max(0,...players.map(p=>p.matches));
+  mPlayers.textContent=fmt(players.length);mMatches.textContent=fmt(totalM);mRuns.textContent=fmt(totalRuns);mWickets.textContent=fmt(totalW);
+  const tr=sorted(players,"runs")[0], tw=sorted(players,"wickets")[0], hs=sorted(players,"highScore")[0];
+  topRuns.innerHTML=playerLink(tr);topRunsMeta.textContent=`${fmt(tr.runs)} runs · avg ${avg(tr.average)}`;
+  topWickets.innerHTML=playerLink(tw);topWicketsMeta.textContent=`${fmt(tw.wickets)} wickets · avg ${avg(tw.bowlingAverage)}`;
+  highScore.innerHTML=playerLink(hs);highScoreMeta.textContent=`${fmt(hs.highScore)}* highest score`;
+  renderBat();renderBowl();renderField();renderPlayers();renderRecords();renderTeams();
+}
+function renderBat(){
+ const q=batSearch.value.toLowerCase(), key=batSort.value;
+ const a=players.filter(p=>p.name.toLowerCase().includes(q)).sort((x,y)=>(y[key]||0)-(x[key]||0));
+ batBody.innerHTML=a.map((p,i)=>`<tr><td>${i+1}</td><td>${playerLink(p)}</td><td>${p.matches}</td><td>${p.innings}</td><td><b>${fmt(p.runs)}</b></td><td>${avg(p.average)}</td><td>${p.highScore}</td><td>${p.hundreds}</td><td>${p.fifties}</td></tr>`).join("");
+}
+function renderBowl(){
+ const q=bowlSearch.value.toLowerCase(), key=bowlSort.value==="best"?"wickets":bowlSort.value;
+ const a=players.filter(p=>p.name.toLowerCase().includes(q)).sort((x,y)=>(y[key]||0)-(x[key]||0));
+ bowlBody.innerHTML=a.map((p,i)=>`<tr><td>${i+1}</td><td>${playerLink(p)}</td><td>${p.matches}</td><td>${p.overs}</td><td><b>${p.wickets}</b></td><td>${avg(p.bowlingAverage)}</td><td>${avg(p.economy)}</td><td>${p.best||"—"}</td></tr>`).join("");
+}
+function renderField(){
+ const q=fieldSearch.value.toLowerCase();
+ const a=players.filter(p=>p.name.toLowerCase().includes(q)).sort((x,y)=>y.dismissals-x.dismissals);
+ fieldBody.innerHTML=a.map((p,i)=>`<tr><td>${i+1}</td><td>${playerLink(p)}</td><td>${p.matches}</td><td>${p.catches}</td><td>${p.stumpings}</td><td><b>${p.dismissals}</b></td></tr>`).join("");
+}
+function renderPlayers(){
+ const q=playerSearch.value.toLowerCase(), st=playerStatus.value;
+ const a=players.filter(p=>p.name.toLowerCase().includes(q)&&(st===""||(st==="current"&&p.current)||(st==="former"&&!p.current))).sort((x,y)=>x.name.localeCompare(y.name));
+ playerBody.innerHTML=a.map(p=>`<tr><td>${playerLink(p)}</td><td>${p.debut||"—"}</td><td>${p.matches}</td><td>${fmt(p.runs)}</td><td>${p.wickets}</td><td><span class="badge">${p.current?"Current":"Former"}</span></td></tr>`).join("");
+}
+function renderRecords(){
+ const maxR=Math.max(500,Math.floor(Math.max(...players.map(p=>p.runs),0)/500)*500);
+ const r=[];for(let n=500;n<=maxR;n+=500){const ps=players.filter(p=>p.runs>=n).sort((a,b)=>b.runs-a.runs);if(ps.length)r.push(`<p><b>${fmt(n)} runs</b><br>${ps.map(playerLink).join(", ")}</p>`)}
+ runMilestones.innerHTML=r.join("")||"<p>No milestones yet.</p>";
+ const maxW=Math.max(25,Math.floor(Math.max(...players.map(p=>p.wickets),0)/25)*25), w=[];
+ for(let n=25;n<=maxW;n+=25){const ps=players.filter(p=>p.wickets>=n).sort((a,b)=>b.wickets-a.wickets);if(ps.length)w.push(`<p><b>${n} wickets</b><br>${ps.map(playerLink).join(", ")}</p>`)}
+ wicketMilestones.innerHTML=w.join("")||"<p>No milestones yet.</p>";
+ const mostMatches=sorted(players,"matches")[0], bestAvg=[...players].filter(p=>p.innings>=10).sort((a,b)=>b.average-a.average)[0];
+ clubRecords.innerHTML=`<p><b>Most appearances</b><br>${playerLink(mostMatches)} · ${mostMatches.matches}</p><p><b>Best batting average (10+ innings)</b><br>${bestAvg?playerLink(bestAvg)+" · "+avg(bestAvg.average):"—"}</p>`;
+}
+function scoreBat(p){return p.runs + p.matches*4 + p.average*25 + p.hundreds*150 + p.fifties*35}
+function scoreBowl(p){return p.wickets*35 + p.matches*3 + (p.bowlingAverage?Math.max(0,35-p.bowlingAverage)*10:0) + Math.max(0,7-p.economy)*30}
+function renderTeams(){
+ const eligible=players.filter(p=>p.matches>=20);
+ const used=new Set(), teams=[];
+ for(let t=0;t<3;t++){
+   let pool=eligible.filter(p=>!used.has(p.name));
+   const wk=pool.filter(p=>p.stumpings>=5).sort((a,b)=>b.stumpings-a.stumpings)[0];
+   const bats=pool.filter(p=>p!==wk).sort((a,b)=>scoreBat(b)-scoreBat(a)).slice(0,6);
+   const bowls=pool.filter(p=>p!==wk&&!bats.includes(p)).sort((a,b)=>scoreBowl(b)-scoreBowl(a)).slice(0,4);
+   const chosen=[...bats,...bowls]; if(wk)chosen.push(wk);
+   if(chosen.length<11) chosen.push(...pool.filter(p=>!chosen.includes(p)).slice(0,11-chosen.length));
+   chosen.slice(0,11).forEach(p=>used.add(p.name)); teams.push(chosen.slice(0,11));
+ }
+ teamCards.innerHTML=teams.map((team,i)=>`<div class="card team-card"><div class="label">Statistical XI</div><h3>Greatest XI ${i+1}</h3><ol>${team.map(playerLink).map(x=>`<li>${x}</li>`).join("")}</ol></div>`).join("");
+}
+function openProfile(name){
+ const p=players.find(x=>x.name===name);if(!p)return;
+ profileName.textContent=p.name;profileSub.textContent=`${p.current?"Current player":"Former player"} · Debut ${p.debut||"—"} · Player #${p.number||"—"}`;
+ const stats=[["Matches",p.matches],["Runs",fmt(p.runs)],["Batting average",avg(p.average)],["High score",p.highScore],["50s",p.fifties],["100s",p.hundreds],["Wickets",p.wickets],["Bowling average",avg(p.bowlingAverage)],["Economy",avg(p.economy)],["Best bowling",p.best||"—"],["Catches",p.catches],["Stumpings",p.stumpings]];
+ profileGrid.innerHTML=stats.map(([k,v])=>`<div class="profile-stat"><span class="small">${k}</span><b>${v}</b></div>`).join("");
+ modal.classList.add("open");
+}
+function closeProfile(){modal.classList.remove("open")}
+document.querySelectorAll("nav button").forEach(btn=>btn.addEventListener("click",()=>{document.querySelectorAll("nav button").forEach(b=>b.classList.remove("active"));btn.classList.add("active");document.querySelectorAll(".section").forEach(s=>s.classList.remove("active"));document.getElementById(btn.dataset.tab).classList.add("active")}));
+["batSearch","batSort","bowlSearch","bowlSort","fieldSearch","playerSearch","playerStatus"].forEach(id=>document.getElementById(id).addEventListener("input",render));
+modal.addEventListener("click",e=>{if(e.target===modal)closeProfile()});
+
+async function load(){
+ try{
+   const text=CSV_URL.trim()?await (await fetch(CSV_URL)).text():SAMPLE_CSV;
+   players=parseCSV(text); render();
+   if(!CSV_URL.trim()) {notice.innerHTML="<b>Demo data loaded.</b> Replace <code>CSV_URL</code> in index.html with your published Google Sheets CSV URL to connect the live club statistics.";notice.style.display="block";}
+ }catch(e){
+   notice.innerHTML=`<span class="error">Could not load the live spreadsheet.</span> Check the Google Sheets CSV URL and that the sheet is published to the web. Demo data is being used instead.`;
+   players=parseCSV(SAMPLE_CSV);render();notice.style.display="block";
+ }
+}
+load();
+</script>
+</body>
+</html>
