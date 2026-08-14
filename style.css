@@ -1,148 +1,81 @@
-/* Global */
 body {
   font-family: Arial, sans-serif;
-  background: #f4f6fa;
   margin: 0;
   padding: 0;
+  background: #f4f6fa;
   color: #222;
 }
 
-/* Header */
-.navy-header {
+.header {
   background: #001f3f;
-  color: white;
-  padding: 20px;
+  color: #fff;
   text-align: center;
+  padding: 20px;
 }
 
-.team-logo {
-  width: 80px;
-  height: auto;
+.logo {
+  height: 70px;
   margin-bottom: 10px;
 }
 
-/* Navigation */
-.nav-bar {
-  background: #001f3f;
-  padding: 10px;
-  text-align: center;
+.main {
+  width: 95%;
+  max-width: 1100px;
+  margin: 20px auto;
 }
 
-.nav-btn {
-  background: white;
+h2 {
+  margin-top: 30px;
   color: #001f3f;
-  padding: 10px 16px;
-  margin: 5px;
-  border-radius: 6px;
-  border: none;
-  cursor: pointer;
 }
 
-.nav-btn:hover {
-  background: #e8f0ff;
-}
-
-/* Search bar */
-.search-section {
-  text-align: center;
-  margin: 20px 0;
-}
-
-.search-bar {
-  width: 80%;
-  max-width: 400px;
-  padding: 10px;
-  border-radius: 6px;
-  border: 1px solid #ccc;
-}
-
-/* Buttons */
-.btn {
-  background: #001f3f;
-  color: white;
-  padding: 10px 16px;
-  border: none;
-  border-radius: 6px;
-  cursor: pointer;
-  margin-right: 10px;
-}
-
-.btn:hover {
-  background: #003366;
-}
-
-/* Styled tables */
 table {
   width: 100%;
   border-collapse: collapse;
-  margin: 20px 0;
-  font-size: 15px;
+  margin-top: 10px;
+  font-size: 14px;
+}
+
+th, td {
+  padding: 8px;
+  border: 1px solid #ccc;
 }
 
 th {
   background: #001f3f;
-  color: white;
-  padding: 10px;
+  color: #fff;
   cursor: pointer;
 }
 
-td {
-  padding: 8px;
-  border-bottom: 1px solid #ccc;
+tr:nth-child(even) {
+  background: #f0f4ff;
+}
+
+tr:nth-child(odd) {
+  background: #ffffff;
 }
 
 tr:hover {
-  background: #e8f0ff;
+  background: #e3edff;
 }
 
-/* Pages */
-.page {
-  display: none;
+.footer {
+  text-align: center;
+  padding: 10px;
+  background: #001f3f;
+  color: #fff;
+  margin-top: 30px;
 }
 
-.page.active {
-  display: block;
-}
-
-/* Modal */
-.modal {
-  display: none;
-  position: fixed;
-  z-index: 10;
-  left: 0;
-  top: 0;
-  width: 100%;
-  height: 100%;
-  background: rgba(0,0,0,0.6);
-}
-
-.modal-content {
-  background: white;
-  margin: 10% auto;
-  padding: 20px;
-  width: 60%;
-  border-radius: 8px;
-}
-
-.close {
-  float: right;
-  font-size: 28px;
-  cursor: pointer;
-}
-
-/* Responsive layout */
+/* Responsive */
 @media (max-width: 600px) {
-  .team-logo {
-    width: 60px;
+  .logo {
+    height: 50px;
   }
   table {
     font-size: 12px;
   }
   th, td {
     padding: 6px;
-  }
-  canvas {
-    width: 100% !important;
-    height: auto !important;
   }
 }
