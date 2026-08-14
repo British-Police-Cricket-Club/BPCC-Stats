@@ -155,36 +155,17 @@ function buildTable(data, columns) {
 
 // Render all tables
 function renderTables() {
-  // Batting table columns
   const battingCols = [
-    "Player",
-    "Number",
-    "Years",
-    "Matches",
-    "Innings",
-    "Runs",
-    "Average",
-    "High Score",
-    "Fifties",
-    "Hundreds"
+    "Player","Number","Years","Matches","Innings",
+    "Runs","Average","High Score","Fifties","Hundreds"
   ];
 
-  // Bowling table columns
   const bowlingCols = [
-    "Player",
-    "Overs",
-    "Wickets",
-    "Bowling Average",
-    "Economy",
-    "Best"
+    "Player","Overs","Wickets","Bowling Average","Economy","Best"
   ];
 
-  // Fielding table columns
   const fieldingCols = [
-    "Player",
-    "Catches",
-    "Stumpings",
-    "Current"
+    "Player","Catches","Stumpings","Current"
   ];
 
   document.getElementById("batting").innerHTML =
@@ -207,19 +188,9 @@ function attachSorting() {
       const col = th.getAttribute("data-col");
 
       const numericCols = [
-        "Matches",
-        "Innings",
-        "Runs",
-        "Average",
-        "High Score",
-        "Fifties",
-        "Hundreds",
-        "Overs",
-        "Wickets",
-        "Bowling Average",
-        "Economy",
-        "Catches",
-        "Stumpings"
+        "Matches","Innings","Runs","Average","High Score",
+        "Fifties","Hundreds","Overs","Wickets",
+        "Bowling Average","Economy","Catches","Stumpings"
       ];
 
       const sorted = [...allData].sort((a, b) => {
