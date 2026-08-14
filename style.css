@@ -1,0 +1,63 @@
+/* Team logo */
+.team-logo {
+  width: 80px;
+  height: auto;
+  margin-bottom: 10px;
+}
+
+/* Navigation */
+.nav-bar {
+  background: #001f3f;
+  padding: 10px;
+  text-align: center;
+}
+.nav-btn {
+  background: white;
+  color: #001f3f;
+  padding: 10px 16px;
+  margin: 5px;
+  border-radius: 6px;
+  border: none;
+  cursor: pointer;
+}
+.nav-btn:hover {
+  background: #e8f0ff;
+}
+
+/* Search bar */
+.search-section {
+  text-align: center;
+  margin: 20px 0;
+}
+.search-bar {
+  width: 80%;
+  max-width: 400px;
+  padding: 10px;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+}
+
+/* Page switching */
+.page {
+  display: none;
+}
+.page.active {
+  display: block;
+}
+
+/* Responsive layout */
+@media (max-width: 600px) {
+  .team-logo {
+    width: 60px;
+  }
+  table {
+    font-size: 12px;
+  }
+  th, td {
+    padding: 6px;
+  }
+  canvas {
+    width: 100% !important;
+    height: auto !important;
+  }
+}
