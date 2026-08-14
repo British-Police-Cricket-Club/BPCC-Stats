@@ -6,86 +6,35 @@
   <title>British Police Cricket Club – Player Statistics</title>
   <link rel="stylesheet" href="style.css">
 </head>
-
 <body>
 
-  <!-- Header -->
-  <header class="navy-header">
-    <img src="logo.png" alt="BPCC Logo" class="team-logo">
+  <header class="header">
+    <img src="logo.png" alt="BPCC Logo" class="logo">
     <h1>British Police Cricket Club – Player Statistics</h1>
   </header>
 
-  <!-- Navigation -->
-  <nav class="nav-bar">
-    <button class="nav-btn" onclick="showPage('stats')">Statistics</button>
-    <button class="nav-btn" onclick="showPage('top10batters')">Top 10 Batters</button>
-    <button class="nav-btn" onclick="showPage('top10bowlers')">Top 10 Bowlers</button>
-  </nav>
+  <main class="main">
 
-  <!-- Search -->
-  <section class="search-section">
-    <input type="text" id="search-input" placeholder="Search players..." class="search-bar">
-  </section>
+    <section>
+      <h2>Batting Statistics</h2>
+      <div id="batting-table"></div>
+    </section>
 
-  <!-- Main Pages -->
-  <main>
+    <section>
+      <h2>Bowling Statistics</h2>
+      <div id="bowling-table"></div>
+    </section>
 
-    <!-- Stats Page -->
-    <div id="page-stats" class="page active">
-
-      <section class="filters">
-        <button id="filter-all" class="btn">All Players</button>
-        <button id="filter-current" class="btn">Current Squad</button>
-      </section>
-
-      <section>
-        <h2>Batting Statistics</h2>
-        <div id="batting-table" class="styled-table"></div>
-      </section>
-
-      <section>
-        <h2>Bowling Statistics</h2>
-        <div id="bowling-table" class="styled-table"></div>
-      </section>
-
-      <section>
-        <h2>Fielding Statistics</h2>
-        <div id="fielding-table" class="styled-table"></div>
-      </section>
-
-      <section>
-        <h2>Runs Chart</h2>
-        <canvas id="runs-chart" width="600" height="250"></canvas>
-      </section>
-
-      <section>
-        <h2>Wickets Chart</h2>
-        <canvas id="wickets-chart" width="600" height="250"></canvas>
-      </section>
-
-    </div>
-
-    <!-- Top 10 Batters Page -->
-    <div id="page-top10batters" class="page">
-      <h2>Top 10 Batters</h2>
-      <div id="top10-batters-table" class="styled-table"></div>
-    </div>
-
-    <!-- Top 10 Bowlers Page -->
-    <div id="page-top10bowlers" class="page">
-      <h2>Top 10 Bowlers</h2>
-      <div id="top10-bowlers-table" class="styled-table"></div>
-    </div>
+    <section>
+      <h2>Fielding Statistics</h2>
+      <div id="fielding-table"></div>
+    </section>
 
   </main>
 
-  <!-- Player Profile Modal -->
-  <div id="player-modal" class="modal">
-    <div class="modal-content">
-      <span id="modal-close" class="close">&times;</span>
-      <div id="modal-body"></div>
-    </div>
-  </div>
+  <footer class="footer">
+    <p>British Police Cricket Club</p>
+  </footer>
 
   <script src="script.js"></script>
 </body>
