@@ -334,17 +334,27 @@
     color: #555;
   }
 
+.milestone-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 15px;
+  margin-top: 15px;
+}
+
 .milestone-club-box {
   background: #f0f4ff;
   border: 1px solid #ccc;
   padding: 12px;
-  margin: 12px 0;
   border-radius: 6px;
 }
 
 .milestone-club-box h4 {
   margin: 0 0 8px 0;
   color: #001f3f;
+}
+
+.approaching-section {
+  margin-top: 25px;
 }
 
 .milestone-approach-box {
@@ -371,6 +381,7 @@
   font-weight: bold;
   color: #cc0000;
 }
+
   
 </style>
 </head>
@@ -745,13 +756,22 @@ function renderMilestones() {
 function renderMilestoneClubs({ title, field, milestones, threshold, container }) {
   let html = `<h3>${title}</h3>`;
 
-  milestones.forEach(m => {
-    const achieved = allData.filter(p => num(p[field]) >= m);
-    const approaching = allData.filter(p =>
-      p["Current"] === "Yes" &&
-      num(p[field]) < m &&
-      (m - num(p[field])) <= threshold
-    );
+  // Sort milestones ascending so we can find the highest one each player qualifies for
+  const sortedMilestones = [...milestones].sort((a, b) => a - b);
+
+  // Build milestone club boxes
+  html += `<div class="milestone-grid">`;
+
+  sortedMilestones.forEach(m => {
+    // Players whose maximum milestone is exactly this one
+    const achieved = allData.filter(p => {
+      const value = num(p[field]);
+      if (value < m) return false;
+
+      // Find highest milestone they qualify for
+      const maxMilestone = sortedMilestones.filter(ms => value >= ms).pop();
+      return maxMilestone === m;
+    });
 
     html += `<div class="milestone-club-box">
                <h4>${m} Club</h4>`;
@@ -767,6 +787,20 @@ function renderMilestoneClubs({ title, field, milestones, threshold, container }
     }
 
     html += `</div>`;
+  });
+
+  html += `</div>`; // end milestone-grid
+
+  // Approaching milestones (current players only)
+  html += `<div class="approaching-section">`;
+
+  sortedMilestones.forEach(m => {
+    const approaching = allData.filter(p => {
+      if (p["Current"] !== "Yes") return false;
+      const value = num(p[field]);
+      const toGo = m - value;
+      return toGo > 0 && toGo <= threshold;
+    });
 
     if (approaching.length > 0) {
       html += `<div class="milestone-approach-box">
@@ -775,12 +809,12 @@ function renderMilestoneClubs({ title, field, milestones, threshold, container }
       approaching
         .sort((a, b) => (m - num(a[field])) - (m - num(b[field])))
         .forEach(p => {
-          const current = num(p[field]);
-          const toGo = m - current;
+          const value = num(p[field]);
+          const toGo = m - value;
 
           html += `
             <div class="approach-row">
-              <span>${p["Player"]} – ${current}</span>
+              <span>${p["Player"]} – ${value}</span>
               <span class="to-go">${toGo} to go</span>
             </div>`;
         });
@@ -789,9 +823,10 @@ function renderMilestoneClubs({ title, field, milestones, threshold, container }
     }
   });
 
+  html += `</div>`; // end approaching-section
+
   container.innerHTML = html;
 }
-
 
 /* AI TEAMS */
 function renderAITeams(){
