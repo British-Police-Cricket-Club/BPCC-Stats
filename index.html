@@ -195,6 +195,63 @@
     margin: 10px 0;
   }
 
+.ai-teams-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px;
+  margin-top: 20px;
+}
+
+.ai-team-box {
+  background: white;
+  border: 1px solid #ccc;
+  padding: 15px;
+  border-radius: 6px;
+}
+
+.ai-team-box h3 {
+  background: #001f3f;
+  color: white;
+  padding: 10px;
+  margin: -15px -15px 15px -15px;
+  border-radius: 6px 6px 0 0;
+}
+
+.ai-team-section {
+  margin-bottom: 15px;
+}
+
+.ai-team-section h4 {
+  margin: 0 0 8px 0;
+  color: #004080;
+}
+
+.ai-player-row {
+  padding: 8px 0;
+  border-bottom: 1px solid #eee;
+  cursor: pointer;
+}
+
+.ai-player-row:hover {
+  background: #e3edff;
+}
+
+.ai-player-name {
+  font-weight: bold;
+  color: #001f3f;
+}
+
+.ai-player-role {
+  font-size: 12px;
+  color: #555;
+}
+
+.ai-player-stats {
+  margin-top: 4px;
+  font-size: 14px;
+}
+  
+  
 /* Modal overlay */
 #player-modal {
   position: fixed;
@@ -500,12 +557,15 @@
 
   <!-- AI Teams -->
   <div id="ai-teams" class="section">
-    <h2>AI Teams</h2>
+  <h2>AI Teams</h2>
+
+  <div class="ai-teams-grid">
     <div id="team-a"></div>
     <div id="team-b"></div>
     <div id="team-c"></div>
   </div>
 </div>
+
 
 <script>
 const DATA_URL="https://docs.google.com/spreadsheets/d/e/2PACX-1vQlS2BceCsyAkRFmAuwA0QDJR8wPjuLZyquKAeszxD2-FM7gFTzEQrVTqPxtph-z55FZNU01tMnpvQv/pub?output=csv";
@@ -865,60 +925,96 @@ function renderAITeams(){
 
   function build(){return[...pick(batSorted,5,"Batter"),...pick(keepSorted,1,"Wicketkeeper"),...pick(bowlSorted,5,"Bowler")];}
 
-  renderTeam("team-a","Team A – Best XI",teamA);
-  renderTeam("team-b","Team B – Next Best XI",build());
-  renderTeam("team-c","Team C – Next Best XI",build());
+  renderTeam("team-a","AI 1st XI",teamA);
+  renderTeam("team-b","AI 2nd XI",build());
+  renderTeam("team-c","AI 3rd XI",build());
 }
 
 function renderTeam(id, title, players) {
   const container = document.getElementById(id);
 
-  let html = `
-    <h3>${title}</h3>
-    <table>
-      <thead>
-        <tr>
-          <th>Player</th>
-          <th>Matches</th>
-          <th>Runs</th>
-          <th>Average</th>
-          <th>Wickets</th>
-          <th>Bowling Avg</th>
-          <th>Victims</th>
-        </tr>
-      </thead>
-      <tbody>
+  // Split into sections
+  const batters = players.filter(p => p.role === "Batter");
+  const keeper = players.filter(p => p.role === "Wicketkeeper");
+  const bowlers = players.filter(p => p.role === "Bowler");
+
+  let html = `<div class="ai-team-box">
+                <h3>${title}</h3>
   `;
 
-  players.forEach(({ player }) => {
+  // --- Batters ---
+  html += `<div class="ai-team-section">
+             <h4>Batters</h4>
+  `;
+
+  batters.forEach((entry, i) => {
+    const p = entry.player;
     html += `
-      <tr class="team-row" data-player="${player["Player"]}">
-        <td>${player["Player"]} <span class="role-badge">${getRole(player)}</span></td>
-        <td>${player["Matches"]}</td>
-        <td>${player["Runs"]}</td>
-        <td>${player["Average"]}</td>
-        <td>${player["Wickets"]}</td>
-        <td>${player["Bowling Average"]}</td>
-        <td>${victims(player)}</td>
-      </tr>
+      <div class="ai-player-row" data-player="${p["Player"]}">
+        <div class="ai-player-name">${i + 1}. ${p["Player"]}</div>
+        <div class="ai-player-role">${getRole(p)}</div>
+        <div class="ai-player-stats">
+          Runs: ${p["Runs"]} • Avg: ${p["Average"]}
+        </div>
+      </div>
     `;
   });
 
-  html += `
-      </tbody>
-    </table>
+  html += `</div>`;
+
+  // --- Wicket Keeper ---
+  html += `<div class="ai-team-section">
+             <h4>Wicket Keeper</h4>
   `;
+
+  keeper.forEach((entry, i) => {
+    const p = entry.player;
+    const victimsPM = (victims(p) / num(p["Matches"])).toFixed(2);
+
+    html += `
+      <div class="ai-player-row" data-player="${p["Player"]}">
+        <div class="ai-player-name">${batters.length + 1}. ${p["Player"]}</div>
+        <div class="ai-player-role">${getRole(p)}</div>
+        <div class="ai-player-stats">
+          Victims: ${victims(p)} • Per match: ${victimsPM}
+        </div>
+      </div>
+    `;
+  });
+
+  html += `</div>`;
+
+  // --- Bowlers ---
+  html += `<div class="ai-team-section">
+             <h4>Bowlers</h4>
+  `;
+
+  bowlers.forEach((entry, i) => {
+    const p = entry.player;
+    html += `
+      <div class="ai-player-row" data-player="${p["Player"]}">
+        <div class="ai-player-name">${batters.length + keeper.length + i + 1}. ${p["Player"]}</div>
+        <div class="ai-player-role">${getRole(p)}</div>
+        <div class="ai-player-stats">
+          Wickets: ${p["Wickets"]} • Avg: ${p["Bowling Average"]}
+        </div>
+      </div>
+    `;
+  });
+
+  html += `</div></div>`;
 
   container.innerHTML = html;
 
-  // Make rows clickable (Fugitives behaviour)
-  container.querySelectorAll(".team-row").forEach(row => {
+  // Modal click behaviour
+  container.querySelectorAll(".ai-player-row").forEach(row => {
     row.addEventListener("click", () => {
       const player = allData.find(p => p["Player"] === row.dataset.player);
       openPlayerModal(player);
     });
   });
 }
+
 
 
 /* INIT */
