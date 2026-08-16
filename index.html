@@ -217,29 +217,45 @@
   }
 
   #modal-close {
-    position: absolute;
-    right: 15px;
-    top: 10px;
-    font-size: 22px;
-    cursor: pointer;
-  }
+  position: absolute;
+  right: 15px;
+  top: 10px;
+  font-size: 20px;
+  cursor: pointer;
+  background: #cc0000;
+  color: white;
+  padding: 6px 10px;
+  border-radius: 4px;
+  font-weight: bold;
+}
+#modal-close:hover {
+  background: #ff3333;
+}
 
   .modal-header {
-    background: #001f3f;
-    color: white;
-    padding: 10px;
-    border-radius: 6px;
-    margin-bottom: 15px;
-  }
+  background: #001f3f;
+  color: white;
+  padding: 15px;
+  border-radius: 6px;
+  margin-bottom: 15px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  height: 120px;
+  text-align: center;
+}
 
-  .modal-header h2 {
-    margin: 0;
-  }
+#modal-player-name {
+  font-size: 26px;
+  font-weight: bold;
+  margin: 5px 0;
+}
 
-  .modal-header p {
-    margin: 0;
-    font-size: 14px;
-  }
+#modal-player-number {
+  font-size: 18px;
+  margin: 0;
+}
+
 
   .modal-stats-grid {
     display: grid;
@@ -443,7 +459,12 @@ function renderPlayers() {
 
   const q = document.getElementById("player-search").value.toLowerCase();
 
-  allData.forEach((p, idx) => {
+  // Sort alphabetically
+  const sorted = [...allData].sort((a, b) =>
+    a["Player"].localeCompare(b["Player"])
+  );
+
+  sorted.forEach((p, idx) => {
     if (!p["Player"].toLowerCase().includes(q)) return;
 
     const card = document.createElement("div");
