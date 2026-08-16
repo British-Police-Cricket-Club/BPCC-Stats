@@ -476,3 +476,51 @@ function renderTeam(id, title, players) {
     const victimsPM = (m > 0) ? (victims(p) / m).toFixed(2) : "0.00";
 
     html += "<div class='ai-player-row' data-player='" + p
+                 "</div>" +
+            "</div>";
+  });
+  html += "</div>";
+
+  /* Close team box */
+  html += "</div>";
+
+  container.innerHTML = html;
+
+  /* Modal click behaviour */
+  container.querySelectorAll(".ai-player-row").forEach(function(row){
+    row.addEventListener("click", function(){
+      const player = allData.find(function(p){
+        return p["Player"] === row.dataset.player;
+      });
+      openPlayerModal(player);
+    });
+  });
+}
+
+/* ============================================================
+   INIT
+============================================================ */
+async function init() {
+  allData = await loadCSV();
+
+  /* Default section */
+  document.querySelectorAll(".section").forEach(function(sec){
+    sec.classList.remove("active");
+  });
+  document.getElementById("overview").classList.add("active");
+
+  heroTitle.innerHTML = heroTitles["overview"];
+  summaryCards.style.display = "grid";
+
+  setupNav();
+  renderOverview();
+  renderPlayers();
+  renderBatting();
+  renderBowling();
+  renderFielding();
+  renderMilestones();
+  renderAITeams();
+}
+
+init();
+
