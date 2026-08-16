@@ -8,7 +8,7 @@
 <style id="v100">
 
 /* ============================================================
-   GLOBAL
+   GLOBAL BRANDING
 ============================================================ */
 :root {
   --bpcc-navy: #0b1a33;
@@ -18,28 +18,13 @@
   --bpcc-gold-gradient: linear-gradient(135deg, #e6c15a, #f7e7a4, #e6c15a);
 }
 
+/* Safe-area support for iPhone */
 body {
+  padding-bottom: env(safe-area-inset-bottom);
+  background: #f7f9fc;
   margin: 0;
   font-family: Inter, Arial, sans-serif;
-  background: #f7f9fc;
   color: #1a1a1a;
-}
-
-h1, h2, h3, h4 {
-  margin: 0;
-  font-weight: 600;
-}
-
-.section {
-  display: none;
-  padding: 50px 20px;
-  max-width: 1100px;
-  margin: auto;
-  animation: fadeIn 0.4s ease;
-}
-
-.section.active {
-  display: block;
 }
 
 /* ============================================================
@@ -49,12 +34,6 @@ header {
   background: var(--bpcc-navy);
   color: white;
   padding: 20px;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-
-header .brand {
   display: flex;
   align-items: center;
 }
@@ -66,13 +45,11 @@ header img {
 
 header h1 {
   font-size: 22px;
-  letter-spacing: 1px;
   font-family: Playfair Display, serif;
 }
 
 header em {
   color: var(--bpcc-gold);
-  font-style: normal;
 }
 
 /* ============================================================
@@ -93,7 +70,6 @@ header em {
   padding: 10px 18px;
   border-radius: 6px;
   cursor: pointer;
-  font-size: 14px;
   transition: 0.25s ease;
 }
 
@@ -105,7 +81,6 @@ header em {
 .nav-bar button.on {
   background: var(--bpcc-gold);
   color: var(--bpcc-navy);
-  box-shadow: inset 0 0 0 2px var(--bpcc-navy);
 }
 
 /* ============================================================
@@ -129,14 +104,29 @@ header em {
 }
 
 /* ============================================================
-   SUMMARY CARDS
+   SECTIONS
+============================================================ */
+.section {
+  display: none;
+  padding: 50px 20px;
+  max-width: 1100px;
+  margin: auto;
+  animation: fadeIn 0.4s ease;
+}
+
+.section.active {
+  display: block;
+}
+
+/* ============================================================
+   OVERVIEW SUMMARY CARDS
 ============================================================ */
 .summary {
   max-width: 1100px;
-  margin: 40px auto;
+  margin: 50px auto;
   display: grid;
   grid-template-columns: repeat(4, 1fr);
-  gap: 25px;
+  gap: 35px; /* Increased spacing */
 }
 
 .summary div {
@@ -163,7 +153,7 @@ header em {
   border-radius: 12px;
   box-shadow: 0 2px 6px rgba(0,0,0,0.08);
   cursor: pointer;
-  transition: transform 0.25s ease, box-shadow 0.25s ease, background 0.25s ease;
+  transition: 0.25s ease;
 }
 
 .player-card:hover {
@@ -181,8 +171,7 @@ table {
   border-radius: 12px;
   overflow: hidden;
   box-shadow: 0 2px 6px rgba(0,0,0,0.08);
-  font-size: 14px;
-  margin-bottom: 40px; /* NEW: prevents bottom bar overlap */
+  margin-bottom: 40px;
 }
 
 thead {
@@ -201,7 +190,6 @@ tbody tr:hover {
   font-size: 28px !important;
   font-family: Playfair Display, serif;
   color: var(--bpcc-navy);
-  margin-top: 30px;
   border-bottom: 3px solid var(--bpcc-gold);
   padding-bottom: 6px;
 }
@@ -210,40 +198,43 @@ tbody tr:hover {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
   gap: 25px;
-  margin-bottom: 40px; /* NEW */
+  margin-bottom: 40px;
 }
 
 .milestone-club-box h4 {
   background: var(--bpcc-gold-gradient);
   color: var(--bpcc-navy);
-  display: inline-block;
   padding: 6px 12px;
   border-radius: 8px;
   font-size: 18px;
-  margin-bottom: 12px;
-  box-shadow: 0 2px 4px rgba(0,0,0,0.15);
 }
 
 /* ============================================================
    AI TEAMS
 ============================================================ */
+.ai-teams-note {
+  background: #fff8d9;
+  border-left: 4px solid var(--bpcc-gold);
+  padding: 12px 16px;
+  border-radius: 8px;
+  margin-bottom: 25px;
+  font-size: 14px;
+  line-height: 1.5;
+}
+
 .ai-teams-grid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   gap: 25px;
-  margin-bottom: 40px; /* NEW */
+  margin-bottom: 40px;
 }
 
 .ai-team-box h3 {
   background: var(--bpcc-gradient);
   color: var(--bpcc-gold);
-  font-family: Playfair Display, serif;
-  font-size: 22px;
   padding: 12px 16px;
   border-radius: 10px;
-  margin-bottom: 20px;
   text-align: center;
-  box-shadow: 0 2px 6px rgba(0,0,0,0.08);
 }
 
 .ai-player-row:hover {
@@ -251,7 +242,6 @@ tbody tr:hover {
   color: var(--bpcc-gold);
   transform: translateY(-3px);
   box-shadow: 0 3px 10px rgba(0,0,0,0.25);
-  border-left: 4px solid var(--bpcc-gold);
 }
 
 /* ============================================================
@@ -265,8 +255,8 @@ tbody tr:hover {
   padding: 25px;
   max-height: 85vh;
   overflow-y: auto;
-  box-shadow: 0 4px 20px rgba(0,0,0,0.25);
   border: 3px solid var(--bpcc-gold);
+  padding-bottom: 140px; /* Prevent overlap */
 }
 
 /* ============================================================
@@ -277,75 +267,62 @@ tbody tr:hover {
   to   { opacity: 1; transform: translateY(0); }
 }
 
-@keyframes slideUp {
-  from { transform: translateY(40px); opacity: 0; }
-  to   { transform: translateY(0); opacity: 1; }
-}
-
 /* ============================================================
-   MOBILE RESPONSIVE
+   MOBILE RESPONSIVE + SAFE AREA
 ============================================================ */
 @media (max-width: 768px) {
 
-  /* NEW: Prevent bottom bar overlap */
+  body {
+    padding-bottom: calc(140px + env(safe-area-inset-bottom));
+  }
+
   .section {
-    padding-bottom: 120px;
+    padding-bottom: calc(140px + env(safe-area-inset-bottom));
   }
 
   table {
-    margin-bottom: 120px;
+    margin-bottom: calc(140px + env(safe-area-inset-bottom));
   }
 
   .milestone-grid {
-    padding-bottom: 120px;
+    padding-bottom: calc(140px + env(safe-area-inset-bottom));
   }
 
   .ai-teams-grid {
-    padding-bottom: 120px;
+    padding-bottom: calc(140px + env(safe-area-inset-bottom));
   }
 
   #player-modal-content {
-    padding-bottom: 120px;
-  }
-
-  /* Existing mobile layout rules */
-  .nav-bar {
-    overflow-x: auto;
-    white-space: nowrap;
-    padding: 10px;
+    padding-bottom: calc(140px + env(safe-area-inset-bottom));
   }
 
   .summary {
     grid-template-columns: repeat(2, 1fr);
-    gap: 15px;
+    gap: 25px;
   }
 
   .player-grid {
     grid-template-columns: 1fr;
   }
 
-  /* Bottom tab bar */
   .bottom-tab-bar {
     position: fixed;
-    bottom: 0;
+    bottom: env(safe-area-inset-bottom);
     left: 0;
     right: 0;
     height: 60px;
     background: var(--bpcc-navy);
+    border-top: 3px solid var(--bpcc-gold);
     display: flex;
     justify-content: space-around;
     align-items: center;
-    border-top: 3px solid var(--bpcc-gold);
     z-index: 9999;
-  }
-
-  .bottom-tab-bar button.active {
-    color: var(--bpcc-gold);
-    transform: translateY(-4px);
+    padding-bottom: env(safe-area-inset-bottom);
   }
 }
 
 </style>
+
 </head>
 
 <body>
