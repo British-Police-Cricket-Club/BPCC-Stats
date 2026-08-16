@@ -8,7 +8,7 @@
 <style id="v100">
 
 /* ============================================================
-   GLOBAL BRANDING
+   BRANDING & GLOBAL
 ============================================================ */
 :root {
   --bpcc-navy: #0b1a33;
@@ -18,13 +18,11 @@
   --bpcc-gold-gradient: linear-gradient(135deg, #e6c15a, #f7e7a4, #e6c15a);
 }
 
-/* Safe-area support for iPhone */
 body {
   margin: 0;
   font-family: Inter, Arial, sans-serif;
   background: #f7f9fc;
   color: #1a1a1a;
-  padding-bottom: env(safe-area-inset-bottom);
 }
 
 /* ============================================================
@@ -53,16 +51,16 @@ header em {
 }
 
 /* ============================================================
-   NAVIGATION
+   NAVIGATION (Desktop + Mobile)
 ============================================================ */
 .nav-bar {
   background: var(--bpcc-gradient);
   display: flex;
-  justify-content: center;
   gap: 10px;
   padding: 12px;
-  padding-bottom: 0 !important; /* FIX: prevents scroll cutoff */
-  margin-bottom: 0 !important;
+  overflow-x: auto;
+  white-space: nowrap;
+  -webkit-overflow-scrolling: touch;
 }
 
 .nav-bar button {
@@ -72,6 +70,7 @@ header em {
   padding: 10px 18px;
   border-radius: 6px;
   cursor: pointer;
+  flex: 0 0 auto;
   transition: 0.25s ease;
 }
 
@@ -113,7 +112,6 @@ header em {
   padding: 50px 20px;
   max-width: 1100px;
   margin: auto;
-  animation: fadeIn 0.4s ease;
 }
 
 .section.active {
@@ -128,7 +126,7 @@ header em {
   margin: 50px auto;
   display: grid;
   grid-template-columns: repeat(4, 1fr);
-  gap: 35px; /* FIX: more spacing */
+  gap: 35px;
 }
 
 .summary div {
@@ -138,12 +136,13 @@ header em {
   text-align: center;
   box-shadow: 0 2px 6px rgba(0,0,0,0.08);
 }
+
 /* ============================================================
    PLAYER GRID
 ============================================================ */
 .player-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  grid-template-columns: repeat(3, 1fr);
   gap: 25px;
   margin-top: 30px;
 }
@@ -182,7 +181,7 @@ thead {
 
 tbody td {
   padding: 10px;
-  border-bottom: 1px solid #e5e5e5; /* FIX: row separation restored */
+  border-bottom: 1px solid #e5e5e5;
 }
 
 tbody tr:hover {
@@ -193,7 +192,7 @@ tbody tr:hover {
    MILESTONES
 ============================================================ */
 #milestones h3 {
-  font-size: 28px !important;
+  font-size: 28px;
   font-family: Playfair Display, serif;
   color: var(--bpcc-navy);
   border-bottom: 3px solid var(--bpcc-gold);
@@ -202,7 +201,7 @@ tbody tr:hover {
 
 .milestone-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  grid-template-columns: repeat(3, 1fr);
   gap: 25px;
   margin-bottom: 40px;
 }
@@ -225,7 +224,6 @@ tbody tr:hover {
   border-radius: 8px;
   margin-bottom: 25px;
   font-size: 14px;
-  line-height: 1.5;
 }
 
 .ai-teams-grid {
@@ -241,24 +239,16 @@ tbody tr:hover {
   padding: 12px 16px;
   border-radius: 10px;
   text-align: center;
-  font-size: 22px; /* FIX */
-}
-
-.ai-team-section h4 {
-  font-size: 18px; /* FIX */
-  font-family: Playfair Display, serif;
-  color: var(--bpcc-blue);
-  margin-bottom: 10px;
-  border-bottom: 2px solid var(--bpcc-gold);
+  font-size: 22px;
 }
 
 .ai-player-name {
-  font-size: 15px; /* FIX */
+  font-size: 15px;
   font-weight: 600;
 }
 
 .ai-player-role {
-  font-size: 13px; /* FIX */
+  font-size: 13px;
   color: #555;
 }
 
@@ -270,15 +260,15 @@ tbody tr:hover {
 }
 
 /* ============================================================
-   MODAL — FIXED
+   MODAL
 ============================================================ */
 #player-modal {
-  display: none; /* FIX: prevents showing on load */
+  display: none;
   position: fixed;
   inset: 0;
   background: rgba(0,0,0,0.6);
   justify-content: center;
-  align-items: center; /* FIX: centers modal again */
+  align-items: center;
   z-index: 9998;
 }
 
@@ -291,24 +281,15 @@ tbody tr:hover {
   max-height: 85vh;
   overflow-y: auto;
   border: 3px solid var(--bpcc-gold);
-  animation: slideUp 0.35s ease;
-
-  /* FIX: restore 4‑column grid spacing */
-  padding-bottom: 40px;
 }
 
 .modal-header {
-  background: var(--bpcc-blue); /* FIX: restore BPCC blue */
+  background: var(--bpcc-blue);
   color: white;
   padding: 16px 20px;
-
-  /* FIX: close button stays locked top-right */
   position: sticky;
   top: 0;
   z-index: 10;
-
-  border-top-left-radius: 14px;
-  border-top-right-radius: 14px;
   border-bottom: 3px solid var(--bpcc-gold);
 }
 
@@ -319,87 +300,62 @@ tbody tr:hover {
   color: var(--bpcc-gold);
 }
 
-/* FIX: restore 4-abreast stat grid */
 #modal-stats {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  grid-template-columns: repeat(4, 1fr);
   gap: 15px;
   margin-top: 20px;
 }
 
-.modal-stat-row {
-  background: #f7f9fc;
-  padding: 12px;
-  border-radius: 10px;
-  box-shadow: 0 1px 3px rgba(0,0,0,0.08);
-}
-
 /* ============================================================
-   MOBILE RESPONSIVE — FULLY FIXED
+   MOBILE RESPONSIVE
 ============================================================ */
 @media (max-width: 768px) {
 
-  /* Correct bottom spacing without affecting nav bar */
-  body {
-    padding-bottom: calc(80px + env(safe-area-inset-bottom));
-  }
-
-  .section {
-    padding-bottom: calc(80px + env(safe-area-inset-bottom));
-  }
-
-  table {
-    margin-bottom: calc(80px + env(safe-area-inset-bottom));
-  }
-
-  .milestone-grid,
-  .ai-teams-grid {
-    padding-bottom: calc(80px + env(safe-area-inset-bottom));
-  }
-
-  /* Modal padding restored */
-  #player-modal-content {
-    padding-bottom: 40px;
-  }
-
-  /* ============================================================
-     TOP NAV BAR — FIXED
-     Prevents left-shift, ensures full scroll visibility
-  ============================================================ */
-
+  /* Nav bar */
   .nav-bar {
-    overflow-x: auto;
-    white-space: nowrap;
-    -webkit-overflow-scrolling: touch;
-
-    /* FIX: prevent body padding from affecting nav bar */
-    padding-left: 0 !important;
-    padding-right: 0 !important;
-    margin-left: 0 !important;
-    margin-right: 0 !important;
-
-    /* FIX: ensure nav bar starts at scroll position 0 */
-    scroll-snap-type: x mandatory;
+    padding: 10px 0;
   }
 
-  .nav-bar button {
-    scroll-snap-align: start;
-    flex: 0 0 auto;
+  /* Overview totals: 4 → 2 */
+  .summary {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 25px;
   }
 
-  /* ============================================================
-     PLAYER GRID
-  ============================================================ */
+  /* Players: 3 → 1 */
   .player-grid {
     grid-template-columns: 1fr;
   }
 
-  /* ============================================================
-     BOTTOM TAB BAR — SAFE AREA AWARE
-  ============================================================ */
+  /* Milestones: 3 → 1 */
+  .milestone-grid {
+    grid-template-columns: 1fr;
+  }
+
+  /* AI Teams: 3 → 1 */
+  .ai-teams-grid {
+    grid-template-columns: 1fr;
+  }
+
+  /* Modal stats: 4 → 2 */
+  #modal-stats {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  /* Bottom padding for content (no desktop bottom bar) */
+  body {
+    padding-bottom: 80px;
+  }
+
+  .section {
+    padding-bottom: 80px;
+  }
+
+  /* Mobile bottom bar */
   .bottom-tab-bar {
     position: fixed;
-    bottom: env(safe-area-inset-bottom);
+    bottom: 0;
     left: 0;
     right: 0;
     height: 60px;
@@ -409,9 +365,6 @@ tbody tr:hover {
     justify-content: space-around;
     align-items: center;
     z-index: 9999;
-
-    /* Safe-area padding */
-    padding-bottom: env(safe-area-inset-bottom);
   }
 
   .bottom-tab-bar button.active {
@@ -421,6 +374,7 @@ tbody tr:hover {
 }
 
 </style>
+
 </head>
 
 <body>
@@ -428,8 +382,8 @@ tbody tr:hover {
   <div class="brand">
     <img src="logo.png?v=2" alt="BPCC Logo">
     <div>
-      <h1>BPCC Player Records</h1>
-      <em>Every Player. Every number.</em>
+      <h1>BPCC Statistic Centre</h1>
+      <em>The Complete Club Record.</em>
     </div>
   </div>
 </header>
@@ -604,13 +558,13 @@ tbody tr:hover {
   const summaryCards = document.getElementById("summary-cards");
 
   const heroTitles = {
-    "overview": "Every officer.<br><i>Every number.</i>",
-    "players": "Player directory<br><i>& profiles</i>",
-    "batting": "Career batting<br><i>records</i>",
-    "bowling": "Career bowling<br><i>records</i>",
-    "fielding": "Career fielding<br><i>records</i>",
-    "milestones": "Landmarks<br><i>& approaching achievements</i>",
-    "ai-teams": "AI-generated<br><i>XI selections</i>"
+    "overview": "Every Player.<br><i>Every Number.</i>",
+    "players": "Player Directory<br><i>& profiles</i>",
+    "batting": "Career Batting<br><i>records</i>",
+    "bowling": "Career Bowling<br><i>records</i>",
+    "fielding": "Career Fielding<br><i>records</i>",
+    "milestones": "Landmarks<br><i>& Approaching Achievements</i>",
+    "ai-teams": "AI-generated XIs<br><i>XI selections</i>"
   };
 
   /* ============================================================
