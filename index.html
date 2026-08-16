@@ -382,7 +382,14 @@
   color: #cc0000;
 }
 
-  
+  .team-row {
+  cursor: pointer;
+}
+
+.team-row:hover {
+  background: #e3edff;
+}
+ 
 </style>
 </head>
 
@@ -479,17 +486,14 @@
     <h2>Milestones</h2>
 
     <div class="milestone-section">
-      <h3>Batting Milestones</h3>
       <div class="milestone-list" id="batting-milestones"></div>
     </div>
 
     <div class="milestone-section">
-      <h3>Bowling Milestones</h3>
       <div class="milestone-list" id="bowling-milestones"></div>
     </div>
 
     <div class="milestone-section">
-      <h3>Catches Milestones</h3>
       <div class="milestone-list" id="catches-milestones"></div>
     </div>
   </div>
@@ -866,26 +870,56 @@ function renderAITeams(){
   renderTeam("team-c","Team C – Next Best XI",build());
 }
 
-function renderTeam(id,title,players){
-  const container=document.getElementById(id);
-  let html=`<h3>${title}</h3><table><thead><tr>
-    <th>Player</th><th>Matches</th><th>Runs</th><th>Average</th>
-    <th>Wickets</th><th>Bowling Avg</th><th>Victims</th>
-  </tr></thead><tbody>`;
-  players.forEach(({player})=>{
-    html+=`<tr>
-      <td>${player["Player"]} <span class="role-badge">${getRole(player)}</span></td>
-      <td>${player["Matches"]}</td>
-      <td>${player["Runs"]}</td>
-      <td>${player["Average"]}</td>
-      <td>${player["Wickets"]}</td>
-      <td>${player["Bowling Average"]}</td>
-      <td>${victims(player)}</td>
-    </tr>`;
+function renderTeam(id, title, players) {
+  const container = document.getElementById(id);
+
+  let html = `
+    <h3>${title}</h3>
+    <table>
+      <thead>
+        <tr>
+          <th>Player</th>
+          <th>Matches</th>
+          <th>Runs</th>
+          <th>Average</th>
+          <th>Wickets</th>
+          <th>Bowling Avg</th>
+          <th>Victims</th>
+        </tr>
+      </thead>
+      <tbody>
+  `;
+
+  players.forEach(({ player }) => {
+    html += `
+      <tr class="team-row" data-player="${player["Player"]}">
+        <td>${player["Player"]} <span class="role-badge">${getRole(player)}</span></td>
+        <td>${player["Matches"]}</td>
+        <td>${player["Runs"]}</td>
+        <td>${player["Average"]}</td>
+        <td>${player["Wickets"]}</td>
+        <td>${player["Bowling Average"]}</td>
+        <td>${victims(player)}</td>
+      </tr>
+    `;
   });
-  html+="</tbody></table>";
-  container.innerHTML=html;
+
+  html += `
+      </tbody>
+    </table>
+  `;
+
+  container.innerHTML = html;
+
+  // Make rows clickable (Fugitives behaviour)
+  container.querySelectorAll(".team-row").forEach(row => {
+    row.addEventListener("click", () => {
+      const player = allData.find(p => p["Player"] === row.dataset.player);
+      openPlayerModal(player);
+    });
+  });
 }
+
 
 /* INIT */
 async function init(){
