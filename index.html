@@ -478,9 +478,9 @@ function getRole(p) {
   const stumpings = num(p["Stumpings"]);
 
   if (stumpings > 0 || catches > 30) return "Wicketkeeper";
-  if (wickets >= 40) return "Bowler";
-  if (runs >= 1000) return "Batter";
-  if (runs >= 500 && wickets >= 20) return "All-rounder";
+  if (wickets >= 1) return "Bowler";
+  if (runs >= 50) return "Batter";
+  if (runs >= 100 && wickets >= 10) return "All-rounder";
   return "Player";
 }
 
