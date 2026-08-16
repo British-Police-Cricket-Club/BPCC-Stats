@@ -5,592 +5,347 @@
   <title>BPCC Player Records</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  <style id="v100">
-  /* ============================================================
-     GLOBAL
-  ============================================================ */
-  :root {
-    --bpcc-navy: #0b1a33;
-    --bpcc-blue: #1c376b;
-    --bpcc-gold: #e6c15a;
-    --bpcc-gradient: linear-gradient(135deg, #0b1a33, #1c376b, #0b1a33);
-    --bpcc-gold-gradient: linear-gradient(135deg, #e6c15a, #f7e7a4, #e6c15a);
-  }
+<style id="v100">
 
-  body {
-    margin: 0;
-    font-family: Inter, Arial, sans-serif;
-    background: #f7f9fc;
-    color: #1a1a1a;
-  }
+/* ============================================================
+   GLOBAL
+============================================================ */
+:root {
+  --bpcc-navy: #0b1a33;
+  --bpcc-blue: #1c376b;
+  --bpcc-gold: #e6c15a;
+  --bpcc-gradient: linear-gradient(135deg, #0b1a33, #1c376b, #0b1a33);
+  --bpcc-gold-gradient: linear-gradient(135deg, #e6c15a, #f7e7a4, #e6c15a);
+}
 
-  h1, h2, h3, h4 {
-    margin: 0;
-    font-weight: 600;
-  }
+body {
+  margin: 0;
+  font-family: Inter, Arial, sans-serif;
+  background: #f7f9fc;
+  color: #1a1a1a;
+}
 
+h1, h2, h3, h4 {
+  margin: 0;
+  font-weight: 600;
+}
+
+.section {
+  display: none;
+  padding: 50px 20px;
+  max-width: 1100px;
+  margin: auto;
+  animation: fadeIn 0.4s ease;
+}
+
+.section.active {
+  display: block;
+}
+
+/* ============================================================
+   HEADER
+============================================================ */
+header {
+  background: var(--bpcc-navy);
+  color: white;
+  padding: 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+header .brand {
+  display: flex;
+  align-items: center;
+}
+
+header img {
+  height: 60px;
+  margin-right: 15px;
+}
+
+header h1 {
+  font-size: 22px;
+  letter-spacing: 1px;
+  font-family: Playfair Display, serif;
+}
+
+header em {
+  color: var(--bpcc-gold);
+  font-style: normal;
+}
+
+/* ============================================================
+   NAVIGATION
+============================================================ */
+.nav-bar {
+  background: var(--bpcc-gradient);
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  padding: 12px;
+}
+
+.nav-bar button {
+  background: var(--bpcc-navy);
+  color: white;
+  border: none;
+  padding: 10px 18px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 14px;
+  transition: 0.25s ease;
+}
+
+.nav-bar button:hover {
+  background: var(--bpcc-gradient);
+  color: var(--bpcc-gold);
+}
+
+.nav-bar button.on {
+  background: var(--bpcc-gold);
+  color: var(--bpcc-navy);
+  box-shadow: inset 0 0 0 2px var(--bpcc-navy);
+}
+
+/* ============================================================
+   HERO
+============================================================ */
+.hero {
+  text-align: center;
+  padding: 60px 20px;
+  background: white;
+  border-bottom: 1px solid #ddd;
+}
+
+.hero h2 {
+  font-size: 42px;
+  font-family: Playfair Display, serif;
+  color: var(--bpcc-navy);
+}
+
+.hero h2 i {
+  color: var(--bpcc-gold);
+}
+
+/* ============================================================
+   SUMMARY CARDS
+============================================================ */
+.summary {
+  max-width: 1100px;
+  margin: 40px auto;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 25px;
+}
+
+.summary div {
+  background: white;
+  padding: 25px;
+  border-radius: 12px;
+  text-align: center;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.08);
+}
+
+/* ============================================================
+   PLAYER GRID
+============================================================ */
+.player-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 25px;
+  margin-top: 30px;
+}
+
+.player-card {
+  background: white;
+  padding: 22px;
+  border-radius: 12px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.08);
+  cursor: pointer;
+  transition: transform 0.25s ease, box-shadow 0.25s ease, background 0.25s ease;
+}
+
+.player-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 3px 10px rgba(0,0,0,0.2);
+}
+
+/* ============================================================
+   TABLES
+============================================================ */
+table {
+  width: 100%;
+  border-collapse: collapse;
+  background: white;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.08);
+  font-size: 14px;
+  margin-bottom: 40px; /* NEW: prevents bottom bar overlap */
+}
+
+thead {
+  background: var(--bpcc-navy);
+  color: white;
+}
+
+tbody tr:hover {
+  background: #f2f4f8;
+}
+
+/* ============================================================
+   MILESTONES
+============================================================ */
+#milestones h3 {
+  font-size: 28px !important;
+  font-family: Playfair Display, serif;
+  color: var(--bpcc-navy);
+  margin-top: 30px;
+  border-bottom: 3px solid var(--bpcc-gold);
+  padding-bottom: 6px;
+}
+
+.milestone-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 25px;
+  margin-bottom: 40px; /* NEW */
+}
+
+.milestone-club-box h4 {
+  background: var(--bpcc-gold-gradient);
+  color: var(--bpcc-navy);
+  display: inline-block;
+  padding: 6px 12px;
+  border-radius: 8px;
+  font-size: 18px;
+  margin-bottom: 12px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.15);
+}
+
+/* ============================================================
+   AI TEAMS
+============================================================ */
+.ai-teams-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 25px;
+  margin-bottom: 40px; /* NEW */
+}
+
+.ai-team-box h3 {
+  background: var(--bpcc-gradient);
+  color: var(--bpcc-gold);
+  font-family: Playfair Display, serif;
+  font-size: 22px;
+  padding: 12px 16px;
+  border-radius: 10px;
+  margin-bottom: 20px;
+  text-align: center;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.08);
+}
+
+.ai-player-row:hover {
+  background: var(--bpcc-gradient);
+  color: var(--bpcc-gold);
+  transform: translateY(-3px);
+  box-shadow: 0 3px 10px rgba(0,0,0,0.25);
+  border-left: 4px solid var(--bpcc-gold);
+}
+
+/* ============================================================
+   MODAL
+============================================================ */
+#player-modal-content {
+  background: white;
+  width: 90%;
+  max-width: 650px;
+  border-radius: 14px;
+  padding: 25px;
+  max-height: 85vh;
+  overflow-y: auto;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.25);
+  border: 3px solid var(--bpcc-gold);
+}
+
+/* ============================================================
+   ANIMATIONS
+============================================================ */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes slideUp {
+  from { transform: translateY(40px); opacity: 0; }
+  to   { transform: translateY(0); opacity: 1; }
+}
+
+/* ============================================================
+   MOBILE RESPONSIVE
+============================================================ */
+@media (max-width: 768px) {
+
+  /* NEW: Prevent bottom bar overlap */
   .section {
-    display: none;
-    padding: 50px 20px;
-    max-width: 1100px;
-    margin: auto;
-    animation: fadeIn 0.4s ease;
+    padding-bottom: 120px;
   }
 
-  .section.active {
-    display: block;
-  }
-
-  /* ============================================================
-     HEADER
-  ============================================================ */
-  header {
-    background: var(--bpcc-navy);
-    color: white;
-    padding: 20px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-  }
-
-  header .brand {
-    display: flex;
-    align-items: center;
-  }
-
-  header img {
-    height: 60px;
-    margin-right: 15px;
-  }
-
-  header h1 {
-    font-size: 22px;
-    letter-spacing: 1px;
-    font-family: Playfair Display, serif;
-  }
-
-  header em {
-    color: var(--bpcc-gold);
-    font-style: normal;
-  }
-
-  /* ============================================================
-     NAVIGATION
-  ============================================================ */
-  .nav-bar {
-    background: var(--bpcc-gradient);
-    display: flex;
-    justify-content: center;
-    gap: 10px;
-    padding: 12px;
-  }
-
-  .nav-bar button {
-    background: var(--bpcc-navy);
-    color: white;
-    border: none;
-    padding: 10px 18px;
-    border-radius: 6px;
-    cursor: pointer;
-    font-size: 14px;
-    transition: 0.25s ease;
-  }
-
-  .nav-bar button:hover {
-    background: var(--bpcc-gradient);
-    color: var(--bpcc-gold);
-  }
-
-  .nav-bar button.on {
-    background: var(--bpcc-gold);
-    color: var(--bpcc-navy);
-    box-shadow: inset 0 0 0 2px var(--bpcc-navy);
-  }
-
-  /* ============================================================
-     HERO
-  ============================================================ */
-  .hero {
-    text-align: center;
-    padding: 60px 20px;
-    background: white;
-    border-bottom: 1px solid #ddd;
-  }
-
-  .hero h2 {
-    font-size: 42px;
-    font-family: Playfair Display, serif;
-    color: var(--bpcc-navy);
-  }
-
-  .hero h2 i {
-    color: var(--bpcc-gold);
-  }
-
-  /* ============================================================
-     SUMMARY CARDS
-  ============================================================ */
-  #summary-cards.summary {
-    max-width: 1100px;
-    margin: 40px auto;
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    gap: 25px;
-  }
-
-  #summary-cards.summary div {
-    background: white;
-    padding: 25px;
-    border-radius: 12px;
-    text-align: center;
-    box-shadow: 0 2px 6px rgba(0,0,0,0.08);
-  }
-
-  /* ============================================================
-     PLAYER GRID
-  ============================================================ */
-  #players-grid.player-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-    gap: 25px;
-    margin-top: 30px;
-  }
-
-  .player-card {
-    background: white;
-    padding: 22px;
-    border-radius: 12px;
-    box-shadow: 0 2px 6px rgba(0,0,0,0.08);
-    cursor: pointer;
-    transition: transform 0.25s ease, box-shadow 0.25s ease, background 0.25s ease;
-  }
-
-  .player-card:hover {
-    transform: translateY(-4px);
-    box-shadow: 0 3px 10px rgba(0,0,0,0.2);
-  }
-
-  .status {
-    font-size: 12px;
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
-    color: var(--bpcc-blue);
-    margin-bottom: 8px;
-  }
-
-  .role-badge {
-    display: inline-block;
-    background: var(--bpcc-gold-gradient);
-    color: var(--bpcc-navy);
-    padding: 4px 10px;
-    border-radius: 999px;
-    font-size: 12px;
-    margin-bottom: 8px;
-  }
-
-  .stats-line {
-    font-size: 13px;
-    color: #555;
-    margin-top: 8px;
-  }
-
-  /* ============================================================
-     TABLES
-  ============================================================ */
   table {
-    width: 100%;
-    border-collapse: collapse;
-    background: white;
-    border-radius: 12px;
-    overflow: hidden;
-    box-shadow: 0 2px 6px rgba(0,0,0,0.08);
-    font-size: 14px;
-  }
-
-  thead {
-    background: var(--bpcc-navy);
-    color: white;
-  }
-
-  thead th {
-    padding: 12px;
-    text-align: left;
-  }
-
-  tbody td {
-    padding: 10px;
-    border-bottom: 1px solid #eee;
-  }
-
-  tbody tr:hover {
-    background: #f2f4f8;
-  }
-
-  .player-name {
-    font-weight: 600;
-  }
-
-  .player-number {
-    font-size: 11px;
-    color: #777;
-  }
-
-  .clickable-row {
-    cursor: pointer;
-  }
-
-  /* ============================================================
-     MILESTONES
-  ============================================================ */
-  #milestones h3 {
-    font-size: 28px !important;
-    font-family: Playfair Display, serif;
-    color: var(--bpcc-navy);
-    margin-top: 30px;
-    border-bottom: 3px solid var(--bpcc-gold);
-    padding-bottom: 6px;
+    margin-bottom: 120px;
   }
 
   .milestone-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-    gap: 25px;
-    margin-top: 20px;
+    padding-bottom: 120px;
   }
 
-  .milestone-club-box {
-    background: white;
-    padding: 18px;
-    border-radius: 12px;
-    box-shadow: 0 2px 6px rgba(0,0,0,0.08);
-    transition: transform 0.25s ease, box-shadow 0.25s ease, background 0.25s ease;
-  }
-
-  .milestone-club-box h4 {
-    background: var(--bpcc-gold-gradient);
-    color: var(--bpcc-navy);
-    display: inline-block;
-    padding: 6px 12px;
-    border-radius: 8px;
-    font-size: 18px;
-    margin-bottom: 12px;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.15);
-  }
-
-  .milestone-club-box p {
-    margin: 4px 0;
-    font-size: 13px;
-  }
-
-  .milestone-approach-box {
-    background: white;
-    padding: 18px;
-    border-radius: 12px;
-    box-shadow: 0 2px 6px rgba(0,0,0,0.08);
-    margin-top: 15px;
-    transition: transform 0.25s ease, box-shadow 0.25s ease, background 0.25s ease;
-  }
-
-  .approach-row {
-    display: flex;
-    justify-content: space-between;
-    font-size: 13px;
-    margin: 4px 0;
-  }
-
-  .to-go {
-    font-weight: 600;
-    color: var(--bpcc-blue);
-  }
-
-  /* ============================================================
-     AI TEAMS
-  ============================================================ */
   .ai-teams-grid {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 25px;
-    margin-top: 30px;
-  }
-
-  .ai-team-box {
-    background: white;
-    padding: 18px;
-    border-radius: 12px;
-    box-shadow: 0 2px 6px rgba(0,0,0,0.08);
-  }
-
-  .ai-team-box h3 {
-    background: var(--bpcc-gradient);
-    color: var(--bpcc-gold);
-    font-family: Playfair Display, serif;
-    font-size: 22px;
-    padding: 12px 16px;
-    border-radius: 10px;
-    margin-bottom: 20px;
-    text-align: center;
-    box-shadow: 0 2px 6px rgba(0,0,0,0.08);
-  }
-
-  .ai-team-section h4 {
-    font-family: Playfair Display, serif;
-    color: var(--bpcc-blue);
-    margin-bottom: 10px;
-    border-bottom: 2px solid var(--bpcc-gold);
-    padding-bottom: 4px;
-  }
-
-  .ai-player-row {
-    display: flex;
-    justify-content: space-between;
-    padding: 10px 0;
-    border-bottom: 1px solid #eee;
-    cursor: pointer;
-    transition: 0.25s ease;
-  }
-
-  .ai-player-row:hover {
-    background: var(--bpcc-gradient);
-    color: var(--bpcc-gold);
-    transform: translateY(-3px);
-    box-shadow: 0 3px 10px rgba(0,0,0,0.25);
-    border-left: 4px solid var(--bpcc-gold);
-  }
-
-  .ai-player-left {
-    flex: 1;
-  }
-
-  .ai-player-right {
-    flex: 1;
-    text-align: right;
-    font-size: 13px;
-  }
-
-  .ai-player-name {
-    font-weight: 600;
-  }
-
-  .ai-player-role {
-    font-size: 12px;
-    color: #555;
-  }
-
-  /* ============================================================
-     RECORD BOXES (OVERVIEW)
-  ============================================================ */
-  .record-box {
-    background: white;
-    padding: 18px;
-    border-radius: 12px;
-    box-shadow: 0 2px 6px rgba(0,0,0,0.08);
-    cursor: pointer;
-    transition: 0.25s ease;
-  }
-
-  .record-box:hover {
-    transform: translateY(-3px);
-    box-shadow: 0 3px 10px rgba(0,0,0,0.2);
-  }
-
-  /* ============================================================
-     MODAL
-  ============================================================ */
-  #player-modal {
-    display: none;
-    position: fixed;
-    inset: 0;
-    background: rgba(0,0,0,0.6);
-    justify-content: center;
-    align-items: center;
-    animation: fadeIn 0.3s ease;
-    z-index: 9998;
+    padding-bottom: 120px;
   }
 
   #player-modal-content {
-    background: white;
-    width: 90%;
-    max-width: 650px;
-    border-radius: 14px;
-    padding: 25px;
-    max-height: 85vh;
-    overflow-y: auto;
-    box-shadow: 0 4px 20px rgba(0,0,0,0.25);
-    border: 3px solid var(--bpcc-gold);
-    animation: slideUp 0.35s ease;
+    padding-bottom: 120px;
   }
 
-  .modal-header {
-    background: var(--bpcc-gradient);
-    color: white;
-    padding: 16px 20px;
-    position: sticky;
-    top: 0;
-    z-index: 10;
-    border-top-left-radius: 14px;
-    border-top-right-radius: 14px;
-    border-bottom: 3px solid var(--bpcc-gold);
+  /* Existing mobile layout rules */
+  .nav-bar {
+    overflow-x: auto;
+    white-space: nowrap;
+    padding: 10px;
   }
 
-  #modal-close {
-    float: right;
-    font-size: 28px;
-    cursor: pointer;
-    color: var(--bpcc-gold);
-  }
-
-  #modal-player-name {
-    font-size: 22px;
-    font-family: Playfair Display, serif;
-  }
-
-  #modal-player-number {
-    font-size: 13px;
-    margin-top: 4px;
-  }
-
-  #modal-player-role {
-    font-size: 13px;
-    margin-top: 6px;
-    display: inline-block;
-    background: var(--bpcc-gold-gradient);
-    color: var(--bpcc-navy);
-    padding: 4px 10px;
-    border-radius: 999px;
-  }
-
-  #modal-stats {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  .summary {
+    grid-template-columns: repeat(2, 1fr);
     gap: 15px;
-    margin-top: 20px;
   }
 
-  .modal-stat-row {
-    background: #f7f9fc;
-    padding: 12px;
-    border-radius: 10px;
-    box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+  .player-grid {
+    grid-template-columns: 1fr;
   }
 
-  .modal-stat-row h4 {
-    margin-bottom: 6px;
-    color: var(--bpcc-navy);
-    font-size: 13px;
+  /* Bottom tab bar */
+  .bottom-tab-bar {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 60px;
+    background: var(--bpcc-navy);
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    border-top: 3px solid var(--bpcc-gold);
+    z-index: 9999;
   }
 
-  .modal-stat-row p {
-    font-size: 13px;
+  .bottom-tab-bar button.active {
+    color: var(--bpcc-gold);
+    transform: translateY(-4px);
   }
+}
 
-  /* ============================================================
-     ANIMATIONS
-  ============================================================ */
-  @keyframes fadeIn {
-    from { opacity: 0; transform: translateY(10px); }
-    to   { opacity: 1; transform: translateY(0); }
-  }
-
-  @keyframes slideUp {
-    from { transform: translateY(40px); opacity: 0; }
-    to   { transform: translateY(0); opacity: 1; }
-  }
-
-  /* ============================================================
-     MOBILE RESPONSIVE
-  ============================================================ */
-  @media (max-width: 768px) {
-
-    .section {
-      padding: 25px 15px;
-    }
-
-    .nav-bar {
-      overflow-x: auto;
-      white-space: nowrap;
-      padding: 10px;
-    }
-
-    .nav-bar button {
-      flex: 0 0 auto;
-      margin-right: 10px;
-    }
-
-    #summary-cards.summary {
-      grid-template-columns: repeat(2, 1fr);
-      gap: 15px;
-    }
-
-    #players-grid.player-grid {
-      grid-template-columns: 1fr;
-    }
-
-    table {
-      font-size: 14px;
-    }
-
-    #player-modal-content {
-      width: 95%;
-      max-height: 90vh;
-      padding: 15px;
-      border-radius: 12px;
-    }
-
-    .modal-header {
-      padding: 12px 15px;
-      border-top-left-radius: 12px;
-      border-top-right-radius: 12px;
-    }
-
-    #modal-stats {
-      grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
-      gap: 10px;
-    }
-
-    .milestone-grid {
-      grid-template-columns: 1fr;
-    }
-
-    .ai-teams-grid {
-      grid-template-columns: 1fr;
-    }
-
-    .hero h2 {
-      font-size: 32px;
-    }
-
-    /* Bottom tab bar */
-    .bottom-tab-bar {
-      position: fixed;
-      bottom: 0;
-      left: 0;
-      right: 0;
-      height: 60px;
-      background: var(--bpcc-navy);
-      display: flex;
-      justify-content: space-around;
-      align-items: center;
-      border-top: 3px solid var(--bpcc-gold);
-      z-index: 9999;
-    }
-
-    .bottom-tab-bar button {
-      background: none;
-      border: none;
-      color: white;
-      font-size: 13px;
-      padding: 6px;
-      flex: 1;
-      cursor: pointer;
-      transition: 0.25s ease;
-    }
-
-    .bottom-tab-bar button.active {
-      color: var(--bpcc-gold);
-      transform: translateY(-4px);
-    }
-  }
-  </style>
+</style>
 </head>
 
 <body>
