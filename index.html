@@ -187,28 +187,106 @@
     <button data-section="ai-teams">AI Teams</button>
   </div>
 
-  <!-- Overview -->
   <div id="overview" class="section active">
-    <h2>Overview</h2>
-    <div class="summary-grid">
-      <div class="summary-card">
-        <h3>Number of Players</h3>
-        <p id="total-players">–</p>
-      </div>
-      <div class="summary-card">
-        <h3>Total Appearances</h3>
-        <p id="total-appearances">–</p>
-      </div>
-      <div class="summary-card">
-        <h3>Total Club Runs</h3>
-        <p id="total-runs">–</p>
-      </div>
-      <div class="summary-card">
-        <h3>Total Club Wickets</h3>
-        <p id="total-wickets">–</p>
-      </div>
+  <h2>Overview</h2>
+
+  <div class="summary-grid">
+    <div class="summary-card">
+      <h3>Number of Players</h3>
+      <p id="total-players">–</p>
+    </div>
+    <div class="summary-card">
+      <h3>Total Appearances</h3>
+      <p id="total-appearances">–</p>
+    </div>
+    <div class="summary-card">
+      <h3>Total Club Runs</h3>
+      <p id="total-runs">–</p>
+    </div>
+    <div class="summary-card">
+      <h3>Total Club Wickets</h3>
+      <p id="total-wickets">–</p>
     </div>
   </div>
+
+  <p style="margin-top:25px; font-size:13px; color:#555; text-align:center;">
+    explore the archive
+  </p>
+
+  <p style="margin-top:5px; font-size:20px; color:#001f3f; text-align:center; font-weight:bold;">
+    start with a record
+  </p>
+
+  <div class="record-links" style="
+    display:grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap:15px;
+    margin-top:20px;
+  ">
+
+    <div class="record-box" data-section="batting" style="
+      background:#f0f4ff;
+      border:1px solid #ccc;
+      padding:15px;
+      text-align:center;
+      cursor:pointer;
+      border-radius:6px;
+    ">
+      <h3 style="margin:0; color:#001f3f;">Batting</h3>
+      <p style="margin:5px 0 0 0; font-size:13px;">Career records</p>
+    </div>
+
+    <div class="record-box" data-section="bowling" style="
+      background:#f0f4ff;
+      border:1px solid #ccc;
+      padding:15px;
+      text-align:center;
+      cursor:pointer;
+      border-radius:6px;
+    ">
+      <h3 style="margin:0; color:#001f3f;">Bowling</h3>
+      <p style="margin:5px 0 0 0; font-size:13px;">Career records</p>
+    </div>
+
+    <div class="record-box" data-section="fielding" style="
+      background:#f0f4ff;
+      border:1px solid #ccc;
+      padding:15px;
+      text-align:center;
+      cursor:pointer;
+      border-radius:6px;
+    ">
+      <h3 style="margin:0; color:#001f3f;">Fielding</h3>
+      <p style="margin:5px 0 0 0; font-size:13px;">Career records</p>
+    </div>
+
+    <div class="record-box" data-section="milestones" style="
+      background:#f0f4ff;
+      border:1px solid #ccc;
+      padding:15px;
+      text-align:center;
+      cursor:pointer;
+      border-radius:6px;
+    ">
+      <h3 style="margin:0; color:#001f3f;">Milestones</h3>
+      <p style="margin:5px 0 0 0; font-size:13px;">Landmarks and players closing in</p>
+    </div>
+
+    <div class="record-box" data-section="ai-teams" style="
+      background:#f0f4ff;
+      border:1px solid #ccc;
+      padding:15px;
+      text-align:center;
+      cursor:pointer;
+      border-radius:6px;
+    ">
+      <h3 style="margin:0; color:#001f3f;">AI Teams</h3>
+      <p style="margin:5px 0 0 0; font-size:13px;">Three balanced, data-selected XIs</p>
+    </div>
+
+  </div>
+</div>
+
 
   <!-- Players -->
   <div id="players" class="section">
@@ -357,6 +435,27 @@ function renderOverview() {
   document.getElementById("total-wickets").textContent = totalWickets;
 }
 
+// Overview record link boxes
+document.querySelectorAll(".record-box").forEach(box => {
+  box.addEventListener("click", () => {
+    const target = box.getAttribute("data-section");
+
+    // Hide all sections
+    document.querySelectorAll(".section").forEach(sec => sec.classList.remove("active"));
+
+    // Show target section
+    document.getElementById(target).classList.add("active");
+
+    // Update nav bar highlight
+    document.querySelectorAll(".nav-bar button").forEach(btn => {
+      btn.classList.toggle("active", btn.getAttribute("data-section") === target);
+    });
+
+    // Scroll to top
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  });
+});
+  
 // Players table + search + detail
 function renderPlayers() {
   const container = document.getElementById("players-table");
