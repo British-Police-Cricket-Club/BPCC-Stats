@@ -616,7 +616,7 @@
   </nav>
 
   <section class="hero">
-    <h2 id="hero-title">Every officer.<br><i>Every number.</i></h2>
+    <h2 id="hero-title">Every Player.<br><i>Every Number.</i></h2>
   </section>
 
   <!-- OVERVIEW -->
@@ -1062,7 +1062,7 @@
   ============================================================ */
   function renderMilestones() {
     renderMilestoneClubs(
-      "Runs milestone clubs",
+      "Runs Milestone Clubs",
       "Runs",
       [3500,3000,2500,2000,1500,1000,500,250],
       20,
@@ -1070,7 +1070,7 @@
     );
 
     renderMilestoneClubs(
-      "Bowling milestone clubs",
+      "Bowling Milestone Clubs",
       "Wickets",
       [100,90,80,70,60,50,40,30,20],
       2,
@@ -1078,7 +1078,7 @@
     );
 
     renderMilestoneClubs(
-      "Catches milestone clubs",
+      "Catches Milestone Clubs",
       "Catches",
       [50,40,30,20,10],
       2,
@@ -1103,7 +1103,7 @@
       html += "<h4>" + m + " Club</h4>";
 
       if (achieved.length === 0) {
-        html += "<p>No players yet.</p>";
+        html += "<p>No Players Yet.</p>";
       } else {
         achieved.sort((a, b) => num(b[field]) - num(a[field]))
           .forEach(function(p){
@@ -1115,7 +1115,7 @@
     });
 
     html += "</div>";
-    html += "<h3>Current players approaching</h3>";
+    html += "<h3>Current Players Approaching</h3>";
 
     let any = false;
 
