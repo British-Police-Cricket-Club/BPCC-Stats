@@ -6,7 +6,6 @@
 
 <title>BPCC Statistics Centre</title>
 
-<!-- Playfair Display + Inter -->
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
 
 <style>
@@ -320,9 +319,109 @@ header em {
   font-family: Playfair Display, serif;
   color: var(--bpcc-navy);
 }
-
 </style>
+</head>
 
-<script src="script.js"></script>
-</body>
-</html>
+<body>
+
+<header>
+  <div class="brand">
+    <img src="logo.png" alt="BPCC Logo">
+    <div>
+      <h1>British Police Cricket Club</h1>
+      <small>Statistics Centre <span class="live">LIVE</span></small>
+    </div>
+  </div>
+</header>
+
+<div class="nav-bar">
+  <button data-section="overview" class="on">Overview</button>
+  <button data-section="players">Players</button>
+  <button data-section="batting">Batting</button>
+  <button data-section="bowling">Bowling</button>
+  <button data-section="fielding">Fielding</button>
+  <button data-section="milestones">Milestones</button>
+  <button data-section="ai-teams">AI Teams</button>
+</div>
+
+<div class="hero">
+  <small>BPCC ARCHIVE</small>
+  <h2 id="hero-title">Every officer.<br><i>Every number.</i></h2>
+  <p>Career records from the British Police Cricket Club archive, updated live from the official spreadsheet.</p>
+</div>
+
+<div id="summary-cards" class="summary">
+  <div><span>Total Players</span><b id="total-players">0</b></div>
+  <div><span>Total Appearances</span><b id="total-appearances">0</b></div>
+  <div><span>Total Runs</span><b id="total-runs">0</b></div>
+  <div><span>Total Wickets</span><b id="total-wickets">0</b></div>
+</div>
+
+<!-- ============================================================
+     OVERVIEW
+============================================================ -->
+<div class="section active" id="overview">
+  <div class="record-links">
+    <div class="record-box"><h3>Players</h3><p>Full directory</p></div>
+    <div class="record-box"><h3>Batting</h3><p>Career batting</p></div>
+    <div class="record-box"><h3>Bowling</h3><p>Career bowling</p></div>
+    <div class="record-box"><h3>Fielding</h3><p>Career fielding</p></div>
+    <div class="record-box"><h3>Milestones</h3><p>Landmarks</p></div>
+    <div class="record-box"><h3>AI Teams</h3><p>Generated XIs</p></div>
+  </div>
+</div>
+
+<!-- ============================================================
+     PLAYERS
+============================================================ -->
+<div class="section" id="players">
+  <h2 style="font-family:Playfair Display,serif;color:var(--bpcc-navy);margin-bottom:20px;">Players</h2>
+  <input id="player-search" placeholder="Search players..." style="padding:10px;width:100%;max-width:400px;">
+  <div id="players-grid" class="player-grid"></div>
+</div>
+
+<!-- ============================================================
+     BATTING
+============================================================ -->
+<div class="section" id="batting">
+  <h2 style="font-family:Playfair Display,serif;color:var(--bpcc-navy);margin-bottom:20px;">Batting Records</h2>
+  <div id="batting-table"></div>
+</div>
+
+<!-- ============================================================
+     BOWLING
+============================================================ -->
+<div class="section" id="bowling">
+  <h2 style="font-family:Playfair Display,serif;color:var(--bpcc-navy);margin-bottom:20px;">Bowling Records</h2>
+  <div id="bowling-table"></div>
+</div>
+
+<!-- ============================================================
+     FIELDING
+============================================================ -->
+<div class="section" id="fielding">
+  <h2 style="font-family:Playfair Display,serif;color:var(--bpcc-navy);margin-bottom:20px;">Fielding Records</h2>
+  <div id="fielding-table"></div>
+</div>
+
+<!-- ============================================================
+     MILESTONES
+============================================================ -->
+<div class="section" id="milestones">
+  <h2 style="font-family:Playfair Display,serif;color:var(--bpcc-navy);margin-bottom:20px;">Milestones</h2>
+  <div id="batting-milestones"></div>
+  <div id="bowling-milestones"></div>
+  <div id="catches-milestones"></div>
+</div>
+
+<!-- ============================================================
+     AI TEAMS
+============================================================ -->
+<div class="section" id="ai-teams">
+  <h2 style="font-family:Playfair Display,serif;color:var(--bpcc-navy);margin-bottom:20px;">AI Teams</h2>
+
+  <div class="ai-notice" style="margin-bottom:20px;opacity:0.8;">
+    AI-generated, unofficial selections. Team A uses the original elite qualification thresholds.
+    Teams B and C select the next best remaining performers, ranked by XI batting average,
+    bowling average and wicketkeeping victims. Career length remains a modest tie-breaker,
+    and no player appears twice.
