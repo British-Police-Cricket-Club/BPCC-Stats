@@ -944,14 +944,14 @@ const keepSorted = [...allData].sort((a, b) => keeperScore(b) - keeperScore(a));
 function renderTeam(id, title, players) {
   const container = document.getElementById(id);
 
-  // Split into sections
-  const batters = players.filter(p => p.role === "Batter");
-  const keeper = players.filter(p => p.role === "Wicketkeeper");
-  const bowlers = players.filter(p => p.role === "Bowler");
-
   let html = `<div class="ai-team-box">
                 <h3>${title}</h3>
   `;
+
+  // Split into sections
+  const batters = players.slice(0, 5);
+  const keeper = players.slice(5, 6);
+  const bowlers = players.slice(6, 11);
 
   // --- Batters ---
   html += `<div class="ai-team-section">
@@ -960,10 +960,12 @@ function renderTeam(id, title, players) {
 
   batters.forEach((entry, i) => {
     const p = entry.player;
+    const teamRole = "Batter";
+
     html += `
       <div class="ai-player-row" data-player="${p["Player"]}">
         <div class="ai-player-name">${i + 1}. ${p["Player"]}</div>
-        <div class="ai-player-role">${getRole(p)}</div>
+        <div class="ai-player-role">${teamRole}</div>
         <div class="ai-player-stats">
           Runs: ${p["Runs"]} • Avg: ${p["Average"]}
         </div>
@@ -980,12 +982,13 @@ function renderTeam(id, title, players) {
 
   keeper.forEach((entry, i) => {
     const p = entry.player;
+    const teamRole = "Wicket Keeper";
     const victimsPM = (victims(p) / num(p["Matches"])).toFixed(2);
 
     html += `
       <div class="ai-player-row" data-player="${p["Player"]}">
-        <div class="ai-player-name">${batters.length + 1}. ${p["Player"]}</div>
-        <div class="ai-player-role">${getRole(p)}</div>
+        <div class="ai-player-name">6. ${p["Player"]}</div>
+        <div class="ai-player-role">${teamRole}</div>
         <div class="ai-player-stats">
           Victims: ${victims(p)} • Per match: ${victimsPM}
         </div>
@@ -1002,10 +1005,12 @@ function renderTeam(id, title, players) {
 
   bowlers.forEach((entry, i) => {
     const p = entry.player;
+    const teamRole = "Bowler";
+
     html += `
       <div class="ai-player-row" data-player="${p["Player"]}">
-        <div class="ai-player-name">${batters.length + keeper.length + i + 1}. ${p["Player"]}</div>
-        <div class="ai-player-role">${getRole(p)}</div>
+        <div class="ai-player-name">${7 + i}. ${p["Player"]}</div>
+        <div class="ai-player-role">${teamRole}</div>
         <div class="ai-player-stats">
           Wickets: ${p["Wickets"]} • Avg: ${p["Bowling Average"]}
         </div>
@@ -1025,6 +1030,7 @@ function renderTeam(id, title, players) {
     });
   });
 }
+
 
 
 
