@@ -31,6 +31,16 @@
     padding: 20px;
   }
 
+.player-name {
+  font-weight: bold;
+  color: #001f3f;
+}
+
+.player-number {
+  font-size: 12px;
+  color: #555;
+}
+  
   .logo {
     display: block;
     margin: 0 auto 10px auto;
@@ -227,13 +237,17 @@
 }
 
 .ai-player-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
   padding: 8px 0;
   border-bottom: 1px solid #eee;
   cursor: pointer;
 }
 
-.ai-player-row:hover {
-  background: #e3edff;
+.ai-player-left {
+  display: flex;
+  flex-direction: column;
 }
 
 .ai-player-name {
@@ -246,11 +260,16 @@
   color: #555;
 }
 
-.ai-player-stats {
-  margin-top: 4px;
-  font-size: 14px;
+.ai-player-right {
+  text-align: right;
+  font-size: 13px;
+  color: #001f3f;
+  min-width: 110px;
 }
-  
+
+.ai-player-right.small {
+  font-size: 11px;
+}
   
 /* Modal overlay */
 #player-modal {
@@ -699,14 +718,16 @@ function renderBatting() {
   const data = [...allData].sort((a, b) => num(b["Runs"]) - num(a["Runs"]));
 
   let html = "<table><thead><tr>";
-  html += "<th>Player</th><th>No.</th><th>Runs</th><th>Average</th>";
+  html += "<th>Player</th><th>Runs</th><th>Average</th>";
   html += "</tr></thead><tbody>";
 
   data.forEach(p => {
     html += `
       <tr class="clickable-row" data-player="${p["Player"]}">
-        <td>${p["Player"]}</td>
-        <td>${p["Number"]}</td>
+        <td>
+          <div class="player-name">${p["Player"]}</div>
+          <div class="player-number">No. ${p["Number"]}</div>
+        </td>
         <td>${p["Runs"]}</td>
         <td>${p["Average"]}</td>
       </tr>
@@ -716,7 +737,7 @@ function renderBatting() {
   html += "</tbody></table>";
   container.innerHTML = html;
 
-  document.querySelectorAll("#batting-table .clickable-row").forEach(row => {
+  container.querySelectorAll(".clickable-row").forEach(row => {
     row.addEventListener("click", () => {
       const player = allData.find(p => p["Player"] === row.dataset.player);
       openPlayerModal(player);
@@ -724,20 +745,23 @@ function renderBatting() {
   });
 }
 
+
 /* BOWLING */
 function renderBowling() {
   const container = document.getElementById("bowling-table");
   const data = [...allData].sort((a, b) => num(b["Wickets"]) - num(a["Wickets"]));
 
   let html = "<table><thead><tr>";
-  html += "<th>Player</th><th>No.</th><th>Wickets</th><th>Average</th>";
+  html += "<th>Player</th><th>Wickets</th><th>Average</th>";
   html += "</tr></thead><tbody>";
 
   data.forEach(p => {
     html += `
       <tr class="clickable-row" data-player="${p["Player"]}">
-        <td>${p["Player"]}</td>
-        <td>${p["Number"]}</td>
+        <td>
+          <div class="player-name">${p["Player"]}</div>
+          <div class="player-number">No. ${p["Number"]}</div>
+        </td>
         <td>${p["Wickets"]}</td>
         <td>${p["Bowling Average"]}</td>
       </tr>
@@ -747,7 +771,7 @@ function renderBowling() {
   html += "</tbody></table>";
   container.innerHTML = html;
 
-  document.querySelectorAll("#bowling-table .clickable-row").forEach(row => {
+  container.querySelectorAll(".clickable-row").forEach(row => {
     row.addEventListener("click", () => {
       const player = allData.find(p => p["Player"] === row.dataset.player);
       openPlayerModal(player);
@@ -756,20 +780,23 @@ function renderBowling() {
 }
 
 
+
 /* FIELDING */
 function renderFielding() {
   const container = document.getElementById("fielding-table");
   const data = [...allData].sort((a, b) => victims(b) - victims(a));
 
   let html = "<table><thead><tr>";
-  html += "<th>Player</th><th>No.</th><th>Victims</th><th>Catches</th>";
+  html += "<th>Player</th><th>Victims</th><th>Catches</th>";
   html += "</tr></thead><tbody>";
 
   data.forEach(p => {
     html += `
       <tr class="clickable-row" data-player="${p["Player"]}">
-        <td>${p["Player"]}</td>
-        <td>${p["Number"]}</td>
+        <td>
+          <div class="player-name">${p["Player"]}</div>
+          <div class="player-number">No. ${p["Number"]}</div>
+        </td>
         <td>${victims(p)}</td>
         <td>${p["Catches"]}</td>
       </tr>
@@ -779,13 +806,14 @@ function renderFielding() {
   html += "</tbody></table>";
   container.innerHTML = html;
 
-  document.querySelectorAll("#fielding-table .clickable-row").forEach(row => {
+  container.querySelectorAll(".clickable-row").forEach(row => {
     row.addEventListener("click", () => {
       const player = allData.find(p => p["Player"] === row.dataset.player);
       openPlayerModal(player);
     });
   });
 }
+
 
 
 /* MILESTONES */
@@ -948,76 +976,69 @@ function renderTeam(id, title, players) {
                 <h3>${title}</h3>
   `;
 
-  // Split into sections
   const batters = players.slice(0, 5);
   const keeper = players.slice(5, 6);
   const bowlers = players.slice(6, 11);
 
   // --- Batters ---
-  html += `<div class="ai-team-section">
-             <h4>Batters</h4>
-  `;
-
+  html += `<div class="ai-team-section"><h4>Batters</h4>`;
   batters.forEach((entry, i) => {
     const p = entry.player;
-    const teamRole = "Batter";
 
     html += `
       <div class="ai-player-row" data-player="${p["Player"]}">
-        <div class="ai-player-name">${i + 1}. ${p["Player"]}</div>
-        <div class="ai-player-role">${teamRole}</div>
-        <div class="ai-player-stats">
-          Runs: ${p["Runs"]} • Avg: ${p["Average"]}
+        <div class="ai-player-left">
+          <div class="ai-player-name">${i + 1}. ${p["Player"]}</div>
+          <div class="ai-player-role">Batter</div>
+        </div>
+        <div class="ai-player-right">
+          ${p["Runs"]} runs<br>
+          Avg ${p["Average"]}
         </div>
       </div>
     `;
   });
-
   html += `</div>`;
 
   // --- Wicket Keeper ---
-  html += `<div class="ai-team-section">
-             <h4>Wicket Keeper</h4>
-  `;
-
-  keeper.forEach((entry, i) => {
+  html += `<div class="ai-team-section"><h4>Wicket Keeper</h4>`;
+  keeper.forEach((entry) => {
     const p = entry.player;
-    const teamRole = "Wicket Keeper";
     const victimsPM = (victims(p) / num(p["Matches"])).toFixed(2);
 
     html += `
       <div class="ai-player-row" data-player="${p["Player"]}">
-        <div class="ai-player-name">6. ${p["Player"]}</div>
-        <div class="ai-player-role">${teamRole}</div>
-        <div class="ai-player-stats">
-          Victims: ${victims(p)} • Per match: ${victimsPM}
+        <div class="ai-player-left">
+          <div class="ai-player-name">6. ${p["Player"]}</div>
+          <div class="ai-player-role">Wicket Keeper</div>
+        </div>
+        <div class="ai-player-right">
+          ${victims(p)} victims<br>
+          ${victimsPM} per match
         </div>
       </div>
     `;
   });
-
   html += `</div>`;
 
   // --- Bowlers ---
-  html += `<div class="ai-team-section">
-             <h4>Bowlers</h4>
-  `;
-
+  html += `<div class="ai-team-section"><h4>Bowlers</h4>`;
   bowlers.forEach((entry, i) => {
     const p = entry.player;
-    const teamRole = "Bowler";
 
     html += `
       <div class="ai-player-row" data-player="${p["Player"]}">
-        <div class="ai-player-name">${7 + i}. ${p["Player"]}</div>
-        <div class="ai-player-role">${teamRole}</div>
-        <div class="ai-player-stats">
-          Wickets: ${p["Wickets"]} • Avg: ${p["Bowling Average"]}
+        <div class="ai-player-left">
+          <div class="ai-player-name">${7 + i}. ${p["Player"]}</div>
+          <div class="ai-player-role">Bowler</div>
+        </div>
+        <div class="ai-player-right">
+          ${p["Wickets"]} wickets<br>
+          Avg ${p["Bowling Average"]}
         </div>
       </div>
     `;
   });
-
   html += `</div></div>`;
 
   container.innerHTML = html;
@@ -1030,9 +1051,6 @@ function renderTeam(id, title, players) {
     });
   });
 }
-
-
-
 
 /* INIT */
 async function init(){
