@@ -342,7 +342,7 @@ function renderFielding() {
 ============================================================ */
 function renderMilestones() {
   renderMilestoneClubs(
-    "Runs milestone clubs",
+    "Runs Milestone Clubs",
     "Runs",
     [3500,3000,2500,2000,1500,1000,500,250],
     20,
@@ -350,7 +350,7 @@ function renderMilestones() {
   );
 
   renderMilestoneClubs(
-    "Bowling milestone clubs",
+    "Bowling Milestone Clubs",
     "Wickets",
     [100,90,80,70,60,50,40,30,20],
     2,
@@ -358,7 +358,7 @@ function renderMilestones() {
   );
 
   renderMilestoneClubs(
-    "Catches milestone clubs",
+    "Catches Milestone Clubs",
     "Catches",
     [50,40,30,20,10],
     2,
@@ -403,7 +403,7 @@ function renderMilestoneClubs(title, field, milestones, threshold, container) {
   html += "</div>";
 
   html += "<h3 style='font-family:Playfair Display,serif;color:#0b1a33;margin-top:40px;'>";
-  html += "Current players approaching";
+  html += "Current Players Approaching";
   html += "</h3>";
 
   let any = false;
@@ -439,7 +439,7 @@ function renderMilestoneClubs(title, field, milestones, threshold, container) {
   });
 
   if (!any) {
-    html += "<p>No current players within range.</p>";
+    html += "<p>No Current Players Wwithin Range.</p>";
   }
 
   container.innerHTML = html;
