@@ -20,11 +20,11 @@
 
 /* Safe-area support for iPhone */
 body {
-  padding-bottom: env(safe-area-inset-bottom);
-  background: #f7f9fc;
   margin: 0;
   font-family: Inter, Arial, sans-serif;
+  background: #f7f9fc;
   color: #1a1a1a;
+  padding-bottom: env(safe-area-inset-bottom);
 }
 
 /* ============================================================
@@ -61,6 +61,8 @@ header em {
   justify-content: center;
   gap: 10px;
   padding: 12px;
+  padding-bottom: 0 !important; /* FIX: prevents scroll cutoff */
+  margin-bottom: 0 !important;
 }
 
 .nav-bar button {
@@ -126,7 +128,7 @@ header em {
   margin: 50px auto;
   display: grid;
   grid-template-columns: repeat(4, 1fr);
-  gap: 35px; /* Increased spacing */
+  gap: 35px; /* FIX: more spacing */
 }
 
 .summary div {
@@ -136,7 +138,6 @@ header em {
   text-align: center;
   box-shadow: 0 2px 6px rgba(0,0,0,0.08);
 }
-
 /* ============================================================
    PLAYER GRID
 ============================================================ */
@@ -177,6 +178,11 @@ table {
 thead {
   background: var(--bpcc-navy);
   color: white;
+}
+
+tbody td {
+  padding: 10px;
+  border-bottom: 1px solid #e5e5e5; /* FIX: row separation restored */
 }
 
 tbody tr:hover {
@@ -235,6 +241,25 @@ tbody tr:hover {
   padding: 12px 16px;
   border-radius: 10px;
   text-align: center;
+  font-size: 22px; /* FIX */
+}
+
+.ai-team-section h4 {
+  font-size: 18px; /* FIX */
+  font-family: Playfair Display, serif;
+  color: var(--bpcc-blue);
+  margin-bottom: 10px;
+  border-bottom: 2px solid var(--bpcc-gold);
+}
+
+.ai-player-name {
+  font-size: 15px; /* FIX */
+  font-weight: 600;
+}
+
+.ai-player-role {
+  font-size: 13px; /* FIX */
+  color: #555;
 }
 
 .ai-player-row:hover {
@@ -247,6 +272,17 @@ tbody tr:hover {
 /* ============================================================
    MODAL
 ============================================================ */
+#player-modal {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.6);
+  display: flex;
+  justify-content: center;
+  align-items: center; /* FIX: modal centered again */
+  padding-bottom: env(safe-area-inset-bottom);
+}
+
 #player-modal-content {
   background: white;
   width: 90%;
@@ -256,17 +292,8 @@ tbody tr:hover {
   max-height: 85vh;
   overflow-y: auto;
   border: 3px solid var(--bpcc-gold);
-  padding-bottom: 140px; /* Prevent overlap */
+  animation: slideUp 0.35s ease;
 }
-
-/* ============================================================
-   ANIMATIONS
-============================================================ */
-@keyframes fadeIn {
-  from { opacity: 0; transform: translateY(10px); }
-  to   { opacity: 1; transform: translateY(0); }
-}
-
 /* ============================================================
    MOBILE RESPONSIVE + SAFE AREA
 ============================================================ */
@@ -296,15 +323,25 @@ tbody tr:hover {
     padding-bottom: calc(140px + env(safe-area-inset-bottom));
   }
 
+  /* Top nav scroll fix */
+  .nav-bar {
+    overflow-x: auto;
+    white-space: nowrap;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  /* Overview spacing */
   .summary {
     grid-template-columns: repeat(2, 1fr);
     gap: 25px;
   }
 
+  /* Player grid */
   .player-grid {
     grid-template-columns: 1fr;
   }
 
+  /* Bottom tab bar */
   .bottom-tab-bar {
     position: fixed;
     bottom: env(safe-area-inset-bottom);
@@ -319,10 +356,14 @@ tbody tr:hover {
     z-index: 9999;
     padding-bottom: env(safe-area-inset-bottom);
   }
+
+  .bottom-tab-bar button.active {
+    color: var(--bpcc-gold);
+    transform: translateY(-4px);
+  }
 }
 
 </style>
-
 </head>
 
 <body>
