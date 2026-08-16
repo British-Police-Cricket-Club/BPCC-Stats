@@ -23,11 +23,13 @@ async function loadCSV() {
   return lines.slice(1).map(function(line){
     const cols = line.split(",");
     const obj = {};
-    headers.forEach(function(h, i){
-      obj[h] = (cols[i] || "").trim();
-    });
-    return obj;
-  });
+    HEADERS.filter(h => h !== "Player" && h !== "Number")
+       .forEach(function(h){
+          const row = document.createElement("div");
+          row.className = "modal-stat-row";
+          row.innerHTML = "<h4>" + h + "</h4><p>" + (p[h] || "") + "</p>";
+          stats.appendChild(row);
+       });
 }
 
 function num(v) {
