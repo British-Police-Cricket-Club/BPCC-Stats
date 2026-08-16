@@ -477,24 +477,9 @@ const DATA_URL =
 
 // Headers
 const HEADERS = [
-  "Player",
-  "Number",
-  "Years",
-  "Matches",
-  "Innings",
-  "Runs",
-  "Average",
-  "High Score",
-  "Fifties",
-  "Hundreds",
-  "Overs",
-  "Wickets",
-  "Bowling Average",
-  "Economy",
-  "Best",
-  "Catches",
-  "Stumpings",
-  "Current"
+  "Player","Number","Years","Matches","Innings","Runs","Average","High Score",
+  "Fifties","Hundreds","Overs","Wickets","Bowling Average","Economy","Best",
+  "Catches","Stumpings","Current"
 ];
 
 const battingMilestones = [100, 250, 500, 1000, 1500, 2000, 2500, 3000, 3500];
@@ -513,9 +498,7 @@ async function loadCSV() {
   return lines.slice(1).map(line => {
     const cols = line.split(",");
     const obj = {};
-    headers.forEach((h, i) => {
-      obj[h] = (cols[i] || "").trim();
-    });
+    headers.forEach((h, i) => obj[h] = (cols[i] || "").trim());
     return obj;
   });
 }
@@ -530,7 +513,8 @@ function victims(player) {
   return num(player["Catches"]) + num(player["Stumpings"]);
 }
 
-function renderPlayers() {  // now renders cards instead of table
+// Render Players (cards)
+function renderPlayers() {
   const container = document.getElementById("players-grid");
   container.innerHTML = "";
 
@@ -559,16 +543,15 @@ function renderPlayers() {  // now renders cards instead of table
   });
 }
 
-  
+document.getElementById("player-search").addEventListener("input", renderPlayers);
+
 // Navigation
 function setupNav() {
   const buttons = document.querySelectorAll(".nav-bar button");
   buttons.forEach(btn => {
     btn.addEventListener("click", () => {
       const sectionId = btn.getAttribute("data-section");
-      document.querySelectorAll(".section").forEach(sec => {
-        sec.classList.remove("active");
-      });
+      document.querySelectorAll(".section").forEach(sec => sec.classList.remove("active"));
       document.getElementById(sectionId).classList.add("active");
 
       buttons.forEach(b => b.classList.remove("active"));
@@ -579,15 +562,13 @@ function setupNav() {
 
 // Overview totals
 function renderOverview() {
-  const totalPlayers = allData.length;
-  const totalAppearances = allData.reduce((sum, p) => sum + num(p["Matches"]), 0);
-  const totalRuns = allData.reduce((sum, p) => sum + num(p["Runs"]), 0);
-  const totalWickets = allData.reduce((sum, p) => sum + num(p["Wickets"]), 0);
-
-  document.getElementById("total-players").textContent = totalPlayers;
-  document.getElementById("total-appearances").textContent = totalAppearances;
-  document.getElementById("total-runs").textContent = totalRuns;
-  document.getElementById("total-wickets").textContent = totalWickets;
+  document.getElementById("total-players").textContent = allData.length;
+  document.getElementById("total-appearances").textContent =
+    allData.reduce((sum, p) => sum + num(p["Matches"]), 0);
+  document.getElementById("total-runs").textContent =
+    allData.reduce((sum, p) => sum + num(p["Runs"]), 0);
+  document.getElementById("total-wickets").textContent =
+    allData.reduce((sum, p) => sum + num(p["Wickets"]), 0);
 }
 
 // Overview record link boxes
@@ -595,78 +576,18 @@ document.querySelectorAll(".record-box").forEach(box => {
   box.addEventListener("click", () => {
     const target = box.getAttribute("data-section");
 
-    // Hide all sections
     document.querySelectorAll(".section").forEach(sec => sec.classList.remove("active"));
-
-    // Show target section
     document.getElementById(target).classList.add("active");
 
-    // Update nav bar highlight
     document.querySelectorAll(".nav-bar button").forEach(btn => {
       btn.classList.toggle("active", btn.getAttribute("data-section") === target);
     });
 
-    // Scroll to top
     window.scrollTo({ top: 0, behavior: "smooth" });
   });
 });
-  
-// Players table + search + detail
-function renderPlayers() {
-  const container = document.getElementById("players-table");
-  const cols = [
-    "Player","Number","Years","Matches","Runs",
-    "Wickets","Catches","Stumpings","Current"
-  ];
-document.getElementById("player-search").addEventListener("input", renderPlayers);
 
-  let html = "<table><thead><tr>";
-  cols.forEach(c => html += `<th>${c}</th>`);
-  html += "</tr></thead><tbody>";
-
-  allData.forEach((p, idx) => {
-    html += `<tr data-index="${idx}">`;
-    cols.forEach(c => {
-      html += `<td>${p[c] || ""}</td>`;
-    });
-    html += "</tr>";
-  });
-
-  html += "</tbody></table>";
-  container.innerHTML = html;
-
-  // search
-  const searchInput = document.getElementById("player-search");
-  searchInput.addEventListener("input", () => {
-    const q = searchInput.value.toLowerCase();
-    const rows = container.querySelectorAll("tbody tr");
-    rows.forEach(row => {
-      const name = row.children[0].textContent.toLowerCase();
-      row.style.display = name.includes(q) ? "" : "none";
-    });
-  });
-
-  // click for detail
-  const rows = container.querySelectorAll("tbody tr");
-  rows.forEach(row => {
-    row.addEventListener("click", () => {
-      const idx = parseInt(row.getAttribute("data-index"), 10);
-      showPlayerDetail(allData[idx]);
-    });
-  });
-}
-
-function showPlayerDetail(p) {
-  const detail = document.getElementById("player-detail");
-  let html = `<h3>${p["Player"]}</h3><table>`;
-  HEADERS.forEach(h => {
-    html += `<tr><th>${h}</th><td>${p[h] || ""}</td></tr>`;
-  });
-  html += "</table>";
-  detail.innerHTML = html;
-  detail.style.display = "block";
-}
-
+// Modal
 function openPlayerModal(p) {
   document.getElementById("modal-player-name").textContent = p["Player"];
   document.getElementById("modal-player-number").textContent = "Player No: " + p["Number"];
@@ -677,10 +598,7 @@ function openPlayerModal(p) {
   HEADERS.forEach(h => {
     const box = document.createElement("div");
     box.className = "modal-stat-box";
-    box.innerHTML = `
-      <h4>${h}</h4>
-      <p>${p[h] || ""}</p>
-    `;
+    box.innerHTML = `<h4>${h}</h4><p>${p[h] || ""}</p>`;
     statsContainer.appendChild(box);
   });
 
@@ -696,15 +614,11 @@ window.addEventListener("click", (e) => {
     document.getElementById("player-modal").style.display = "none";
   }
 });
-  
-  
+
 // Batting
 function renderBatting() {
   const container = document.getElementById("batting-table");
-  const cols = [
-    "Player","Matches","Innings","Runs","Average",
-    "High Score","Fifties","Hundreds"
-  ];
+  const cols = ["Player","Matches","Innings","Runs","Average","High Score","Fifties","Hundreds"];
 
   const data = [...allData].sort((a, b) => num(b["Runs"]) - num(a["Runs"]));
 
@@ -725,9 +639,7 @@ function renderBatting() {
 // Bowling
 function renderBowling() {
   const container = document.getElementById("bowling-table");
-  const cols = [
-    "Player","Overs","Wickets","Bowling Average","Economy","Best"
-  ];
+  const cols = ["Player","Overs","Wickets","Bowling Average","Economy","Best"];
 
   const data = [...allData].sort((a, b) => num(b["Wickets"]) - num(a["Wickets"]));
 
@@ -748,9 +660,7 @@ function renderBowling() {
 // Fielding
 function renderFielding() {
   const container = document.getElementById("fielding-table");
-  const cols = [
-    "Player","Catches","Stumpings","Victims","Current"
-  ];
+  const cols = ["Player","Catches","Stumpings","Victims","Current"];
 
   const data = [...allData].sort((a, b) => victims(b) - victims(a));
 
@@ -760,11 +670,11 @@ function renderFielding() {
 
   data.forEach(p => {
     html += "<tr>";
-    html += `<td>${p["Player"] || ""}</td>`;
-    html += `<td>${p["Catches"] || ""}</td>`;
-    html += `<td>${p["Stumpings"] || ""}</td>`;
+    html += `<td>${p["Player"]}</td>`;
+    html += `<td>${p["Catches"]}</td>`;
+    html += `<td>${p["Stumpings"]}</td>`;
     html += `<td>${victims(p)}</td>`;
-    html += `<td>${p["Current"] || ""}</td>`;
+    html += `<td>${p["Current"]}</td>`;
     html += "</tr>";
   });
 
@@ -774,27 +684,9 @@ function renderFielding() {
 
 // Milestones
 function renderMilestones() {
-  renderMilestoneCategory(
-    allData,
-    "Runs",
-    battingMilestones,
-    20,
-    document.getElementById("batting-milestones")
-  );
-  renderMilestoneCategory(
-    allData,
-    "Wickets",
-    bowlingMilestones,
-    2,
-    document.getElementById("bowling-milestones")
-  );
-  renderMilestoneCategory(
-    allData,
-    "Catches",
-    catchesMilestones,
-    2,
-    document.getElementById("catches-milestones")
-  );
+  renderMilestoneCategory(allData, "Runs", battingMilestones, 20, document.getElementById("batting-milestones"));
+  renderMilestoneCategory(allData, "Wickets", bowlingMilestones, 2, document.getElementById("bowling-milestones"));
+  renderMilestoneCategory(allData, "Catches", catchesMilestones, 2, document.getElementById("catches-milestones"));
 }
 
 function renderMilestoneCategory(data, field, milestones, threshold, container) {
@@ -804,27 +696,17 @@ function renderMilestoneCategory(data, field, milestones, threshold, container) 
   data.forEach(p => {
     const value = num(p[field]);
     milestones.forEach(m => {
-      if (value >= m) {
-        achieved.push(`${p["Player"]} – ${value} ${field} (≥ ${m})`);
-      } else if (m - value > 0 && m - value <= threshold) {
+      if (value >= m) achieved.push(`${p["Player"]} – ${value} ${field} (≥ ${m})`);
+      else if (m - value > 0 && m - value <= threshold)
         approaching.push(`${p["Player"]} – ${value} ${field} (approaching ${m})`);
-      }
     });
   });
 
   let html = "<p><strong>Achieved:</strong></p>";
-  if (achieved.length === 0) {
-    html += "<p>None yet.</p>";
-  } else {
-    achieved.forEach(line => html += `<p>${line}</p>`);
-  }
+  html += achieved.length ? achieved.map(a => `<p>${a}</p>`).join("") : "<p>None yet.</p>";
 
   html += "<p><strong>Approaching:</strong></p>";
-  if (approaching.length === 0) {
-    html += "<p>None currently approaching.</p>";
-  } else {
-    approaching.forEach(line => html += `<p>${line}</p>`);
-  }
+  html += approaching.length ? approaching.map(a => `<p>${a}</p>`).join("") : "<p>None currently approaching.</p>";
 
   container.innerHTML = html;
 }
@@ -833,20 +715,97 @@ function renderMilestoneCategory(data, field, milestones, threshold, container) 
 function renderAITeams() {
   const used = new Set();
 
-  // helper: victims per match
   function victimsPerMatch(p) {
-    const v = victims(p);
     const m = num(p["Matches"]);
-    return m > 0 ? v / m : 0;
+    return m > 0 ? victims(p) / m : 0;
   }
 
-  // Team A: best 5 batters, best keeper, best 5 bowlers
-  const batSorted = [...allData].sort((a, b) => {
-    if (num(b["Runs"]) !== num(a["Runs"])) return num(b["Runs"]) - num(a["Runs"]);
-    if (num(b["Average"]) !== num(a["Average"])) return num(b["Average"]) - num(a["Average"]);
-    return num(b["Matches"]) - num(a["Matches"]);
+  const batSorted = [...allData].sort((a, b) =>
+    num(b["Runs"]) - num(a["Runs"]) ||
+    num(b["Average"]) - num(a["Average"]) ||
+    num(b["Matches"]) - num(a["Matches"])
+  );
+
+  const bowlSorted = [...allData].sort((a, b) =>
+    num(b["Wickets"]) - num(a["Wickets"]) ||
+    num(a["Bowling Average"]) - num(b["Bowling Average"]) ||
+    num(b["Matches"]) - num(a["Matches"])
+  );
+
+  const keepSorted = [...allData].sort((a, b) =>
+    victimsPerMatch(b) - victimsPerMatch(a) ||
+    num(b["Matches"]) - num(a["Matches"])
+  );
+
+  function pickPlayers(sorted, count, role) {
+    const team = [];
+    for (const p of sorted) {
+      if (team.length >= count) break;
+      if (!used.has(p["Player"])) {
+        team.push({ player: p, role });
+        used.add(p["Player"]);
+      }
+    }
+    return team;
+  }
+
+  const teamA = [
+    ...pickPlayers(batSorted, 5, "Batter"),
+    ...pickPlayers(keepSorted, 1, "Wicketkeeper"),
+    ...pickPlayers(bowlSorted, 5, "Bowler")
+  ];
+
+  function buildNextTeam(label) {
+    const team = [
+      ...pickPlayers(batSorted, 5, "Batter"),
+      ...pickPlayers(keepSorted, 1, "Wicketkeeper"),
+      ...pickPlayers(bowlSorted, 5, "Bowler")
+    ];
+    return { label, players: team };
+  }
+
+  const teamB = buildNextTeam("Team B");
+  const teamC = buildNextTeam("Team C");
+
+  renderTeam("team-a", "Team A – Best XI", teamA);
+  renderTeam("team-b", "Team B – Next Best XI", teamB.players);
+  renderTeam("team-c", "Team C – Next Best XI", teamC.players);
+}
+
+function renderTeam(containerId, title, players) {
+  const container = document.getElementById(containerId);
+  let html = `<h3>${title}</h3><table><thead><tr>
+    <th>Player</th><th>Matches</th><th>Runs</th><th>Average</th>
+    <th>Wickets</th><th>Bowling Avg</th><th>Victims</th>
+  </tr></thead><tbody>`;
+
+  players.forEach(({ player, role }) => {
+    html += `<tr>
+      <td>${player["Player"]}<span class="role">${role}</span></td>
+      <td>${player["Matches"]}</td>
+      <td>${player["Runs"]}</td>
+      <td>${player["Average"]}</td>
+      <td>${player["Wickets"]}</td>
+      <td>${player["Bowling Average"]}</td>
+      <td>${victims(player)}</td>
+    </tr>`;
   });
 
-  const bowlSorted = [...allData].sort((a, b) => {
-    if (num(b["Wickets"]) !== num(a["Wickets"])) return num(b["Wickets"]) - num(a["Wickets"]);
-    if (num(a["
+  html += "</tbody></table>";
+  container.innerHTML = html;
+}
+
+// Init
+async function init() {
+  allData = await loadCSV();
+  setupNav();
+  renderOverview();
+  renderPlayers();
+  renderBatting();
+  renderBowling();
+  renderFielding();
+  renderMilestones();
+  renderAITeams();
+}
+
+init();
