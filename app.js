@@ -18,18 +18,16 @@ async function loadCSV() {
   const res = await fetch(DATA_URL);
   const text = await res.text();
   const lines = text.trim().split("\n");
-  const headers = lines[0].split(",").map(function(h){ return h.trim(); });
+  const headers = lines[0].split(",").map(h => h.trim());
 
-  return lines.slice(1).map(function(line){
+  return lines.slice(1).map(line => {
     const cols = line.split(",");
     const obj = {};
-    HEADERS.filter(h => h !== "Player" && h !== "Number")
-       .forEach(function(h){
-          const row = document.createElement("div");
-          row.className = "modal-stat-row";
-          row.innerHTML = "<h4>" + h + "</h4><p>" + (p[h] || "") + "</p>";
-          stats.appendChild(row);
-       });
+    headers.forEach((h, i) => {
+      obj[h] = (cols[i] || "").trim();
+    });
+    return obj;
+  });
 }
 
 function num(v) {
