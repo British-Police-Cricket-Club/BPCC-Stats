@@ -586,6 +586,13 @@ function renderTeam(id, title, players) {
   });
 }
 
+document.querySelectorAll(".record-box").forEach(box => {
+  box.addEventListener("click", () => {
+    const section = box.querySelector("h3").textContent.toLowerCase();
+    document.querySelector(`[data-section="${section}"]`).click();
+  });
+});
+
 /* ============================================================
    INIT
 ============================================================ */
