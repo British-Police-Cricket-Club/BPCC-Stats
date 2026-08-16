@@ -478,16 +478,22 @@ function victims(p){return num(p["Catches"])+num(p["Stumpings"]);}
 
 /* ROLE DETECTION */
 function getRole(p){
-  const runs=num(p["Runs"]);
-  const wickets=num(p["Wickets"]);
-  const catches=num(p["Catches"]);
-  const stumpings=num(p["Stumpings"]);
-  if(stumpings>0&&catches>0)return"Wicketkeeper";
-  if(wickets>=5)return"Bowler";
-  if(runs>=100)return"Batter";
-  if(runs>=100&&wickets>=10)return"All-rounder";
-  return"Player";
+  const runs = num(p["Runs"]);
+  const wickets = num(p["Wickets"]);
+  const stumpings = num(p["Stumpings"]);
+
+  // Wicketkeeper ONLY if they have stumpings
+  if (stumpings > 0) return "Wicketkeeper";
+
+  // All-rounder BEFORE bowler/batter
+  if (runs >= 100 && wickets >= 10) return "All-rounder";
+
+  if (wickets >= 5) return "Bowler";
+  if (runs >= 100) return "Batter";
+
+  return "Player";
 }
+
 
 /* PLAYERS PAGE */
 function renderPlayers(){
