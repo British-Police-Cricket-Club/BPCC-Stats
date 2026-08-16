@@ -295,13 +295,13 @@ function renderFielding() {
   });
 }
 /* ============================================================
-   MILESTONES
+   MILESTONES (largest → smallest)
 ============================================================ */
 function renderMilestones() {
   renderMilestoneClubs(
     "Runs milestone clubs",
     "Runs",
-    [250,500,1000,1500,2000,2500,3000,3500],
+    [3500,3000,2500,2000,1500,1000,500,250],
     20,
     document.getElementById("batting-milestones")
   );
@@ -309,7 +309,7 @@ function renderMilestones() {
   renderMilestoneClubs(
     "Bowling milestone clubs",
     "Wickets",
-    [20,30,40,50,60,70,80,90,100],
+    [100,90,80,70,60,50,40,30,20],
     2,
     document.getElementById("bowling-milestones")
   );
@@ -317,27 +317,22 @@ function renderMilestones() {
   renderMilestoneClubs(
     "Catches milestone clubs",
     "Catches",
-    [10,20,30,40,50],
+    [50,40,30,20,10],
     2,
     document.getElementById("catches-milestones")
   );
 }
 
 function renderMilestoneClubs(title, field, milestones, threshold, container) {
-  let html = "<h3>" + title + "</h3>";
-
-  const sorted = milestones.slice().sort(function(a, b){
-    return a - b;
-  });
+  let html = "<h3 style='font-family:Playfair Display,serif;color:#0b1a33;margin-top:30px;'>" + title + "</h3>";
 
   html += "<div class='milestone-grid'>";
 
-  sorted.forEach(function(m){
+  milestones.forEach(function(m){
     const achieved = allData.filter(function(p){
       const value = num(p[field]);
       if (value < m) return false;
-      const maxM = sorted.filter(function(ms){ return value >= ms; }).pop();
-      return maxM === m;
+      return true;
     });
 
     html += "<div class='milestone-club-box'><h4>" + m + " Club</h4>";
@@ -357,11 +352,11 @@ function renderMilestoneClubs(title, field, milestones, threshold, container) {
 
   html += "</div>";
 
-  html += "<h3>Current players approaching</h3>";
+  html += "<h3 style='font-family:Playfair Display,serif;color:#0b1a33;margin-top:40px;'>Current players approaching</h3>";
 
   let any = false;
 
-  sorted.forEach(function(m){
+  milestones.forEach(function(m){
     const approaching = allData.filter(function(p){
       if (p["Current"] !== "Yes") return false;
       const value = num(p[field]);
