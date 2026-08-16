@@ -355,11 +355,11 @@
     </div>
 
     <p style="margin-top:25px; font-size:13px; color:#555; text-align:center;">
-      explore the archive
+      Explore the Archive
     </p>
 
     <p style="margin-top:5px; font-size:20px; color:#001f3f; text-align:center; font-weight:bold;">
-      start with a record
+      Ttart with a Record
     </p>
 
     <div class="record-links">
@@ -476,10 +476,10 @@ function getRole(p){
   const wickets=num(p["Wickets"]);
   const catches=num(p["Catches"]);
   const stumpings=num(p["Stumpings"]);
-  if(stumpings>0||catches>30)return"Wicketkeeper";
-  if(wickets>=40)return"Bowler";
-  if(runs>=1000)return"Batter";
-  if(runs>=500&&wickets>=20)return"All-rounder";
+  if(stumpings>0||catches>0)return"Wicketkeeper";
+  if(wickets>=5)return"Bowler";
+  if(runs>=100)return"Batter";
+  if(runs>=100&&wickets>=10)return"All-rounder";
   return"Player";
 }
 
