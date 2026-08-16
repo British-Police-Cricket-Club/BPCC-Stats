@@ -186,7 +186,6 @@
 
 /* Modal overlay */
 #player-modal {
-  display: none;
   position: fixed;
   z-index: 2000;
   left: 0;
@@ -194,11 +193,16 @@
   width: 100%;
   height: 100%;
   background: rgba(0,0,0,0.6);
-  display: flex;
+
+  /* FIX: modal starts hidden */
+  display: none;
+
+  /* Center modal when visible */
   justify-content: center;
   align-items: center;
   padding: 20px;
 }
+
 
 /* Modal box */
 #player-modal-content {
@@ -368,7 +372,7 @@
   </div>
 
   <!-- Popup modal -->
-  <div id="player-modal">
+ <div id="player-modal">
   <div id="player-modal-content">
 
     <div class="modal-header">
@@ -382,6 +386,7 @@
 
   </div>
 </div>
+
 
 
   <!-- Batting -->
