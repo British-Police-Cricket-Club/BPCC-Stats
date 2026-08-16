@@ -1,0 +1,1333 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>BPCC Player Records</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <style id="v100">
+  /* ============================================================
+     GLOBAL
+  ============================================================ */
+  :root {
+    --bpcc-navy: #0b1a33;
+    --bpcc-blue: #1c376b;
+    --bpcc-gold: #e6c15a;
+    --bpcc-gradient: linear-gradient(135deg, #0b1a33, #1c376b, #0b1a33);
+    --bpcc-gold-gradient: linear-gradient(135deg, #e6c15a, #f7e7a4, #e6c15a);
+  }
+
+  body {
+    margin: 0;
+    font-family: Inter, Arial, sans-serif;
+    background: #f7f9fc;
+    color: #1a1a1a;
+  }
+
+  h1, h2, h3, h4 {
+    margin: 0;
+    font-weight: 600;
+  }
+
+  .section {
+    display: none;
+    padding: 50px 20px;
+    max-width: 1100px;
+    margin: auto;
+    animation: fadeIn 0.4s ease;
+  }
+
+  .section.active {
+    display: block;
+  }
+
+  /* ============================================================
+     HEADER
+  ============================================================ */
+  header {
+    background: var(--bpcc-navy);
+    color: white;
+    padding: 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  header .brand {
+    display: flex;
+    align-items: center;
+  }
+
+  header img {
+    height: 60px;
+    margin-right: 15px;
+  }
+
+  header h1 {
+    font-size: 22px;
+    letter-spacing: 1px;
+    font-family: Playfair Display, serif;
+  }
+
+  header em {
+    color: var(--bpcc-gold);
+    font-style: normal;
+  }
+
+  /* ============================================================
+     NAVIGATION
+  ============================================================ */
+  .nav-bar {
+    background: var(--bpcc-gradient);
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    padding: 12px;
+  }
+
+  .nav-bar button {
+    background: var(--bpcc-navy);
+    color: white;
+    border: none;
+    padding: 10px 18px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 14px;
+    transition: 0.25s ease;
+  }
+
+  .nav-bar button:hover {
+    background: var(--bpcc-gradient);
+    color: var(--bpcc-gold);
+  }
+
+  .nav-bar button.on {
+    background: var(--bpcc-gold);
+    color: var(--bpcc-navy);
+    box-shadow: inset 0 0 0 2px var(--bpcc-navy);
+  }
+
+  /* ============================================================
+     HERO
+  ============================================================ */
+  .hero {
+    text-align: center;
+    padding: 60px 20px;
+    background: white;
+    border-bottom: 1px solid #ddd;
+  }
+
+  .hero h2 {
+    font-size: 42px;
+    font-family: Playfair Display, serif;
+    color: var(--bpcc-navy);
+  }
+
+  .hero h2 i {
+    color: var(--bpcc-gold);
+  }
+
+  /* ============================================================
+     SUMMARY CARDS
+  ============================================================ */
+  #summary-cards.summary {
+    max-width: 1100px;
+    margin: 40px auto;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 25px;
+  }
+
+  #summary-cards.summary div {
+    background: white;
+    padding: 25px;
+    border-radius: 12px;
+    text-align: center;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.08);
+  }
+
+  /* ============================================================
+     PLAYER GRID
+  ============================================================ */
+  #players-grid.player-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 25px;
+    margin-top: 30px;
+  }
+
+  .player-card {
+    background: white;
+    padding: 22px;
+    border-radius: 12px;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.08);
+    cursor: pointer;
+    transition: transform 0.25s ease, box-shadow 0.25s ease, background 0.25s ease;
+  }
+
+  .player-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 3px 10px rgba(0,0,0,0.2);
+  }
+
+  .status {
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    color: var(--bpcc-blue);
+    margin-bottom: 8px;
+  }
+
+  .role-badge {
+    display: inline-block;
+    background: var(--bpcc-gold-gradient);
+    color: var(--bpcc-navy);
+    padding: 4px 10px;
+    border-radius: 999px;
+    font-size: 12px;
+    margin-bottom: 8px;
+  }
+
+  .stats-line {
+    font-size: 13px;
+    color: #555;
+    margin-top: 8px;
+  }
+
+  /* ============================================================
+     TABLES
+  ============================================================ */
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    background: white;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.08);
+    font-size: 14px;
+  }
+
+  thead {
+    background: var(--bpcc-navy);
+    color: white;
+  }
+
+  thead th {
+    padding: 12px;
+    text-align: left;
+  }
+
+  tbody td {
+    padding: 10px;
+    border-bottom: 1px solid #eee;
+  }
+
+  tbody tr:hover {
+    background: #f2f4f8;
+  }
+
+  .player-name {
+    font-weight: 600;
+  }
+
+  .player-number {
+    font-size: 11px;
+    color: #777;
+  }
+
+  .clickable-row {
+    cursor: pointer;
+  }
+
+  /* ============================================================
+     MILESTONES
+  ============================================================ */
+  #milestones h3 {
+    font-size: 28px !important;
+    font-family: Playfair Display, serif;
+    color: var(--bpcc-navy);
+    margin-top: 30px;
+    border-bottom: 3px solid var(--bpcc-gold);
+    padding-bottom: 6px;
+  }
+
+  .milestone-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 25px;
+    margin-top: 20px;
+  }
+
+  .milestone-club-box {
+    background: white;
+    padding: 18px;
+    border-radius: 12px;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.08);
+    transition: transform 0.25s ease, box-shadow 0.25s ease, background 0.25s ease;
+  }
+
+  .milestone-club-box h4 {
+    background: var(--bpcc-gold-gradient);
+    color: var(--bpcc-navy);
+    display: inline-block;
+    padding: 6px 12px;
+    border-radius: 8px;
+    font-size: 18px;
+    margin-bottom: 12px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.15);
+  }
+
+  .milestone-club-box p {
+    margin: 4px 0;
+    font-size: 13px;
+  }
+
+  .milestone-approach-box {
+    background: white;
+    padding: 18px;
+    border-radius: 12px;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.08);
+    margin-top: 15px;
+    transition: transform 0.25s ease, box-shadow 0.25s ease, background 0.25s ease;
+  }
+
+  .approach-row {
+    display: flex;
+    justify-content: space-between;
+    font-size: 13px;
+    margin: 4px 0;
+  }
+
+  .to-go {
+    font-weight: 600;
+    color: var(--bpcc-blue);
+  }
+
+  /* ============================================================
+     AI TEAMS
+  ============================================================ */
+  .ai-teams-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 25px;
+    margin-top: 30px;
+  }
+
+  .ai-team-box {
+    background: white;
+    padding: 18px;
+    border-radius: 12px;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.08);
+  }
+
+  .ai-team-box h3 {
+    background: var(--bpcc-gradient);
+    color: var(--bpcc-gold);
+    font-family: Playfair Display, serif;
+    font-size: 22px;
+    padding: 12px 16px;
+    border-radius: 10px;
+    margin-bottom: 20px;
+    text-align: center;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.08);
+  }
+
+  .ai-team-section h4 {
+    font-family: Playfair Display, serif;
+    color: var(--bpcc-blue);
+    margin-bottom: 10px;
+    border-bottom: 2px solid var(--bpcc-gold);
+    padding-bottom: 4px;
+  }
+
+  .ai-player-row {
+    display: flex;
+    justify-content: space-between;
+    padding: 10px 0;
+    border-bottom: 1px solid #eee;
+    cursor: pointer;
+    transition: 0.25s ease;
+  }
+
+  .ai-player-row:hover {
+    background: var(--bpcc-gradient);
+    color: var(--bpcc-gold);
+    transform: translateY(-3px);
+    box-shadow: 0 3px 10px rgba(0,0,0,0.25);
+    border-left: 4px solid var(--bpcc-gold);
+  }
+
+  .ai-player-left {
+    flex: 1;
+  }
+
+  .ai-player-right {
+    flex: 1;
+    text-align: right;
+    font-size: 13px;
+  }
+
+  .ai-player-name {
+    font-weight: 600;
+  }
+
+  .ai-player-role {
+    font-size: 12px;
+    color: #555;
+  }
+
+  /* ============================================================
+     RECORD BOXES (OVERVIEW)
+  ============================================================ */
+  .record-box {
+    background: white;
+    padding: 18px;
+    border-radius: 12px;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.08);
+    cursor: pointer;
+    transition: 0.25s ease;
+  }
+
+  .record-box:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 3px 10px rgba(0,0,0,0.2);
+  }
+
+  /* ============================================================
+     MODAL
+  ============================================================ */
+  #player-modal {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.6);
+    justify-content: center;
+    align-items: center;
+    animation: fadeIn 0.3s ease;
+    z-index: 9998;
+  }
+
+  #player-modal-content {
+    background: white;
+    width: 90%;
+    max-width: 650px;
+    border-radius: 14px;
+    padding: 25px;
+    max-height: 85vh;
+    overflow-y: auto;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.25);
+    border: 3px solid var(--bpcc-gold);
+    animation: slideUp 0.35s ease;
+  }
+
+  .modal-header {
+    background: var(--bpcc-gradient);
+    color: white;
+    padding: 16px 20px;
+    position: sticky;
+    top: 0;
+    z-index: 10;
+    border-top-left-radius: 14px;
+    border-top-right-radius: 14px;
+    border-bottom: 3px solid var(--bpcc-gold);
+  }
+
+  #modal-close {
+    float: right;
+    font-size: 28px;
+    cursor: pointer;
+    color: var(--bpcc-gold);
+  }
+
+  #modal-player-name {
+    font-size: 22px;
+    font-family: Playfair Display, serif;
+  }
+
+  #modal-player-number {
+    font-size: 13px;
+    margin-top: 4px;
+  }
+
+  #modal-player-role {
+    font-size: 13px;
+    margin-top: 6px;
+    display: inline-block;
+    background: var(--bpcc-gold-gradient);
+    color: var(--bpcc-navy);
+    padding: 4px 10px;
+    border-radius: 999px;
+  }
+
+  #modal-stats {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+    gap: 15px;
+    margin-top: 20px;
+  }
+
+  .modal-stat-row {
+    background: #f7f9fc;
+    padding: 12px;
+    border-radius: 10px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+  }
+
+  .modal-stat-row h4 {
+    margin-bottom: 6px;
+    color: var(--bpcc-navy);
+    font-size: 13px;
+  }
+
+  .modal-stat-row p {
+    font-size: 13px;
+  }
+
+  /* ============================================================
+     ANIMATIONS
+  ============================================================ */
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  @keyframes slideUp {
+    from { transform: translateY(40px); opacity: 0; }
+    to   { transform: translateY(0); opacity: 1; }
+  }
+
+  /* ============================================================
+     MOBILE RESPONSIVE
+  ============================================================ */
+  @media (max-width: 768px) {
+
+    .section {
+      padding: 25px 15px;
+    }
+
+    .nav-bar {
+      overflow-x: auto;
+      white-space: nowrap;
+      padding: 10px;
+    }
+
+    .nav-bar button {
+      flex: 0 0 auto;
+      margin-right: 10px;
+    }
+
+    #summary-cards.summary {
+      grid-template-columns: repeat(2, 1fr);
+      gap: 15px;
+    }
+
+    #players-grid.player-grid {
+      grid-template-columns: 1fr;
+    }
+
+    table {
+      font-size: 14px;
+    }
+
+    #player-modal-content {
+      width: 95%;
+      max-height: 90vh;
+      padding: 15px;
+      border-radius: 12px;
+    }
+
+    .modal-header {
+      padding: 12px 15px;
+      border-top-left-radius: 12px;
+      border-top-right-radius: 12px;
+    }
+
+    #modal-stats {
+      grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+      gap: 10px;
+    }
+
+    .milestone-grid {
+      grid-template-columns: 1fr;
+    }
+
+    .ai-teams-grid {
+      grid-template-columns: 1fr;
+    }
+
+    .hero h2 {
+      font-size: 32px;
+    }
+
+    /* Bottom tab bar */
+    .bottom-tab-bar {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      height: 60px;
+      background: var(--bpcc-navy);
+      display: flex;
+      justify-content: space-around;
+      align-items: center;
+      border-top: 3px solid var(--bpcc-gold);
+      z-index: 9999;
+    }
+
+    .bottom-tab-bar button {
+      background: none;
+      border: none;
+      color: white;
+      font-size: 13px;
+      padding: 6px;
+      flex: 1;
+      cursor: pointer;
+      transition: 0.25s ease;
+    }
+
+    .bottom-tab-bar button.active {
+      color: var(--bpcc-gold);
+      transform: translateY(-4px);
+    }
+  }
+  </style>
+</head>
+
+<body>
+  <header>
+    <div class="brand">
+      <!-- Optional logo -->
+      <!-- <img src="logo.png" alt="BPCC Logo"> -->
+      <div>
+        <h1>BPCC Player Records</h1>
+        <em>Every officer. Every number.</em>
+      </div>
+    </div>
+  </header>
+
+  <nav class="nav-bar">
+    <button data-section="overview" class="on">Overview</button>
+    <button data-section="players">Players</button>
+    <button data-section="batting">Batting</button>
+    <button data-section="bowling">Bowling</button>
+    <button data-section="fielding">Fielding</button>
+    <button data-section="milestones">Milestones</button>
+    <button data-section="ai-teams">AI Teams</button>
+  </nav>
+
+  <section class="hero">
+    <h2 id="hero-title">Every officer.<br><i>Every number.</i></h2>
+  </section>
+
+  <!-- OVERVIEW -->
+  <section id="overview" class="section active">
+    <div id="summary-cards" class="summary">
+      <div>
+        <h3>Total players</h3>
+        <p id="total-players">0</p>
+      </div>
+      <div>
+        <h3>Total appearances</h3>
+        <p id="total-appearances">0</p>
+      </div>
+      <div>
+        <h3>Total runs</h3>
+        <p id="total-runs">0</p>
+      </div>
+      <div>
+        <h3>Total wickets</h3>
+        <p id="total-wickets">0</p>
+      </div>
+    </div>
+
+    <div class="summary">
+      <div class="record-box">
+        <h3>Players</h3>
+        <p>Directory & profiles</p>
+      </div>
+      <div class="record-box">
+        <h3>Batting</h3>
+        <p>Career batting records</p>
+      </div>
+      <div class="record-box">
+        <h3>Bowling</h3>
+        <p>Career bowling records</p>
+      </div>
+      <div class="record-box">
+        <h3>Milestones</h3>
+        <p>Landmarks & approaching achievements</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- PLAYERS -->
+  <section id="players" class="section">
+    <h2>Player directory & profiles</h2>
+    <input id="player-search" type="text" placeholder="Search players..." style="margin-top:20px;width:100%;padding:10px;border-radius:8px;border:1px solid #ccc;">
+    <div id="players-grid" class="player-grid"></div>
+  </section>
+
+  <!-- BATTING -->
+  <section id="batting" class="section">
+    <h2>Career batting records</h2>
+    <div id="batting-table"></div>
+  </section>
+
+  <!-- BOWLING -->
+  <section id="bowling" class="section">
+    <h2>Career bowling records</h2>
+    <div id="bowling-table"></div>
+  </section>
+
+  <!-- FIELDING -->
+  <section id="fielding" class="section">
+    <h2>Career fielding records</h2>
+    <div id="fielding-table"></div>
+  </section>
+
+  <!-- MILESTONES -->
+  <section id="milestones" class="section">
+    <h2>Landmarks & approaching achievements</h2>
+    <div id="batting-milestones"></div>
+    <div id="bowling-milestones"></div>
+    <div id="catches-milestones"></div>
+  </section>
+
+  <!-- AI TEAMS -->
+  <section id="ai-teams" class="section">
+    <h2>AI-generated XI selections</h2>
+    <div class="ai-teams-grid">
+      <div id="team-a"></div>
+      <div id="team-b"></div>
+      <div id="team-c"></div>
+    </div>
+  </section>
+
+  <!-- MODAL -->
+  <div id="player-modal">
+    <div id="player-modal-content">
+      <div class="modal-header">
+        <span id="modal-close">&times;</span>
+        <div id="modal-player-name"></div>
+        <div id="modal-player-number"></div>
+        <div id="modal-player-role"></div>
+      </div>
+      <div id="modal-stats"></div>
+    </div>
+  </div>
+
+  <!-- MOBILE BOTTOM TAB BAR -->
+  <div class="bottom-tab-bar">
+    <button data-section="overview" class="active">Overview</button>
+    <button data-section="players">Players</button>
+    <button data-section="batting">Batting</button>
+    <button data-section="bowling">Bowling</button>
+    <button data-section="milestones">Milestones</button>
+  </div>
+
+  <script>
+  /* ============================================================
+     CONFIG
+  ============================================================ */
+  const DATA_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vQlS2BceCsyAkRFmAuwA0QDJR8wPjuLZyquKAeszxD2-FM7gFTzEQrVTqPxtph-z55FZNU01tMnpvQv/pub?output=csv";
+
+  const HEADERS = [
+    "Player","Number","Years","Matches","Innings","Runs","Average",
+    "High Score","Fifties","Hundreds","Overs","Wickets",
+    "Bowling Average","Economy","Best","Catches","Stumpings","Current"
+  ];
+
+  let allData = [];
+
+  /* ============================================================
+     CSV LOADING
+  ============================================================ */
+  async function loadCSV() {
+    const res = await fetch(DATA_URL);
+    const text = await res.text();
+    const lines = text.trim().split("\n");
+    const headers = lines[0].split(",").map(h => h.trim());
+
+    return lines.slice(1).map(line => {
+      const cols = line.split(",");
+      const obj = {};
+      headers.forEach((h, i) => {
+        obj[h] = (cols[i] || "").trim();
+      });
+      return obj;
+    });
+  }
+
+  function num(v) {
+    const n = parseFloat(v);
+    return isNaN(n) ? 0 : n;
+  }
+
+  function victims(p) {
+    return num(p["Catches"]) + num(p["Stumpings"]);
+  }
+
+  /* ============================================================
+     HERO TITLES
+  ============================================================ */
+  const heroTitle = document.getElementById("hero-title");
+  const summaryCards = document.getElementById("summary-cards");
+
+  const heroTitles = {
+    "overview": "Every officer.<br><i>Every number.</i>",
+    "players": "Player directory<br><i>& profiles</i>",
+    "batting": "Career batting<br><i>records</i>",
+    "bowling": "Career bowling<br><i>records</i>",
+    "fielding": "Career fielding<br><i>records</i>",
+    "milestones": "Landmarks<br><i>& approaching achievements</i>",
+    "ai-teams": "AI-generated<br><i>XI selections</i>"
+  };
+
+  /* ============================================================
+     ROLE DETECTION
+  ============================================================ */
+  function getRole(p) {
+    const runs = num(p["Runs"]);
+    const wickets = num(p["Wickets"]);
+    const stumpings = num(p["Stumpings"]);
+
+    if (stumpings >= 1) return "Wicketkeeper";
+    if (runs >= 100 && wickets >= 10) return "All-rounder";
+    if (wickets >= 5) return "Bowler";
+    if (runs >= 100) return "Batter";
+    return "Player";
+  }
+
+  /* ============================================================
+     PLAYERS PAGE
+  ============================================================ */
+  function renderPlayers() {
+    const container = document.getElementById("players-grid");
+    container.innerHTML = "";
+    const q = document.getElementById("player-search").value.toLowerCase();
+
+    const sorted = allData.slice().sort((a, b) => a["Player"].localeCompare(b["Player"]));
+
+    sorted.forEach(function(p){
+      if (p["Player"].toLowerCase().indexOf(q) === -1) return;
+
+      const card = document.createElement("div");
+      card.className = "player-card";
+
+      const status = (p["Current"] === "Yes") ? "Current Player" : "Retired";
+      const role = getRole(p);
+
+      card.innerHTML =
+        "<div class='status'>" + status + "</div>" +
+        "<h3>" + p["Player"] + "</h3>" +
+        "<span class='role-badge'>" + role + "</span>" +
+        "<div class='stats-line'>" +
+        p["Matches"] + " matches • " +
+        p["Runs"] + " runs • " +
+        p["Wickets"] + " wickets • " +
+        victims(p) + " victims" +
+        "</div>";
+
+      card.addEventListener("click", function(){
+        openPlayerModal(p);
+      });
+
+      container.appendChild(card);
+    });
+  }
+
+  document.getElementById("player-search").addEventListener("input", renderPlayers);
+
+  /* ============================================================
+     MODAL
+  ============================================================ */
+  function openPlayerModal(p) {
+    document.getElementById("modal-player-name").textContent = p["Player"];
+    document.getElementById("modal-player-number").textContent = "Player No: " + p["Number"];
+    document.getElementById("modal-player-role").textContent = getRole(p);
+
+    const stats = document.getElementById("modal-stats");
+    stats.innerHTML = "";
+
+    HEADERS
+      .filter(h => h !== "Player" && h !== "Number")
+      .forEach(function(h){
+        const row = document.createElement("div");
+        row.className = "modal-stat-row";
+        row.innerHTML = "<h4>" + h + "</h4><p>" + (p[h] || "") + "</p>";
+        stats.appendChild(row);
+      });
+
+    document.getElementById("player-modal").style.display = "flex";
+  }
+
+  document.getElementById("modal-close").addEventListener("click", function(){
+    document.getElementById("player-modal").style.display = "none";
+  });
+
+  window.addEventListener("click", function(e){
+    if (e.target.id === "player-modal") {
+      document.getElementById("player-modal").style.display = "none";
+    }
+  });
+
+  /* ============================================================
+     NAVIGATION
+  ============================================================ */
+  function setupNav() {
+    const buttons = document.querySelectorAll(".nav-bar button");
+
+    buttons.forEach(function(btn){
+      btn.addEventListener("click", function(){
+        const section = btn.getAttribute("data-section");
+
+        document.querySelectorAll(".section").forEach(function(sec){
+          sec.classList.remove("active");
+        });
+        document.getElementById(section).classList.add("active");
+
+        buttons.forEach(function(b){
+          b.classList.remove("on");
+        });
+        btn.classList.add("on");
+
+        heroTitle.innerHTML = heroTitles[section];
+        summaryCards.style.display = (section === "overview") ? "grid" : "none";
+
+        window.scrollTo({ top: 0, behavior: "smooth" });
+
+        // Sync bottom tab bar
+        document.querySelectorAll(".bottom-tab-bar button").forEach(b => {
+          b.classList.toggle("active", b.getAttribute("data-section") === section);
+        });
+      });
+    });
+
+    // Bottom tab bar click -> trigger nav button
+    document.querySelectorAll(".bottom-tab-bar button").forEach(btn => {
+      btn.addEventListener("click", () => {
+        const section = btn.getAttribute("data-section");
+        document.querySelector(`.nav-bar button[data-section="${section}"]`).click();
+      });
+    });
+  }
+
+  /* ============================================================
+     OVERVIEW TOTALS
+  ============================================================ */
+  function renderOverview() {
+    document.getElementById("total-players").textContent = allData.length;
+
+    document.getElementById("total-appearances").textContent =
+      allData.reduce((sum, p) => sum + num(p["Matches"]), 0);
+
+    document.getElementById("total-runs").textContent =
+      allData.reduce((sum, p) => sum + num(p["Runs"]), 0);
+
+    document.getElementById("total-wickets").textContent =
+      allData.reduce((sum, p) => sum + num(p["Wickets"]), 0);
+  }
+
+  /* ============================================================
+     BATTING
+  ============================================================ */
+  function renderBatting() {
+    const container = document.getElementById("batting-table");
+
+    const data = allData.slice().sort((a, b) => num(b["Runs"]) - num(a["Runs"]));
+
+    let html = "";
+    html += "<table>";
+    html += "<thead>";
+    html += "<tr>";
+    html += "<th>Player</th>";
+    html += "<th>Runs</th>";
+    html += "<th>Average</th>";
+    html += "</tr>";
+    html += "</thead>";
+    html += "<tbody>";
+
+    data.forEach(function(p){
+      html += "<tr class='clickable-row' data-player='" + p["Player"] + "'>";
+      html += "<td>";
+      html += "<div class='player-name'>" + p["Player"] + "</div>";
+      html += "<div class='player-number'>No. " + p["Number"] + "</div>";
+      html += "</td>";
+      html += "<td>" + p["Runs"] + "</td>";
+      html += "<td>" + p["Average"] + "</td>";
+      html += "</tr>";
+    });
+
+    html += "</tbody>";
+    html += "</table>";
+
+    container.innerHTML = html;
+
+    container.querySelectorAll(".clickable-row").forEach(function(row){
+      row.addEventListener("click", function(){
+        const player = allData.find(p => p["Player"] === row.dataset.player);
+        openPlayerModal(player);
+      });
+    });
+  }
+
+  /* ============================================================
+     BOWLING
+  ============================================================ */
+  function renderBowling() {
+    const container = document.getElementById("bowling-table");
+
+    const data = allData.slice().sort((a, b) => num(b["Wickets"]) - num(a["Wickets"]));
+
+    let html = "";
+    html += "<table>";
+    html += "<thead>";
+    html += "<tr>";
+    html += "<th>Player</th>";
+    html += "<th>Wickets</th>";
+    html += "<th>Average</th>";
+    html += "</tr>";
+    html += "</thead>";
+    html += "<tbody>";
+
+    data.forEach(function(p){
+      html += "<tr class='clickable-row' data-player='" + p["Player"] + "'>";
+      html += "<td>";
+      html += "<div class='player-name'>" + p["Player"] + "</div>";
+      html += "<div class='player-number'>No. " + p["Number"] + "</div>";
+      html += "</td>";
+      html += "<td>" + p["Wickets"] + "</td>";
+      html += "<td>" + p["Bowling Average"] + "</td>";
+      html += "</tr>";
+    });
+
+    html += "</tbody>";
+    html += "</table>";
+
+    container.innerHTML = html;
+
+    container.querySelectorAll(".clickable-row").forEach(function(row){
+      row.addEventListener("click", function(){
+        const player = allData.find(p => p["Player"] === row.dataset.player);
+        openPlayerModal(player);
+      });
+    });
+  }
+
+  /* ============================================================
+     FIELDING
+  ============================================================ */
+  function renderFielding() {
+    const container = document.getElementById("fielding-table");
+
+    const data = allData.slice().sort((a, b) => victims(b) - victims(a));
+
+    let html = "";
+    html += "<table>";
+    html += "<thead>";
+    html += "<tr>";
+    html += "<th>Player</th>";
+    html += "<th>Victims</th>";
+    html += "<th>Catches</th>";
+    html += "</tr>";
+    html += "</thead>";
+    html += "<tbody>";
+
+    data.forEach(function(p){
+      html += "<tr class='clickable-row' data-player='" + p["Player"] + "'>";
+      html += "<td>";
+      html += "<div class='player-name'>" + p["Player"] + "</div>";
+      html += "<div class='player-number'>No. " + p["Number"] + "</div>";
+      html += "</td>";
+      html += "<td>" + victims(p) + "</td>";
+      html += "<td>" + p["Catches"] + "</td>";
+      html += "</tr>";
+    });
+
+    html += "</tbody>";
+    html += "</table>";
+
+    container.innerHTML = html;
+
+    container.querySelectorAll(".clickable-row").forEach(function(row){
+      row.addEventListener("click", function(){
+        const player = allData.find(p => p["Player"] === row.dataset.player);
+        openPlayerModal(player);
+      });
+    });
+  }
+
+  /* ============================================================
+     MILESTONES
+  ============================================================ */
+  function renderMilestones() {
+    renderMilestoneClubs(
+      "Runs milestone clubs",
+      "Runs",
+      [3500,3000,2500,2000,1500,1000,500,250],
+      20,
+      document.getElementById("batting-milestones")
+    );
+
+    renderMilestoneClubs(
+      "Bowling milestone clubs",
+      "Wickets",
+      [100,90,80,70,60,50,40,30,20],
+      2,
+      document.getElementById("bowling-milestones")
+    );
+
+    renderMilestoneClubs(
+      "Catches milestone clubs",
+      "Catches",
+      [50,40,30,20,10],
+      2,
+      document.getElementById("catches-milestones")
+    );
+  }
+
+  function renderMilestoneClubs(title, field, milestones, threshold, container) {
+    let html = "";
+    html += "<h3>" + title + "</h3>";
+    html += "<div class='milestone-grid'>";
+
+    milestones.forEach(function(m){
+      const achieved = allData.filter(p => {
+        const value = num(p[field]);
+        if (value < m) return false;
+        const higher = milestones.find(x => x > m && value >= x);
+        return !higher;
+      });
+
+      html += "<div class='milestone-club-box'>";
+      html += "<h4>" + m + " Club</h4>";
+
+      if (achieved.length === 0) {
+        html += "<p>No players yet.</p>";
+      } else {
+        achieved.sort((a, b) => num(b[field]) - num(a[field]))
+          .forEach(function(p){
+            html += "<p>" + p["Player"] + " – " + num(p[field]) + "</p>";
+          });
+      }
+
+      html += "</div>";
+    });
+
+    html += "</div>";
+    html += "<h3>Current players approaching</h3>";
+
+    let any = false;
+
+    milestones.forEach(function(m){
+      const approaching = allData.filter(function(p){
+        if (p["Current"] !== "Yes") return false;
+        const value = num(p[field]);
+        const toGo = m - value;
+        return toGo > 0 && toGo <= threshold;
+      });
+
+      if (approaching.length > 0) {
+        any = true;
+
+        html += "<div class='milestone-approach-box'>";
+        html += "<h4>Approaching " + m + "</h4>";
+
+        approaching.sort((a, b) => (m - num(a[field])) - (m - num(b[field])))
+          .forEach(function(p){
+            const value = num(p[field]);
+            const toGo = m - value;
+
+            html += "<div class='approach-row'>";
+            html += "<span>" + p["Player"] + " – " + value + "</span>";
+            html += "<span class='to-go'>" + toGo + " to go</span>";
+            html += "</div>";
+          });
+
+        html += "</div>";
+      }
+    });
+
+    if (!any) {
+      html += "<p>No current players within range.</p>";
+    }
+
+    container.innerHTML = html;
+  }
+
+  /* ============================================================
+     AI TEAMS
+  ============================================================ */
+  function renderAITeams() {
+    const used = new Set();
+
+    const batSorted = allData.slice().sort(function(a, b){
+      return num(b["Runs"]) - num(a["Runs"]) ||
+             num(b["Average"]) - num(a["Average"]) ||
+             num(b["Matches"]) - num(a["Matches"]);
+    });
+
+    const bowlSorted = allData.slice().sort(function(a, b){
+      return num(b["Wickets"]) - num(a["Wickets"]) ||
+             num(a["Bowling Average"]) - num(b["Bowling Average"]) ||
+             num(b["Matches"]) - num(a["Matches"]);
+    });
+
+    function keeperScore(p) {
+      const v = victims(p);
+      const m = num(p["Matches"]);
+      const vp = (m > 0) ? (v / m) : 0;
+      const s = num(p["Stumpings"]);
+      return (v * 2) + (vp * 10) + (s * 5) + m;
+    }
+
+    const keepSorted = allData.slice().sort((a, b) => keeperScore(b) - keeperScore(a));
+
+    function pick(sorted, count, role) {
+      const team = [];
+      sorted.forEach(function(p){
+        if (team.length >= count) return;
+        if (!used.has(p["Player"])) {
+          team.push({ player: p, role: role });
+          used.add(p["Player"]);
+        }
+      });
+      return team;
+    }
+
+    const teamA = []
+      .concat(pick(batSorted, 5, "Batter"))
+      .concat(pick(keepSorted, 1, "Wicketkeeper"))
+      .concat(pick(bowlSorted, 5, "Bowler"));
+
+    function buildTeam() {
+      return []
+        .concat(pick(batSorted, 5, "Batter"))
+        .concat(pick(keepSorted, 1, "Wicketkeeper"))
+        .concat(pick(bowlSorted, 5, "Bowler"));
+    }
+
+    renderTeam("team-a", "AI 1st XI", teamA);
+    renderTeam("team-b", "AI 2nd XI", buildTeam());
+    renderTeam("team-c", "AI 3rd XI", buildTeam());
+  }
+
+  function renderTeam(id, title, players) {
+    const container = document.getElementById(id);
+
+    let html = "";
+    html += "<div class='ai-team-box'>";
+    html += "<h3>" + title + "</h3>";
+
+    const batters = players.slice(0, 5);
+    const keeper = players.slice(5, 6);
+    const bowlers = players.slice(6, 11);
+
+    html += "<div class='ai-team-section'>";
+    html += "<h4>Batters</h4>";
+
+    batters.forEach(function(entry, i){
+      const p = entry.player;
+      html += "<div class='ai-player-row' data-player='" + p["Player"] + "'>";
+      html += "<div class='ai-player-left'>";
+      html += "<div class='ai-player-name'>" + (i + 1) + ". " + p["Player"] + "</div>";
+      html += "<div class='ai-player-role'>Batter</div>";
+      html += "</div>";
+      html += "<div class='ai-player-right'>";
+      html += p["Runs"] + " runs — Avg " + p["Average"];
+      html += "</div>";
+      html += "</div>";
+    });
+
+    html += "</div>";
+
+    html += "<div class='ai-team-section'>";
+    html += "<h4>Wicket Keeper</h4>";
+
+    keeper.forEach(function(entry){
+      const p = entry.player;
+      const m = num(p["Matches"]);
+      const victimsPM = (m > 0) ? (victims(p) / m).toFixed(2) : "0.00";
+
+      html += "<div class='ai-player-row' data-player='" + p["Player"] + "'>";
+      html += "<div class='ai-player-left'>";
+      html += "<div class='ai-player-name'>6. " + p["Player"] + "</div>";
+      html += "<div class='ai-player-role'>Wicket Keeper</div>";
+      html += "</div>";
+      html += "<div class='ai-player-right'>";
+      html += victims(p) + " victims — " + victimsPM + " per match";
+      html += "</div>";
+      html += "</div>";
+    });
+
+    html += "</div>";
+
+    html += "<div class='ai-team-section'>";
+    html += "<h4>Bowlers</h4>";
+
+    bowlers.forEach(function(entry, i){
+      const p = entry.player;
+      html += "<div class='ai-player-row' data-player='" + p["Player"] + "'>";
+      html += "<div class='ai-player-left'>";
+      html += "<div class='ai-player-name'>" + (7 + i) + ". " + p["Player"] + "</div>";
+      html += "<div class='ai-player-role'>Bowler</div>";
+      html += "</div>";
+      html += "<div class='ai-player-right'>";
+      html += p["Wickets"] + " wickets — Avg " + p["Bowling Average"];
+      html += "</div>";
+      html += "</div>";
+    });
+
+    html += "</div>";
+    html += "</div>";
+
+    container.innerHTML = html;
+
+    container.querySelectorAll(".ai-player-row").forEach(function(row){
+      row.addEventListener("click", function(){
+        const player = allData.find(p => p["Player"] === row.dataset.player);
+        openPlayerModal(player);
+      });
+    });
+  }
+
+  /* ============================================================
+     RECORD BOX CLICK -> NAV
+  ============================================================ */
+  document.querySelectorAll(".record-box").forEach(box => {
+    box.addEventListener("click", () => {
+      const section = box.querySelector("h3").textContent.toLowerCase();
+      const btn = document.querySelector(`.nav-bar button[data-section="${section}"]`);
+      if (btn) btn.click();
+    });
+  });
+
+  /* ============================================================
+     INIT
+  ============================================================ */
+  async function init() {
+    allData = await loadCSV();
+
+    document.querySelectorAll(".section").forEach(function(sec){
+      sec.classList.remove("active");
+    });
+
+    document.getElementById("overview").classList.add("active");
+
+    heroTitle.innerHTML = heroTitles["overview"];
+    summaryCards.style.display = "grid";
+
+    setupNav();
+    renderOverview();
+    renderPlayers();
+    renderBatting();
+    renderBowling();
+    renderFielding();
+    renderMilestones();
+    renderAITeams();
+  }
+
+  init();
+  </script>
+</body>
+</html>
