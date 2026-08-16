@@ -907,7 +907,18 @@ function renderAITeams(){
 
   const batSorted=[...allData].sort((a,b)=>num(b["Runs"])-num(a["Runs"])||num(b["Average"])-num(a["Average"])||num(b["Matches"])-num(a["Matches"]));
   const bowlSorted=[...allData].sort((a,b)=>num(b["Wickets"])-num(a["Wickets"])||num(a["Bowling Average"])-num(b["Bowling Average"])||num(b["Matches"])-num(a["Matches"]));
-  const keepSorted=[...allData].sort((a,b)=>victimsPerMatch(b)-victimsPerMatch(a)||num(b["Matches"])-num(a["Matches"]));
+  
+  function keeperScore(p) {
+  const v = victims(p);
+  const m = num(p["Matches"]);
+  const vp = m > 0 ? v / m : 0;
+  const s = num(p["Stumpings"]);
+
+  return (v * 2) + (vp * 10) + (s * 5) + m;
+}
+
+const keepSorted = [...allData].sort((a, b) => keeperScore(b) - keeperScore(a));
+
 
   function pick(sorted,count,role){
     const team=[];
