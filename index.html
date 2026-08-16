@@ -5,535 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>BPCC Statistics Centre</title>
 
-<style>
-/* ============================================================
-   BPCC BRANDING — Fugitives-style full-width layout
-   ============================================================ */
-
-:root{
-  --bpcc-navy:#001f3f;
-  --bpcc-blue:#e3edff;
-  --bpcc-paper:#f4f6fa;
-  --bpcc-grey:#ccc;
-  --bpcc-accent:#cfa300;
-  --bpcc-ink:#222;
-}
-
-body{
-  margin:0;
-  background:var(--bpcc-paper);
-  color:var(--bpcc-ink);
-  font-family:Arial,sans-serif;
-}
-
-button,input{font:inherit}
-button{cursor:pointer}
-
-/* ============================================================
-   HEADER
-   ============================================================ */
-
-header{
-  height:94px;
-  background:white;
-  padding:0 5vw;
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
-  border-bottom:1px solid var(--bpcc-grey);
-}
-
-.brand{
-  display:flex;
-  align-items:center;
-  gap:14px;
-}
-
-.brand img{
-  height:70px;
-}
-
-.brand small{
-  font-size:9px;
-  letter-spacing:.2em;
-  font-weight:bold;
-}
-
-.brand h1{
-  font-size:21px;
-  margin:5px 0 0;
-  color:var(--bpcc-navy);
-}
-
-.brand em{
-  font-style:normal;
-  color:var(--bpcc-accent);
-}
-
-.live{
-  font-size:9px;
-  letter-spacing:.14em;
-  font-weight:bold;
-  color:var(--bpcc-accent);
-}
-
-/* ============================================================
-   NAVIGATION
-   ============================================================ */
-
-nav{
-  height:50px;
-  background:var(--bpcc-navy);
-  padding:0 5vw;
-  display:flex;
-  overflow:auto;
-}
-
-nav button{
-  border:0;
-  border-bottom:3px solid transparent;
-  background:none;
-  color:#aebcc3;
-  padding:0 18px;
-  font-size:11px;
-  font-weight:bold;
-  text-transform:uppercase;
-  white-space:nowrap;
-}
-
-nav button.on,
-nav button:hover{
-  border-color:var(--bpcc-accent);
-  color:white;
-}
-
-/* ============================================================
-   HERO (dynamic title)
-   ============================================================ */
-
-.hero{
-  min-height:300px;
-  padding:50px 7vw;
-  background:var(--bpcc-navy);
-  color:white;
-  position:relative;
-  overflow:hidden;
-}
-
-.hero:after{
-  content:"";
-  position:absolute;
-  width:420px;
-  height:420px;
-  border-radius:50%;
-  border:1px solid #ffffff20;
-  right:-110px;
-  top:-180px;
-  box-shadow:0 0 0 70px #ffffff08,0 0 0 140px #ffffff08;
-}
-
-.hero small{
-  font-size:9px;
-  letter-spacing:.2em;
-  font-weight:bold;
-}
-
-.hero h2{
-  font:700 clamp(42px,6vw,72px)/.9 Georgia;
-  margin:18px 0;
-  letter-spacing:-.05em;
-  position:relative;
-  z-index:1;
-}
-
-.hero h2 i{
-  color:var(--bpcc-accent);
-}
-
-.hero p{
-  max-width:550px;
-  line-height:1.7;
-  color:#d5e8ee;
-}
-
-/* ============================================================
-   FLOATING SUMMARY CARDS (Overview only)
-   ============================================================ */
-
-.summary{
-  max-width:1400px;
-  margin:auto;
-  margin-top:-70px;
-  background:white;
-  border:1px solid var(--bpcc-grey);
-  display:grid;
-  grid-template-columns:repeat(4,1fr);
-  position:relative;
-  z-index:10;
-}
-
-.summary div{
-  padding:27px 30px;
-  border-right:1px solid var(--bpcc-grey);
-}
-
-.summary span{
-  display:block;
-  text-transform:uppercase;
-  font-size:9px;
-  letter-spacing:.16em;
-  color:#66747b;
-}
-
-.summary b{
-  display:block;
-  font:700 39px Georgia;
-  margin-top:5px;
-}
-
-/* ============================================================
-   CONTENT WRAPPER
-   ============================================================ */
-
-.content{
-  max-width:1400px;
-  margin:auto;
-  padding:42px 5vw 90px;
-}
-
-/* ============================================================
-   SECTION SWITCHER
-   ============================================================ */
-
-.section { display:none; }
-.section.active { display:block; }
-
-/* ============================================================
-   OVERVIEW BUTTONS
-   ============================================================ */
-
-.record-links{
-  display:grid;
-  grid-template-columns:repeat(3,1fr);
-  gap:15px;
-  margin-top:30px;
-}
-
-.record-box{
-  background:white;
-  border:1px solid var(--bpcc-grey);
-  padding:20px;
-  text-align:center;
-  cursor:pointer;
-  border-radius:6px;
-  transition:.2s;
-}
-
-.record-box:hover{
-  background:var(--bpcc-blue);
-}
-
-.record-box h3{
-  margin:0;
-  color:var(--bpcc-navy);
-}
-
-.record-box p{
-  margin:5px 0 0 0;
-  font-size:13px;
-  color:#555;
-}
-
-/* ============================================================
-   SEARCH
-   ============================================================ */
-
-.search-box{
-  margin:20px 0;
-  text-align:right;
-}
-
-.search-box input{
-  padding:10px;
-  width:300px;
-  max-width:100%;
-}
-
-/* ============================================================
-   PLAYER GRID
-   ============================================================ */
-
-.player-grid{
-  display:grid;
-  grid-template-columns:repeat(3,1fr);
-  gap:20px;
-  margin-top:20px;
-}
-
-.player-card{
-  background:white;
-  border:1px solid var(--bpcc-grey);
-  padding:20px;
-  border-radius:6px;
-  cursor:pointer;
-  transition:.2s;
-}
-
-.player-card:hover{
-  background:var(--bpcc-blue);
-}
-
-.player-card h3{
-  margin:0;
-  color:var(--bpcc-navy);
-}
-
-.player-card .status{
-  font-size:12px;
-  color:#555;
-  margin-bottom:5px;
-}
-
-.player-card .stats-line{
-  font-size:14px;
-  margin-top:8px;
-  font-weight:bold;
-}
-
-/* ============================================================
-   TABLES
-   ============================================================ */
-
-table{
-  width:100%;
-  border-collapse:collapse;
-  margin-top:20px;
-  font-size:14px;
-}
-
-th, td{
-  padding:10px;
-  border:1px solid var(--bpcc-grey);
-}
-
-th{
-  background:var(--bpcc-navy);
-  color:white;
-}
-
-tr:nth-child(even){ background:var(--bpcc-blue); }
-tr:nth-child(odd){ background:white; }
-tr:hover{ background:#e3edff; }
-
-/* ============================================================
-   MILESTONES
-   ============================================================ */
-
-.milestone-grid{
-  display:grid;
-  grid-template-columns:repeat(3,1fr) !important;
-  gap:20px;
-  margin-top:25px;
-  width:100%;
-}
-
-.milestone-club-box{
-  background:var(--bpcc-blue);
-  border:1px solid var(--bpcc-grey);
-  padding:18px !important;
-  border-radius:6px;
-}
-
-.milestone-club-box h4{
-  margin:0 0 8px 0;
-  color:var(--bpcc-navy);
-}
-
-.approaching-section{
-  margin-top:30px;
-  padding-top:10px;
-  border-top:2px solid #ddd;
-}
-
-.milestone-approach-box{
-  background:#fff7e6;
-  border:1px solid #e6c200;
-  padding:15px;
-  border-radius:6px;
-  margin-bottom:20px;
-}
-
-.milestone-approach-box h4{
-  margin:0 0 8px 0;
-  color:#b58900;
-}
-
-.approach-row{
-  display:flex;
-  justify-content:space-between;
-  padding:6px 0;
-  border-bottom:1px solid #eee;
-}
-
-.to-go{
-  font-weight:bold;
-  color:#cc0000;
-}
-
-/* ============================================================
-   AI TEAMS
-   ============================================================ */
-
-.ai-teams-grid{
-  display:grid;
-  grid-template-columns:repeat(3,1fr);
-  gap:20px;
-  margin-top:20px;
-}
-
-.ai-team-box{
-  background:white;
-  border:1px solid var(--bpcc-grey);
-  padding:20px;
-  border-radius:6px;
-}
-
-.ai-team-box h3{
-  background:var(--bpcc-navy);
-  color:white;
-  padding:10px;
-  margin:-20px -20px 20px -20px;
-  border-radius:6px 6px 0 0;
-}
-
-.ai-player-row{
-  display:flex;
-  justify-content:space-between;
-  padding:6px 0 !important;
-  border-bottom:1px solid #eee;
-  cursor:pointer;
-}
-
-.ai-player-name{
-  font-weight:bold;
-  color:var(--bpcc-navy);
-  font-size:13px !important;
-}
-
-.ai-player-role{
-  font-size:12px;
-  color:#555;
-}
-
-.ai-player-right{
-  text-align:right;
-  font-size:11px !important;
-  color:var(--bpcc-navy);
-  min-width:90px !important;
-}
-
-/* ============================================================
-   AI TEAMS NOTICE BOX
-   ============================================================ */
-
-.ai-notice{
-  background:#fff7e6;
-  border:1px solid #e6c200;
-  padding:18px;
-  border-radius:6px;
-  margin-bottom:25px;
-  font-size:14px;
-  line-height:1.6;
-}
-
-/* ============================================================
-   MODAL — restored tabular layout
-   ============================================================ */
-
-#player-modal{
-  position:fixed;
-  z-index:2000;
-  left:0; top:0;
-  width:100%; height:100%;
-  background:rgba(0,0,0,0.6);
-  display:none;
-  justify-content:center;
-  align-items:center;
-  padding:20px;
-}
-
-#player-modal-content{
-  background:white;
-  width:600px;
-  max-width:95%;
-  max-height:90vh;
-  overflow-y:auto;
-  border-radius:6px;
-  box-shadow:0 0 20px rgba(0,0,0,0.3);
-}
-
-.modal-header{
-  background:var(--bpcc-navy);
-  color:white;
-  padding:20px;
-  text-align:center;
-  position:relative;
-}
-
-#modal-close{
-  position:absolute;
-  right:15px;
-  top:15px;
-  background:#cc0000;
-  color:white;
-  padding:4px 10px;
-  border-radius:4px;
-  font-size:18px;
-  cursor:pointer;
-}
-
-.modal-stats-list{
-  display:grid;
-  grid-template-columns:1fr 1fr;
-  gap:20px;
-  padding:20px;
-}
-
-.modal-stat-row{
-  display:flex;
-  justify-content:space-between;
-  padding:8px 0;
-  border-bottom:1px solid #ddd;
-}
-
-.modal-stat-row h4{
-  margin:0;
-  font-size:14px;
-  color:var(--bpcc-navy);
-}
-
-.modal-stat-row p{
-  margin:0;
-  font-weight:bold;
-}
-
-/* ============================================================
-   FOOTER
-   ============================================================ */
-
-footer{
-  display:flex;
-  justify-content:space-between;
-  padding:28px 5vw;
-  background:var(--bpcc-navy);
-  color:white;
-  font-size:10px;
-}
-
-footer b{
-  color:var(--bpcc-accent);
-}
-</style>
+<link rel="stylesheet" href="style.css">
 </head>
 
 <body>
@@ -574,6 +46,7 @@ footer b{
 
 <div class="content">
 
+  <!-- OVERVIEW -->
   <div id="overview" class="section active">
     <h2>Overview</h2>
 
@@ -587,6 +60,7 @@ footer b{
     </div>
   </div>
 
+  <!-- PLAYERS -->
   <div id="players" class="section">
     <h2>Players</h2>
 
@@ -597,6 +71,7 @@ footer b{
     <div id="players-grid" class="player-grid"></div>
   </div>
 
+  <!-- PLAYER MODAL -->
   <div id="player-modal">
     <div id="player-modal-content">
       <div class="modal-header">
@@ -609,33 +84,34 @@ footer b{
     </div>
   </div>
 
+  <!-- BATTING -->
   <div id="batting" class="section">
     <h2>Batting (ordered by runs)</h2>
     <div id="batting-table"></div>
   </div>
 
+  <!-- BOWLING -->
   <div id="bowling" class="section">
     <h2>Bowling (ordered by wickets)</h2>
     <div id="bowling-table"></div>
   </div>
 
+  <!-- FIELDING -->
   <div id="fielding" class="section">
     <h2>Fielding (ordered by victims)</h2>
     <div id="fielding-table"></div>
   </div>
 
+  <!-- MILESTONES -->
   <div id="milestones" class="section">
     <h2>Milestones</h2>
 
-    <div class="milestone-grid" id="batting-milestones"></div>
-
-    <div class="approaching-section">
-      <div class="milestone-approach-box" id="batting-approaching"></div>
-      <div class="milestone-approach-box" id="bowling-approaching"></div>
-      <div class="milestone-approach-box" id="catches-approaching"></div>
-    </div>
+    <div id="batting-milestones"></div>
+    <div id="bowling-milestones"></div>
+    <div id="catches-milestones"></div>
   </div>
 
+  <!-- AI TEAMS -->
   <div id="ai-teams" class="section">
     <h2>AI Teams</h2>
 
@@ -644,9 +120,9 @@ footer b{
     </div>
 
     <div class="ai-teams-grid">
-      <div id="team-a" class="ai-team-box"></div>
-      <div id="team-b" class="ai-team-box"></div>
-      <div id="team-c" class="ai-team-box"></div>
+      <div id="team-a"></div>
+      <div id="team-b"></div>
+      <div id="team-c"></div>
     </div>
   </div>
 
@@ -656,7 +132,7 @@ footer b{
   <b>BRITISH POLICE CRICKET CLUB</b>
   <span>Statistics from the BPCC archive · Updated live</span>
 </footer>
-<script src="script.js"></script>
 
+<script src="script.js"></script>
 </body>
 </html>
