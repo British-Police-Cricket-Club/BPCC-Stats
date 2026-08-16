@@ -169,6 +169,114 @@
   .section.active {
     display: block;
   }
+
+/* Player cards */
+.player-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 15px;
+  margin-top: 15px;
+}
+
+.player-card {
+  background: #f0f4ff;
+  border: 1px solid #ccc;
+  padding: 15px;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+.player-card:hover {
+  background: #e3edff;
+}
+
+.player-card h3 {
+  margin: 0;
+  color: #001f3f;
+}
+
+.player-card .status {
+  font-size: 12px;
+  color: #555;
+  margin-bottom: 5px;
+}
+
+.player-card .stats-line {
+  font-size: 14px;
+  margin-top: 8px;
+  font-weight: bold;
+}
+
+/* Popup modal */
+#player-modal {
+  display: none;
+  position: fixed;
+  z-index: 20;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0,0,0,0.6);
+}
+
+#player-modal-content {
+  background: white;
+  width: 600px;
+  margin: 8% auto;
+  padding: 20px;
+  border-radius: 8px;
+  position: relative;
+}
+
+#modal-close {
+  position: absolute;
+  right: 15px;
+  top: 10px;
+  font-size: 22px;
+  cursor: pointer;
+}
+
+.modal-header {
+  background: #001f3f;
+  color: white;
+  padding: 10px;
+  border-radius: 6px;
+  margin-bottom: 15px;
+}
+
+.modal-header h2 {
+  margin: 0;
+}
+
+.modal-header p {
+  margin: 0;
+  font-size: 14px;
+}
+
+.modal-stats-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 10px;
+}
+
+.modal-stat-box {
+  background: #f0f4ff;
+  border: 1px solid #ccc;
+  padding: 10px;
+  border-radius: 6px;
+}
+
+.modal-stat-box h4 {
+  margin: 0 0 5px 0;
+  color: #001f3f;
+}
+
+.modal-stat-box p {
+  margin: 0;
+  font-weight: bold;
+}
+  
 </style>
 </head>
 
@@ -289,14 +397,31 @@
 
 
   <!-- Players -->
-  <div id="players" class="section">
-    <h2>Players</h2>
-    <div class="search-box">
-      <input type="text" id="player-search" placeholder="Search players...">
-    </div>
-    <div id="players-table"></div>
-    <div id="player-detail"></div>
+<div id="players" class="section">
+  <h2>Players</h2>
+
+  <div class="search-box">
+    <input type="text" id="player-search" placeholder="Search players...">
   </div>
+
+  <div id="players-grid" class="player-grid"></div>
+</div>
+
+<!-- Popup modal -->
+<div id="player-modal">
+  <div id="player-modal-content">
+    <span id="modal-close">&times;</span>
+
+    <div class="modal-header">
+      <h2>Complete Career Record</h2>
+      <p id="modal-player-name"></p>
+      <p id="modal-player-number"></p>
+    </div>
+
+    <div id="modal-stats" class="modal-stats-grid"></div>
+  </div>
+</div>
+
 
   <!-- Batting -->
   <div id="batting" class="section">
@@ -405,6 +530,36 @@ function victims(player) {
   return num(player["Catches"]) + num(player["Stumpings"]);
 }
 
+function renderPlayers(); // now renders cards instead of table {
+  const container = document.getElementById("players-grid");
+  container.innerHTML = "";
+
+  const q = document.getElementById("player-search").value.toLowerCase();
+
+  allData.forEach((p, idx) => {
+    if (!p["Player"].toLowerCase().includes(q)) return;
+
+    const card = document.createElement("div");
+    card.className = "player-card";
+    card.setAttribute("data-index", idx);
+
+    const status = p["Current"] === "Yes" ? "Current Player" : "Retired";
+    const victimsCount = victims(p);
+
+    card.innerHTML = `
+      <div class="status">${status}</div>
+      <h3>${p["Player"]}</h3>
+      <div class="stats-line">
+        ${p["Matches"]} matches • ${p["Runs"]} runs • ${p["Wickets"]} wickets • ${victimsCount} victims
+      </div>
+    `;
+
+    card.addEventListener("click", () => openPlayerModal(p));
+    container.appendChild(card);
+  });
+}
+
+  
 // Navigation
 function setupNav() {
   const buttons = document.querySelectorAll(".nav-bar button");
@@ -463,6 +618,7 @@ function renderPlayers() {
     "Player","Number","Years","Matches","Runs",
     "Wickets","Catches","Stumpings","Current"
   ];
+document.getElementById("player-search").addEventListener("input", renderPlayers);
 
   let html = "<table><thead><tr>";
   cols.forEach(c => html += `<th>${c}</th>`);
@@ -511,6 +667,37 @@ function showPlayerDetail(p) {
   detail.style.display = "block";
 }
 
+function openPlayerModal(p) {
+  document.getElementById("modal-player-name").textContent = p["Player"];
+  document.getElementById("modal-player-number").textContent = "Player No: " + p["Number"];
+
+  const statsContainer = document.getElementById("modal-stats");
+  statsContainer.innerHTML = "";
+
+  HEADERS.forEach(h => {
+    const box = document.createElement("div");
+    box.className = "modal-stat-box";
+    box.innerHTML = `
+      <h4>${h}</h4>
+      <p>${p[h] || ""}</p>
+    `;
+    statsContainer.appendChild(box);
+  });
+
+  document.getElementById("player-modal").style.display = "block";
+}
+
+document.getElementById("modal-close").addEventListener("click", () => {
+  document.getElementById("player-modal").style.display = "none";
+});
+
+window.addEventListener("click", (e) => {
+  if (e.target.id === "player-modal") {
+    document.getElementById("player-modal").style.display = "none";
+  }
+});
+  
+  
 // Batting
 function renderBatting() {
   const container = document.getElementById("batting-table");
