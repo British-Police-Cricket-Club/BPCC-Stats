@@ -270,17 +270,16 @@ tbody tr:hover {
 }
 
 /* ============================================================
-   MODAL
+   MODAL — FIXED
 ============================================================ */
 #player-modal {
-  display: none;
+  display: none; /* FIX: prevents showing on load */
   position: fixed;
   inset: 0;
   background: rgba(0,0,0,0.6);
-  display: flex;
   justify-content: center;
-  align-items: center; /* FIX: modal centered again */
-  padding-bottom: env(safe-area-inset-bottom);
+  align-items: center; /* FIX: centers modal again */
+  z-index: 9998;
 }
 
 #player-modal-content {
@@ -293,55 +292,111 @@ tbody tr:hover {
   overflow-y: auto;
   border: 3px solid var(--bpcc-gold);
   animation: slideUp 0.35s ease;
+
+  /* FIX: restore 4‑column grid spacing */
+  padding-bottom: 40px;
 }
+
+.modal-header {
+  background: var(--bpcc-blue); /* FIX: restore BPCC blue */
+  color: white;
+  padding: 16px 20px;
+
+  /* FIX: close button stays locked top-right */
+  position: sticky;
+  top: 0;
+  z-index: 10;
+
+  border-top-left-radius: 14px;
+  border-top-right-radius: 14px;
+  border-bottom: 3px solid var(--bpcc-gold);
+}
+
+#modal-close {
+  float: right;
+  font-size: 28px;
+  cursor: pointer;
+  color: var(--bpcc-gold);
+}
+
+/* FIX: restore 4-abreast stat grid */
+#modal-stats {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  gap: 15px;
+  margin-top: 20px;
+}
+
+.modal-stat-row {
+  background: #f7f9fc;
+  padding: 12px;
+  border-radius: 10px;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+}
+
 /* ============================================================
-   MOBILE RESPONSIVE + SAFE AREA
+   MOBILE RESPONSIVE — FULLY FIXED
 ============================================================ */
 @media (max-width: 768px) {
 
+  /* Correct bottom spacing without affecting nav bar */
   body {
-    padding-bottom: calc(140px + env(safe-area-inset-bottom));
+    padding-bottom: calc(80px + env(safe-area-inset-bottom));
   }
 
   .section {
-    padding-bottom: calc(140px + env(safe-area-inset-bottom));
+    padding-bottom: calc(80px + env(safe-area-inset-bottom));
   }
 
   table {
-    margin-bottom: calc(140px + env(safe-area-inset-bottom));
+    margin-bottom: calc(80px + env(safe-area-inset-bottom));
   }
 
-  .milestone-grid {
-    padding-bottom: calc(140px + env(safe-area-inset-bottom));
-  }
-
+  .milestone-grid,
   .ai-teams-grid {
-    padding-bottom: calc(140px + env(safe-area-inset-bottom));
+    padding-bottom: calc(80px + env(safe-area-inset-bottom));
   }
 
+  /* Modal padding restored */
   #player-modal-content {
-    padding-bottom: calc(140px + env(safe-area-inset-bottom));
+    padding-bottom: 40px;
   }
 
-  /* Top nav scroll fix */
+  /* ============================================================
+     TOP NAV BAR — FIXED
+     Prevents left-shift, ensures full scroll visibility
+  ============================================================ */
+
   .nav-bar {
     overflow-x: auto;
     white-space: nowrap;
     -webkit-overflow-scrolling: touch;
+
+    /* FIX: prevent body padding from affecting nav bar */
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+    margin-left: 0 !important;
+    margin-right: 0 !important;
+
+    /* FIX: ensure nav bar starts at scroll position 0 */
+    scroll-snap-type: x mandatory;
   }
 
-  /* Overview spacing */
-  .summary {
-    grid-template-columns: repeat(2, 1fr);
-    gap: 25px;
+  .nav-bar button {
+    scroll-snap-align: start;
+    flex: 0 0 auto;
   }
 
-  /* Player grid */
+  /* ============================================================
+     PLAYER GRID
+  ============================================================ */
   .player-grid {
     grid-template-columns: 1fr;
   }
 
-  /* Bottom tab bar */
+  /* ============================================================
+     BOTTOM TAB BAR — SAFE AREA AWARE
+  ============================================================ */
   .bottom-tab-bar {
     position: fixed;
     bottom: env(safe-area-inset-bottom);
@@ -354,6 +409,8 @@ tbody tr:hover {
     justify-content: space-around;
     align-items: center;
     z-index: 9999;
+
+    /* Safe-area padding */
     padding-bottom: env(safe-area-inset-bottom);
   }
 
