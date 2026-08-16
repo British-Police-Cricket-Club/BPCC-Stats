@@ -6,9 +6,9 @@
 <title>BPCC Statistics Centre</title>
 
 <style>
-/* ============================
-   BPCC BRANDING THEME
-   ============================ */
+/* ============================================================
+   BPCC BRANDING — Fugitives-style full-width layout
+   ============================================================ */
 
 :root{
   --bpcc-navy:#001f3f;
@@ -29,7 +29,10 @@ body{
 button,input{font:inherit}
 button{cursor:pointer}
 
-/* HEADER */
+/* ============================================================
+   HEADER
+   ============================================================ */
+
 header{
   height:94px;
   background:white;
@@ -74,7 +77,10 @@ header{
   color:var(--bpcc-accent);
 }
 
-/* NAV */
+/* ============================================================
+   NAVIGATION
+   ============================================================ */
+
 nav{
   height:50px;
   background:var(--bpcc-navy);
@@ -101,7 +107,10 @@ nav button:hover{
   color:white;
 }
 
-/* HERO */
+/* ============================================================
+   HERO
+   ============================================================ */
+
 .hero{
   min-height:300px;
   padding:50px 7vw;
@@ -147,7 +156,294 @@ nav button:hover{
   color:#d5e8ee;
 }
 
-/* FOOTER */
+/* ============================================================
+   FLOATING SUMMARY CARDS (Overview only)
+   ============================================================ */
+
+.summary{
+  max-width:1400px;
+  margin:auto;
+  margin-top:-70px;
+  background:white;
+  border:1px solid var(--bpcc-grey);
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+  position:relative;
+  z-index:10;
+}
+
+.summary div{
+  padding:27px 30px;
+  border-right:1px solid var(--bpcc-grey);
+}
+
+.summary span{
+  display:block;
+  text-transform:uppercase;
+  font-size:9px;
+  letter-spacing:.16em;
+  color:#66747b;
+}
+
+.summary b{
+  display:block;
+  font:700 39px Georgia;
+  margin-top:5px;
+}
+
+/* ============================================================
+   CONTENT WRAPPER (Fugitives-style)
+   ============================================================ */
+
+.content{
+  max-width:1400px;
+  margin:auto;
+  padding:42px 5vw 90px;
+}
+
+/* ============================================================
+   SECTION SWITCHER
+   ============================================================ */
+
+.section { display:none; }
+.section.active { display:block; }
+
+/* ============================================================
+   OVERVIEW BUTTONS
+   ============================================================ */
+
+.record-links{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:15px;
+  margin-top:30px;
+}
+
+.record-box{
+  background:white;
+  border:1px solid var(--bpcc-grey);
+  padding:20px;
+  text-align:center;
+  cursor:pointer;
+  border-radius:6px;
+  transition:.2s;
+}
+
+.record-box:hover{
+  background:var(--bpcc-blue);
+}
+
+.record-box h3{
+  margin:0;
+  color:var(--bpcc-navy);
+}
+
+.record-box p{
+  margin:5px 0 0 0;
+  font-size:13px;
+  color:#555;
+}
+
+/* ============================================================
+   SEARCH
+   ============================================================ */
+
+.search-box{
+  margin:20px 0;
+  text-align:right;
+}
+
+.search-box input{
+  padding:10px;
+  width:300px;
+  max-width:100%;
+}
+
+/* ============================================================
+   PLAYER GRID
+   ============================================================ */
+
+.player-grid{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:20px;
+  margin-top:20px;
+}
+
+.player-card{
+  background:white;
+  border:1px solid var(--bpcc-grey);
+  padding:20px;
+  border-radius:6px;
+  cursor:pointer;
+  transition:.2s;
+}
+
+.player-card:hover{
+  background:var(--bpcc-blue);
+}
+
+.player-card h3{
+  margin:0;
+  color:var(--bpcc-navy);
+}
+
+.player-card .status{
+  font-size:12px;
+  color:#555;
+  margin-bottom:5px;
+}
+
+.player-card .stats-line{
+  font-size:14px;
+  margin-top:8px;
+  font-weight:bold;
+}
+
+/* ============================================================
+   TABLES (Batting / Bowling / Fielding)
+   ============================================================ */
+
+table{
+  width:100%;
+  border-collapse:collapse;
+  margin-top:20px;
+  font-size:14px;
+}
+
+th, td{
+  padding:10px;
+  border:1px solid var(--bpcc-grey);
+}
+
+th{
+  background:var(--bpcc-navy);
+  color:white;
+}
+
+tr:nth-child(even){ background:var(--bpcc-blue); }
+tr:nth-child(odd){ background:white; }
+tr:hover{ background:#e3edff; }
+
+/* ============================================================
+   AI TEAMS
+   ============================================================ */
+
+.ai-teams-grid{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:20px;
+  margin-top:20px;
+}
+
+.ai-team-box{
+  background:white;
+  border:1px solid var(--bpcc-grey);
+  padding:20px;
+  border-radius:6px;
+}
+
+.ai-team-box h3{
+  background:var(--bpcc-navy);
+  color:white;
+  padding:10px;
+  margin:-20px -20px 20px -20px;
+  border-radius:6px 6px 0 0;
+}
+
+.ai-player-row{
+  display:flex;
+  justify-content:space-between;
+  padding:10px 0;
+  border-bottom:1px solid #eee;
+  cursor:pointer;
+}
+
+.ai-player-name{
+  font-weight:bold;
+  color:var(--bpcc-navy);
+}
+
+.ai-player-role{
+  font-size:12px;
+  color:#555;
+}
+
+/* ============================================================
+   MODAL — restored tabular layout
+   ============================================================ */
+
+#player-modal{
+  position:fixed;
+  z-index:2000;
+  left:0; top:0;
+  width:100%; height:100%;
+  background:rgba(0,0,0,0.6);
+  display:none;
+  justify-content:center;
+  align-items:center;
+  padding:20px;
+}
+
+#player-modal-content{
+  background:white;
+  width:600px;
+  max-width:95%;
+  max-height:90vh;
+  overflow-y:auto;
+  border-radius:6px;
+  box-shadow:0 0 20px rgba(0,0,0,0.3);
+}
+
+.modal-header{
+  background:var(--bpcc-navy);
+  color:white;
+  padding:20px;
+  text-align:center;
+  position:relative;
+}
+
+#modal-close{
+  position:absolute;
+  right:15px;
+  top:15px;
+  background:#cc0000;
+  color:white;
+  padding:4px 10px;
+  border-radius:4px;
+  font-size:18px;
+  cursor:pointer;
+}
+
+.modal-stats-list{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:20px;
+  padding:20px;
+}
+
+.modal-stat-row{
+  display:flex;
+  justify-content:space-between;
+  padding:8px 0;
+  border-bottom:1px solid #ddd;
+}
+
+.modal-stat-row h4{
+  margin:0;
+  font-size:14px;
+  color:var(--bpcc-navy);
+}
+
+.modal-stat-row p{
+  margin:0;
+  font-weight:bold;
+}
+
+/* ============================================================
+   FOOTER
+   ============================================================ */
+
 footer{
   display:flex;
   justify-content:space-between;
@@ -161,247 +457,14 @@ footer b{
   color:var(--bpcc-accent);
 }
 
-/* ============================
-   YOUR SITE CSS
-   ============================ */
-
-.section { display:none; }
-.section.active { display:block; }
-
-#container {
-  width:1000px;
-  margin:0 auto;
-  background:white;
-  padding:20px;
-}
-
-.player-name { font-weight:bold; color:var(--bpcc-navy); }
-.player-number { font-size:12px; color:#555; }
-
-h1 { text-align:center; color:var(--bpcc-navy); margin-bottom:10px; }
-
-.nav-bar {
-  display:flex;
-  gap:10px;
-  justify-content:center;
-  margin:20px 0;
-  flex-wrap:wrap;
-}
-
-.nav-bar button {
-  background:var(--bpcc-navy);
-  color:#fff;
-  border:none;
-  padding:8px 14px;
-  cursor:pointer;
-  border-radius:4px;
-  font-size:14px;
-}
-
-.nav-bar button.active { background:#004080; }
-
-.section h2 { margin-top:20px; color:var(--bpcc-navy); }
-
-table {
-  width:100%;
-  border-collapse:collapse;
-  margin-top:10px;
-  font-size:14px;
-}
-
-th, td { padding:8px; border:1px solid #ccc; }
-th { background:var(--bpcc-navy); color:white; }
-
-tr:nth-child(even) { background:var(--bpcc-blue); }
-tr:nth-child(odd) { background:white; }
-tr:hover { background:#e3edff; }
-
-.summary-grid {
-  display:grid;
-  grid-template-columns:repeat(2,1fr);
-  gap:10px;
-  margin-top:10px;
-}
-
-.summary-card {
-  background:var(--bpcc-blue);
-  border:1px solid #ccc;
-  padding:10px;
-  border-radius:4px;
-}
-
-.summary-card h3 { margin:0 0 5px 0; color:var(--bpcc-navy); font-size:14px; }
-.summary-card p { margin:0; font-size:16px; font-weight:bold; }
-
-.search-box { margin:10px 0; text-align:right; }
-.search-box input { padding:6px; width:250px; max-width:100%; }
-
-/* Player cards */
-.player-grid {
-  display:grid;
-  grid-template-columns:repeat(3,1fr);
-  gap:15px;
-  margin-top:15px;
-}
-
-.player-card {
-  background:var(--bpcc-blue);
-  border:1px solid #ccc;
-  padding:15px;
-  border-radius:6px;
-  cursor:pointer;
-  transition:.2s;
-}
-
-.player-card:hover { background:#e3edff; }
-.player-card h3 { margin:0; color:var(--bpcc-navy); }
-.player-card .status { font-size:12px; color:#555; margin-bottom:5px; }
-.player-card .stats-line { font-size:14px; margin-top:8px; font-weight:bold; }
-
-/* Role badges */
-.role-badge {
-  display:inline-block;
-  background:#004080;
-  color:white;
-  padding:3px 8px;
-  border-radius:12px;
-  font-size:11px;
-  margin-top:6px;
-}
-
-/* Modal */
-#player-modal {
-  position:fixed;
-  z-index:2000;
-  left:0; top:0;
-  width:100%; height:100%;
-  background:rgba(0,0,0,0.6);
-  display:none;
-  justify-content:center;
-  align-items:center;
-  padding:20px;
-}
-
-#player-modal-content {
-  background:white;
-  width:500px;
-  max-width:95%;
-  max-height:90vh;
-  overflow-y:auto;
-  border-radius:6px;
-  box-shadow:0 0 20px rgba(0,0,0,0.3);
-}
-
-.modal-header {
-  background:var(--bpcc-navy);
-  color:white;
-  padding:20px;
-  text-align:center;
-  position:relative;
-  display:flex;
-  flex-direction:column;
-  justify-content:center;
-  align-items:center;
-  min-height:140px;
-}
-
-#modal-close {
-  position:absolute;
-  right:15px;
-  top:15px;
-  background:#cc0000;
-  color:white;
-  padding:4px 10px;
-  border-radius:4px;
-  font-size:18px;
-  cursor:pointer;
-}
-
-/* AI Teams */
-.ai-teams-grid {
-  display:grid;
-  grid-template-columns:repeat(3,1fr);
-  gap:20px;
-  margin-top:20px;
-}
-
-.ai-team-box {
-  background:white;
-  border:1px solid #ccc;
-  padding:15px;
-  border-radius:6px;
-}
-
-.ai-team-box h3 {
-  background:var(--bpcc-navy);
-  color:white;
-  padding:10px;
-  margin:-15px -15px 15px -15px;
-  border-radius:6px 6px 0 0;
-}
-
-.ai-team-section { margin-bottom:15px; }
-.ai-team-section h4 { margin:0 0 8px 0; color:#004080; }
-
-.ai-player-row {
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
-  padding:8px 0;
-  border-bottom:1px solid #eee;
-  cursor:pointer;
-}
-
-.ai-player-left { display:flex; flex-direction:column; }
-.ai-player-name { font-weight:bold; color:var(--bpcc-navy); }
-.ai-player-role { font-size:12px; color:#555; }
-
-.ai-player-right {
-  text-align:right;
-  font-size:13px;
-  color:var(--bpcc-navy);
-  min-width:110px;
-}
-
-.ai-player-right.small { font-size:11px; }
-
-/* Milestones */
-.milestone-grid {
-  display:grid;
-  grid-template-columns:repeat(4,1fr);
-  gap:15px;
-  margin-top:15px;
-}
-
-.milestone-club-box {
-  background:var(--bpcc-blue);
-  border:1px solid #ccc;
-  padding:12px;
-  border-radius:6px;
-}
-
-.milestone-approach-box {
-  background:#fff7e6;
-  border:1px solid #e6c200;
-  padding:12px;
-  margin:12px 0;
-  border-radius:6px;
-}
-
-.approach-row {
-  display:flex;
-  justify-content:space-between;
-  padding:6px 0;
-  border-bottom:1px solid #eee;
-}
-
-.to-go { font-weight:bold; color:#cc0000; }
-
 </style>
 </head>
 
 <body>
 
+<!-- ============================================================
+     HEADER
+     ============================================================ -->
 <header>
   <div class="brand">
     <img src="logo.png" alt="BPCC Logo">
@@ -413,8 +476,11 @@ tr:hover { background:#e3edff; }
   <span class="live">● LIVE CLUB ARCHIVE</span>
 </header>
 
+<!-- ============================================================
+     NAVIGATION
+     ============================================================ -->
 <nav class="nav-bar">
-  <button data-section="overview" class="active">Overview</button>
+  <button data-section="overview" class="on">Overview</button>
   <button data-section="players">Players</button>
   <button data-section="batting">Batting</button>
   <button data-section="bowling">Bowling</button>
@@ -423,35 +489,49 @@ tr:hover { background:#e3edff; }
   <button data-section="ai-teams">AI Teams</button>
 </nav>
 
+<!-- ============================================================
+     HERO
+     ============================================================ -->
 <section class="hero">
   <small>THE COMPLETE CLUB RECORD</small>
-  <h2>Every officer.<br><i>Every number.</i></h2>
+  <h2>Every player.<br><i>Every number.</i></h2>
   <p>Career records across all BPCC fixtures, updated directly from the club archive.</p>
 </section>
 
-<div id="container">
+<!-- ============================================================
+     FLOATING SUMMARY CARDS (Overview only)
+     ============================================================ -->
+<div id="summary-cards" class="summary">
+  <div><span>Players</span><b id="total-players">–</b></div>
+  <div><span>Appearances</span><b id="total-appearances">–</b></div>
+  <div><span>Runs</span><b id="total-runs">–</b></div>
+  <div><span>Wickets</span><b id="total-wickets">–</b></div>
+</div>
 
-  <!-- Overview -->
+<!-- ============================================================
+     CONTENT AREA
+     ============================================================ -->
+<div class="content">
+
+  <!-- ============================================================
+       OVERVIEW
+       ============================================================ -->
   <div id="overview" class="section active">
     <h2>Overview</h2>
 
-    <div class="summary-grid">
-      <div class="summary-card"><h3>Number of Players</h3><p id="total-players">–</p></div>
-      <div class="summary-card"><h3>Total Appearances</h3><p id="total-appearances">–</p></div>
-      <div class="summary-card"><h3>Total Club Runs</h3><p id="total-runs">–</p></div>
-      <div class="summary-card"><h3>Total Club Wickets</h3><p id="total-wickets">–</p></div>
-    </div>
-
     <div class="record-links">
+      <div class="record-box" data-section="players"><h3>Players</h3><p>Full player list</p></div>
       <div class="record-box" data-section="batting"><h3>Batting</h3><p>Career records</p></div>
       <div class="record-box" data-section="bowling"><h3>Bowling</h3><p>Career records</p></div>
       <div class="record-box" data-section="fielding"><h3>Fielding</h3><p>Career records</p></div>
-      <div class="record-box" data-section="milestones"><h3>Milestones</h3><p>Landmarks and players closing in</p></div>
-      <div class="record-box" data-section="ai-teams"><h3>AI Teams</h3><p>Three balanced, data-selected XIs</p></div>
+      <div class="record-box" data-section="milestones"><h3>Milestones</h3><p>Landmarks</p></div>
+      <div class="record-box" data-section="ai-teams"><h3>AI Teams</h3><p>Data-selected XIs</p></div>
     </div>
   </div>
 
-  <!-- Players -->
+  <!-- ============================================================
+       PLAYERS
+       ============================================================ -->
   <div id="players" class="section">
     <h2>Players</h2>
 
@@ -462,7 +542,9 @@ tr:hover { background:#e3edff; }
     <div id="players-grid" class="player-grid"></div>
   </div>
 
-  <!-- Modal -->
+  <!-- ============================================================
+       MODAL
+       ============================================================ -->
   <div id="player-modal">
     <div id="player-modal-content">
       <div class="modal-header">
@@ -475,42 +557,44 @@ tr:hover { background:#e3edff; }
     </div>
   </div>
 
-  <!-- Batting -->
+  <!-- ============================================================
+       BATTING
+       ============================================================ -->
   <div id="batting" class="section">
     <h2>Batting (ordered by runs)</h2>
     <div id="batting-table"></div>
   </div>
 
-  <!-- Bowling -->
+  <!-- ============================================================
+       BOWLING
+       ============================================================ -->
   <div id="bowling" class="section">
     <h2>Bowling (ordered by wickets)</h2>
     <div id="bowling-table"></div>
   </div>
 
-  <!-- Fielding -->
+  <!-- ============================================================
+       FIELDING
+       ============================================================ -->
   <div id="fielding" class="section">
     <h2>Fielding (ordered by victims)</h2>
     <div id="fielding-table"></div>
   </div>
 
-  <!-- Milestones -->
+  <!-- ============================================================
+       MILESTONES
+       ============================================================ -->
   <div id="milestones" class="section">
     <h2>Milestones</h2>
 
-    <div class="milestone-section">
-      <div class="milestone-list" id="batting-milestones"></div>
-    </div>
-
-    <div class="milestone-section">
-      <div class="milestone-list" id="bowling-milestones"></div>
-    </div>
-
-    <div class="milestone-section">
-      <div class="milestone-list" id="catches-milestones"></div>
-    </div>
+    <div id="batting-milestones"></div>
+    <div id="bowling-milestones"></div>
+    <div id="catches-milestones"></div>
   </div>
 
-  <!-- AI Teams -->
+  <!-- ============================================================
+       AI TEAMS
+       ============================================================ -->
   <div id="ai-teams" class="section">
     <h2>AI Teams</h2>
     <div class="ai-teams-grid">
@@ -522,6 +606,9 @@ tr:hover { background:#e3edff; }
 
 </div>
 
+<!-- ============================================================
+     FOOTER
+     ============================================================ -->
 <footer>
   <b>BRITISH POLICE CRICKET CLUB</b>
   <span>Statistics from the BPCC archive · Updated live</span>
