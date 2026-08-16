@@ -3,471 +3,530 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>BPCC Player Statistics</title>
+<title>BPCC Statistics Centre</title>
 
 <style>
+/* ============================
+   BPCC BRANDING THEME
+   ============================ */
 
-/* Hide all sections by default */
-.section {
-  display: none;
+:root{
+  --bpcc-navy:#001f3f;
+  --bpcc-blue:#e3edff;
+  --bpcc-paper:#f4f6fa;
+  --bpcc-grey:#ccc;
+  --bpcc-accent:#cfa300;
+  --bpcc-ink:#222;
 }
 
-/* Only show the active section */
-.section.active {
-  display: block;
-}
-  
-  body {
-    font-family: Arial, sans-serif;
-    background: #f4f6fa;
-    margin: 0;
-    padding: 0;
-  }
-
-  #container {
-    width: 1000px;
-    margin: 0 auto;
-    background: white;
-    padding: 20px;
-  }
-
-.player-name {
-  font-weight: bold;
-  color: #001f3f;
+body{
+  margin:0;
+  background:var(--bpcc-paper);
+  color:var(--bpcc-ink);
+  font-family:Arial,sans-serif;
 }
 
-.player-number {
-  font-size: 12px;
-  color: #555;
+button,input{font:inherit}
+button{cursor:pointer}
+
+/* HEADER */
+header{
+  height:94px;
+  background:white;
+  padding:0 5vw;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  border-bottom:1px solid var(--bpcc-grey);
 }
-  
-  .logo {
-    display: block;
-    margin: 0 auto 10px auto;
-    height: 80px;
-  }
 
-  h1 {
-    text-align: center;
-    color: #001f3f;
-    margin-bottom: 10px;
-  }
+.brand{
+  display:flex;
+  align-items:center;
+  gap:14px;
+}
 
-  .nav-bar {
-    display: flex;
-    gap: 10px;
-    justify-content: center;
-    margin: 20px 0;
-    flex-wrap: wrap;
-  }
+.brand img{
+  height:70px;
+}
 
-  .nav-bar button {
-    background: #001f3f;
-    color: #fff;
-    border: none;
-    padding: 8px 14px;
-    cursor: pointer;
-    border-radius: 4px;
-    font-size: 14px;
-  }
+.brand small{
+  font-size:9px;
+  letter-spacing:.2em;
+  font-weight:bold;
+}
 
-  .nav-bar button.active {
-    background: #004080;
-  }
+.brand h1{
+  font-size:21px;
+  margin:5px 0 0;
+  color:var(--bpcc-navy);
+}
 
-  .section h2 {
-    margin-top: 20px;
-    color: #001f3f;
-  }
+.brand em{
+  font-style:normal;
+  color:var(--bpcc-accent);
+}
 
-  table {
-    width: 100%;
-    border-collapse: collapse;
-    margin-top: 10px;
-    font-size: 14px;
-  }
+.live{
+  font-size:9px;
+  letter-spacing:.14em;
+  font-weight:bold;
+  color:var(--bpcc-accent);
+}
 
-  th, td {
-    padding: 8px;
-    border: 1px solid #ccc;
-  }
+/* NAV */
+nav{
+  height:50px;
+  background:var(--bpcc-navy);
+  padding:0 5vw;
+  display:flex;
+  overflow:auto;
+}
 
-  th {
-    background: #001f3f;
-    color: white;
-  }
+nav button{
+  border:0;
+  border-bottom:3px solid transparent;
+  background:none;
+  color:#aebcc3;
+  padding:0 18px;
+  font-size:11px;
+  font-weight:bold;
+  text-transform:uppercase;
+  white-space:nowrap;
+}
 
-  tr:nth-child(even) {
-    background: #f0f4ff;
-  }
+nav button.on,
+nav button:hover{
+  border-color:var(--bpcc-accent);
+  color:white;
+}
 
-  tr:nth-child(odd) {
-    background: #ffffff;
-  }
+/* HERO */
+.hero{
+  min-height:300px;
+  padding:50px 7vw;
+  background:var(--bpcc-navy);
+  color:white;
+  position:relative;
+  overflow:hidden;
+}
 
-  tr:hover {
-    background: #e3edff;
-  }
+.hero:after{
+  content:"";
+  position:absolute;
+  width:420px;
+  height:420px;
+  border-radius:50%;
+  border:1px solid #ffffff20;
+  right:-110px;
+  top:-180px;
+  box-shadow:0 0 0 70px #ffffff08,0 0 0 140px #ffffff08;
+}
 
-  .summary-grid {
-    display: grid;
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 10px;
-    margin-top: 10px;
-  }
+.hero small{
+  font-size:9px;
+  letter-spacing:.2em;
+  font-weight:bold;
+}
 
-  .summary-card {
-    background: #f0f4ff;
-    border: 1px solid #ccc;
-    padding: 10px;
-    border-radius: 4px;
-  }
+.hero h2{
+  font:700 clamp(42px,6vw,72px)/.9 Georgia;
+  margin:18px 0;
+  letter-spacing:-.05em;
+  position:relative;
+  z-index:1;
+}
 
-  .summary-card h3 {
-    margin: 0 0 5px 0;
-    color: #001f3f;
-    font-size: 14px;
-  }
+.hero h2 i{
+  color:var(--bpcc-accent);
+}
 
-  .summary-card p {
-    margin: 0;
-    font-size: 16px;
-    font-weight: bold;
-  }
+.hero p{
+  max-width:550px;
+  line-height:1.7;
+  color:#d5e8ee;
+}
 
-  .search-box {
-    margin: 10px 0;
-    text-align: right;
-  }
+/* FOOTER */
+footer{
+  display:flex;
+  justify-content:space-between;
+  padding:28px 5vw;
+  background:var(--bpcc-navy);
+  color:white;
+  font-size:10px;
+}
 
-  .search-box input {
-    padding: 6px;
-    width: 250px;
-    max-width: 100%;
-  }
+footer b{
+  color:var(--bpcc-accent);
+}
 
-  /* Player cards */
-  .player-grid {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 15px;
-    margin-top: 15px;
-  }
+/* ============================
+   YOUR SITE CSS
+   ============================ */
 
-  .player-card {
-    background: #f0f4ff;
-    border: 1px solid #ccc;
-    padding: 15px;
-    border-radius: 6px;
-    cursor: pointer;
-    transition: 0.2s;
-  }
+.section { display:none; }
+.section.active { display:block; }
 
-  .player-card:hover {
-    background: #e3edff;
-  }
+#container {
+  width:1000px;
+  margin:0 auto;
+  background:white;
+  padding:20px;
+}
 
-  .player-card h3 {
-    margin: 0;
-    color: #001f3f;
-  }
+.player-name { font-weight:bold; color:var(--bpcc-navy); }
+.player-number { font-size:12px; color:#555; }
 
-  .player-card .status {
-    font-size: 12px;
-    color: #555;
-    margin-bottom: 5px;
-  }
+h1 { text-align:center; color:var(--bpcc-navy); margin-bottom:10px; }
 
-  .player-card .stats-line {
-    font-size: 14px;
-    margin-top: 8px;
-    font-weight: bold;
-  }
+.nav-bar {
+  display:flex;
+  gap:10px;
+  justify-content:center;
+  margin:20px 0;
+  flex-wrap:wrap;
+}
 
-  /* Role badges */
-  .role-badge {
-    display: inline-block;
-    background: #004080;
-    color: white;
-    padding: 3px 8px;
-    border-radius: 12px;
-    font-size: 11px;
-    margin-top: 6px;
-  }
+.nav-bar button {
+  background:var(--bpcc-navy);
+  color:#fff;
+  border:none;
+  padding:8px 14px;
+  cursor:pointer;
+  border-radius:4px;
+  font-size:14px;
+}
 
-  .modal-role-badge {
-    display: inline-block;
-    background: #004080;
-    color: white;
-    padding: 6px 12px;
-    border-radius: 14px;
-    font-size: 14px;
-    margin: 10px 0;
-  }
+.nav-bar button.active { background:#004080; }
 
+.section h2 { margin-top:20px; color:var(--bpcc-navy); }
+
+table {
+  width:100%;
+  border-collapse:collapse;
+  margin-top:10px;
+  font-size:14px;
+}
+
+th, td { padding:8px; border:1px solid #ccc; }
+th { background:var(--bpcc-navy); color:white; }
+
+tr:nth-child(even) { background:var(--bpcc-blue); }
+tr:nth-child(odd) { background:white; }
+tr:hover { background:#e3edff; }
+
+.summary-grid {
+  display:grid;
+  grid-template-columns:repeat(2,1fr);
+  gap:10px;
+  margin-top:10px;
+}
+
+.summary-card {
+  background:var(--bpcc-blue);
+  border:1px solid #ccc;
+  padding:10px;
+  border-radius:4px;
+}
+
+.summary-card h3 { margin:0 0 5px 0; color:var(--bpcc-navy); font-size:14px; }
+.summary-card p { margin:0; font-size:16px; font-weight:bold; }
+
+.search-box { margin:10px 0; text-align:right; }
+.search-box input { padding:6px; width:250px; max-width:100%; }
+
+/* Player cards */
+.player-grid {
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:15px;
+  margin-top:15px;
+}
+
+.player-card {
+  background:var(--bpcc-blue);
+  border:1px solid #ccc;
+  padding:15px;
+  border-radius:6px;
+  cursor:pointer;
+  transition:.2s;
+}
+
+.player-card:hover { background:#e3edff; }
+.player-card h3 { margin:0; color:var(--bpcc-navy); }
+.player-card .status { font-size:12px; color:#555; margin-bottom:5px; }
+.player-card .stats-line { font-size:14px; margin-top:8px; font-weight:bold; }
+
+/* Role badges */
+.role-badge {
+  display:inline-block;
+  background:#004080;
+  color:white;
+  padding:3px 8px;
+  border-radius:12px;
+  font-size:11px;
+  margin-top:6px;
+}
+
+/* Modal */
+#player-modal {
+  position:fixed;
+  z-index:2000;
+  left:0; top:0;
+  width:100%; height:100%;
+  background:rgba(0,0,0,0.6);
+  display:none;
+  justify-content:center;
+  align-items:center;
+  padding:20px;
+}
+
+#player-modal-content {
+  background:white;
+  width:500px;
+  max-width:95%;
+  max-height:90vh;
+  overflow-y:auto;
+  border-radius:6px;
+  box-shadow:0 0 20px rgba(0,0,0,0.3);
+}
+
+.modal-header {
+  background:var(--bpcc-navy);
+  color:white;
+  padding:20px;
+  text-align:center;
+  position:relative;
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
+  align-items:center;
+  min-height:140px;
+}
+
+#modal-close {
+  position:absolute;
+  right:15px;
+  top:15px;
+  background:#cc0000;
+  color:white;
+  padding:4px 10px;
+  border-radius:4px;
+  font-size:18px;
+  cursor:pointer;
+}
+
+/* AI Teams */
 .ai-teams-grid {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 20px;
-  margin-top: 20px;
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:20px;
+  margin-top:20px;
 }
 
 .ai-team-box {
-  background: white;
-  border: 1px solid #ccc;
-  padding: 15px;
-  border-radius: 6px;
+  background:white;
+  border:1px solid #ccc;
+  padding:15px;
+  border-radius:6px;
 }
 
 .ai-team-box h3 {
-  background: #001f3f;
-  color: white;
-  padding: 10px;
-  margin: -15px -15px 15px -15px;
-  border-radius: 6px 6px 0 0;
+  background:var(--bpcc-navy);
+  color:white;
+  padding:10px;
+  margin:-15px -15px 15px -15px;
+  border-radius:6px 6px 0 0;
 }
 
-.ai-team-section {
-  margin-bottom: 15px;
-}
-
-.ai-team-section h4 {
-  margin: 0 0 8px 0;
-  color: #004080;
-}
+.ai-team-section { margin-bottom:15px; }
+.ai-team-section h4 { margin:0 0 8px 0; color:#004080; }
 
 .ai-player-row {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 8px 0;
-  border-bottom: 1px solid #eee;
-  cursor: pointer;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  padding:8px 0;
+  border-bottom:1px solid #eee;
+  cursor:pointer;
 }
 
-.ai-player-left {
-  display: flex;
-  flex-direction: column;
-}
-
-.ai-player-name {
-  font-weight: bold;
-  color: #001f3f;
-}
-
-.ai-player-role {
-  font-size: 12px;
-  color: #555;
-}
+.ai-player-left { display:flex; flex-direction:column; }
+.ai-player-name { font-weight:bold; color:var(--bpcc-navy); }
+.ai-player-role { font-size:12px; color:#555; }
 
 .ai-player-right {
-  text-align: right;
-  font-size: 13px;
-  color: #001f3f;
-  min-width: 110px;
+  text-align:right;
+  font-size:13px;
+  color:var(--bpcc-navy);
+  min-width:110px;
 }
 
-.ai-player-right.small {
-  font-size: 11px;
-}
-  
-/* Modal overlay */
-#player-modal {
-  position: fixed;
-  z-index: 2000;
-  left: 0;
-  top: 0;
-  width: 100%;
-  height: 100%;
-  background: rgba(0,0,0,0.6);
+.ai-player-right.small { font-size:11px; }
 
-  /* FIX: modal starts hidden */
-  display: none;
-
-  /* Center modal when visible */
-  justify-content: center;
-  align-items: center;
-  padding: 20px;
-}
-
-
-/* Modal box */
-#player-modal-content {
-  background: white;
-  width: 500px;
-  max-width: 95%;
-  max-height: 90vh;
-  overflow-y: auto;
-  border-radius: 6px;
-  box-shadow: 0 0 20px rgba(0,0,0,0.3);
-}
-
-/* Header */
-.modal-header {
-  background: #001f3f;
-  color: white;
-  padding: 20px;
-  text-align: center;
-  position: relative;
-
-  display: flex;
-  flex-direction: column;
-  justify-content: center;   /* centers vertically */
-  align-items: center;       /* centers horizontally */
-  min-height: 140px;         /* gives breathing room */
-}
-
-
-#modal-player-name {
-  font-size: 26px;
-  font-weight: bold;
-  margin: 0;
-  color: white !important;
-}
-
-#modal-player-number {
-  font-size: 16px;
-  margin: 5px 0 0 0;
-}
-
-/* Close button */
-#modal-close {
-  position: absolute;
-  right: 15px;
-  top: 15px;
-  background: #cc0000;
-  color: white;
-  padding: 4px 10px;
-  border-radius: 4px;
-  font-size: 18px;
-  cursor: pointer;
-}
-
-/* Role badge */
-.modal-role-badge {
-  display: inline-block;
-  background: #004080;
-  color: white;
-  padding: 6px 12px;
-  border-radius: 14px;
-  font-size: 14px;
-  margin-top: 10px;
-}
-
-/* Stats list */
-.modal-stats-list {
-  padding: 15px;
-}
-
-.modal-stat-row {
-  display: flex;
-  justify-content: space-between;
-  padding: 8px 0;
-  border-bottom: 1px solid #ddd;
-}
-
-.modal-stat-row h4 {
-  margin: 0;
-  font-size: 14px;
-  color: #001f3f;
-}
-
-.modal-stat-row p {
-  margin: 0;
-  font-weight: bold;
-}
-
-  /* Record boxes */
-  .record-links {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 15px;
-    margin-top: 20px;
-  }
-
-  .record-box {
-    background: #f0f4ff;
-    border: 1px solid #ccc;
-    padding: 15px;
-    text-align: center;
-    cursor: pointer;
-    border-radius: 6px;
-    transition: 0.2s;
-  }
-
-  .record-box:hover {
-    background: #e3edff;
-  }
-
-  .record-box h3 {
-    margin: 0;
-    color: #001f3f;
-  }
-
-  .record-box p {
-    margin: 5px 0 0 0;
-    font-size: 13px;
-    color: #555;
-  }
-
+/* Milestones */
 .milestone-grid {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 15px;
-  margin-top: 15px;
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+  gap:15px;
+  margin-top:15px;
 }
 
 .milestone-club-box {
-  background: #f0f4ff;
-  border: 1px solid #ccc;
-  padding: 12px;
-  border-radius: 6px;
-}
-
-.milestone-club-box h4 {
-  margin: 0 0 8px 0;
-  color: #001f3f;
-}
-
-.approaching-section {
-  margin-top: 25px;
+  background:var(--bpcc-blue);
+  border:1px solid #ccc;
+  padding:12px;
+  border-radius:6px;
 }
 
 .milestone-approach-box {
-  background: #fff7e6;
-  border: 1px solid #e6c200;
-  padding: 12px;
-  margin: 12px 0;
-  border-radius: 6px;
-}
-
-.milestone-approach-box h4 {
-  margin: 0 0 8px 0;
-  color: #b58900;
+  background:#fff7e6;
+  border:1px solid #e6c200;
+  padding:12px;
+  margin:12px 0;
+  border-radius:6px;
 }
 
 .approach-row {
-  display: flex;
-  justify-content: space-between;
-  padding: 6px 0;
-  border-bottom: 1px solid #eee;
+  display:flex;
+  justify-content:space-between;
+  padding:6px 0;
+  border-bottom:1px solid #eee;
 }
 
-.to-go {
-  font-weight: bold;
-  color: #cc0000;
-}
+.to-go { font-weight:bold; color:#cc0000; }
 
-  .team-row {
-  cursor: pointer;
-}
-
-.team-row:hover {
-  background: #e3edff;
-}
 </style>
-  
-  
+</head>
+
+<body>
+
+<header>
+  <div class="brand">
+    <img src="logo.png" alt="BPCC Logo">
+    <div>
+      <small>BRITISH POLICE CRICKET CLUB</small>
+      <h1>BPCC <em>STATISTICS CENTRE</em></h1>
+    </div>
+  </div>
+  <span class="live">● LIVE CLUB ARCHIVE</span>
+</header>
+
+<nav class="nav-bar">
+  <button data-section="overview" class="active">Overview</button>
+  <button data-section="players">Players</button>
+  <button data-section="batting">Batting</button>
+  <button data-section="bowling">Bowling</button>
+  <button data-section="fielding">Fielding</button>
+  <button data-section="milestones">Milestones</button>
+  <button data-section="ai-teams">AI Teams</button>
+</nav>
+
+<section class="hero">
+  <small>THE COMPLETE CLUB RECORD</small>
+  <h2>Every officer.<br><i>Every number.</i></h2>
+  <p>Career records across all BPCC fixtures, updated directly from the club archive.</p>
+</section>
+
+<div id="container">
+
+  <!-- Overview -->
+  <div id="overview" class="section active">
+    <h2>Overview</h2>
+
+    <div class="summary-grid">
+      <div class="summary-card"><h3>Number of Players</h3><p id="total-players">–</p></div>
+      <div class="summary-card"><h3>Total Appearances</h3><p id="total-appearances">–</p></div>
+      <div class="summary-card"><h3>Total Club Runs</h3><p id="total-runs">–</p></div>
+      <div class="summary-card"><h3>Total Club Wickets</h3><p id="total-wickets">–</p></div>
+    </div>
+
+    <div class="record-links">
+      <div class="record-box" data-section="batting"><h3>Batting</h3><p>Career records</p></div>
+      <div class="record-box" data-section="bowling"><h3>Bowling</h3><p>Career records</p></div>
+      <div class="record-box" data-section="fielding"><h3>Fielding</h3><p>Career records</p></div>
+      <div class="record-box" data-section="milestones"><h3>Milestones</h3><p>Landmarks and players closing in</p></div>
+      <div class="record-box" data-section="ai-teams"><h3>AI Teams</h3><p>Three balanced, data-selected XIs</p></div>
+    </div>
+  </div>
+
+  <!-- Players -->
+  <div id="players" class="section">
+    <h2>Players</h2>
+
+    <div class="search-box">
+      <input type="text" id="player-search" placeholder="Search players...">
+    </div>
+
+    <div id="players-grid" class="player-grid"></div>
+  </div>
+
+  <!-- Modal -->
+  <div id="player-modal">
+    <div id="player-modal-content">
+      <div class="modal-header">
+        <span id="modal-close">×</span>
+        <h2 id="modal-player-name"></h2>
+        <p id="modal-player-number"></p>
+        <span id="modal-player-role" class="modal-role-badge"></span>
+      </div>
+      <div id="modal-stats" class="modal-stats-list"></div>
+    </div>
+  </div>
+
+  <!-- Batting -->
+  <div id="batting" class="section">
+    <h2>Batting (ordered by runs)</h2>
+    <div id="batting-table"></div>
+  </div>
+
+  <!-- Bowling -->
+  <div id="bowling" class="section">
+    <h2>Bowling (ordered by wickets)</h2>
+    <div id="bowling-table"></div>
+  </div>
+
+  <!-- Fielding -->
+  <div id="fielding" class="section">
+    <h2>Fielding (ordered by victims)</h2>
+    <div id="fielding-table"></div>
+  </div>
+
+  <!-- Milestones -->
+  <div id="milestones" class="section">
+    <h2>Milestones</h2>
+
+    <div class="milestone-section">
+      <div class="milestone-list" id="batting-milestones"></div>
+    </div>
+
+    <div class="milestone-section">
+      <div class="milestone-list" id="bowling-milestones"></div>
+    </div>
+
+    <div class="milestone-section">
+      <div class="milestone-list" id="catches-milestones"></div>
+    </div>
+  </div>
+
+  <!-- AI Teams -->
+  <div id="ai-teams" class="section">
+    <h2>AI Teams</h2>
+    <div class="ai-teams-grid">
+      <div id="team-a"></div>
+      <div id="team-b"></div>
+      <div id="team-c"></div>
+    </div>
+  </div>
+
+</div>
+
+<footer>
+  <b>BRITISH POLICE CRICKET CLUB</b>
+  <span>Statistics from the BPCC archive · Updated live</span>
+</footer>
+
 <script>
 const DATA_URL="https://docs.google.com/spreadsheets/d/e/2PACX-1vQlS2BceCsyAkRFmAuwA0QDJR8wPjuLZyquKAeszxD2-FM7gFTzEQrVTqPxtph-z55FZNU01tMnpvQv/pub?output=csv";
 
