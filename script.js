@@ -8,9 +8,7 @@ const HEADERS = [
 
 let allData = [];
 
-/* ============================================================
-   CSV LOADING
-   ============================================================ */
+/* CSV LOADING */
 async function loadCSV() {
   const res = await fetch(DATA_URL);
   const text = await res.text();
@@ -24,18 +22,10 @@ async function loadCSV() {
   });
 }
 
-function num(v) {
-  const n = parseFloat(v);
-  return isNaN(n) ? 0 : n;
-}
+function num(v) { const n = parseFloat(v); return isNaN(n) ? 0 : n; }
+function victims(p) { return num(p["Catches"]) + num(p["Stumpings"]); }
 
-function victims(p) {
-  return num(p["Catches"]) + num(p["Stumpings"]);
-}
-
-/* ============================================================
-   HERO TITLES + SUMMARY CONTROL
-   ============================================================ */
+/* HERO TITLES */
 const heroTitle = document.getElementById("hero-title");
 const summaryCards = document.getElementById("summary-cards");
 
@@ -49,9 +39,7 @@ const heroTitles = {
   "ai-teams": "AI-generated<br><i>XI selections</i>"
 };
 
-/* ============================================================
-   ROLE DETECTION
-   ============================================================ */
+/* ROLE DETECTION */
 function getRole(p) {
   const runs = num(p["Runs"]);
   const wickets = num(p["Wickets"]);
@@ -64,9 +52,7 @@ function getRole(p) {
   return "Player";
 }
 
-/* ============================================================
-   PLAYERS PAGE
-   ============================================================ */
+/* PLAYERS PAGE */
 function renderPlayers() {
   const container = document.getElementById("players-grid");
   container.innerHTML = "";
@@ -80,14 +66,17 @@ function renderPlayers() {
     const status = p["Current"] === "Yes" ? "Current Player" : "Retired";
     const role = getRole(p);
 
-    card.innerHTML = `
-      <div class="status">${status}</div>
-      <h3>${p["Player"]}</h3>
-      <span class="role-badge">${role}</span>
-      <div class="stats-line">
-        ${p["Matches"]} matches • ${p["Runs"]} runs • ${p["Wickets"]} wickets • ${victims(p)} victims
-      </div>
-    `;
+    card.innerHTML =
+      "<div class='status'>" + status + "</div>" +
+      "<h3>" + p["Player"] + "</h3>" +
+      "<span class='role-badge'>" + role + "</span>" +
+      "<div class='stats-line'>" +
+      p["Matches"] + " matches • " +
+      p["Runs"] + " runs • " +
+      p["Wickets"] + " wickets • " +
+      victims(p) + " victims" +
+      "</div>";
+
     card.addEventListener("click", () => openPlayerModal(p));
     container.appendChild(card);
   });
@@ -95,9 +84,7 @@ function renderPlayers() {
 
 document.getElementById("player-search").addEventListener("input", renderPlayers);
 
-/* ============================================================
-   MODAL
-   ============================================================ */
+/* MODAL */
 function openPlayerModal(p) {
   document.getElementById("modal-player-name").textContent = p["Player"];
   document.getElementById("modal-player-number").textContent = "Player No: " + p["Number"];
@@ -109,7 +96,7 @@ function openPlayerModal(p) {
   HEADERS.forEach(h => {
     const row = document.createElement("div");
     row.className = "modal-stat-row";
-    row.innerHTML = `<h4>${h}</h4><p>${p[h] || ""}</p>`;
+    row.innerHTML = "<h4>" + h + "</h4><p>" + (p[h] || "") + "</p>";
     stats.appendChild(row);
   });
 
@@ -126,9 +113,7 @@ window.addEventListener("click", e => {
   }
 });
 
-/* ============================================================
-   NAVIGATION
-   ============================================================ */
+/* NAVIGATION */
 function setupNav() {
   const buttons = document.querySelectorAll(".nav-bar button");
 
@@ -150,18 +135,108 @@ function setupNav() {
   });
 }
 
-/* ============================================================
-   OVERVIEW TOTALS
-   ============================================================ */
+/* OVERVIEW TOTALS */
 function renderOverview() {
   document.getElementById("total-players").textContent = allData.length;
   document.getElementById("total-appearances").textContent = allData.reduce((s, p) => s + num(p["Matches"]), 0);
   document.getElementById("total-runs").textContent = allData.reduce((s, p) => s + num(p["Runs"]), 0);
   document.getElementById("total-wickets").textContent = allData.reduce((s, p) => s + num(p["Wickets"]), 0);
 }
-/* ============================================================
-   MILESTONES
-   ============================================================ */
+
+/* BATTING */
+function renderBatting() {
+  const container = document.getElementById("batting-table");
+  const data = [...allData].sort((a, b) => num(b["Runs"]) - num(a["Runs"]));
+
+  let html = "<table><thead><tr>" +
+             "<th>Player</th><th>Runs</th><th>Average</th>" +
+             "</tr></thead><tbody>";
+
+  data.forEach(p => {
+    html += "<tr class='clickable-row' data-player='" + p["Player"] + "'>" +
+            "<td>" +
+            "<div class='player-name'>" + p["Player"] + "</div>" +
+            "<div class='player-number'>No. " + p["Number"] + "</div>" +
+            "</td>" +
+            "<td>" + p["Runs"] + "</td>" +
+            "<td>" + p["Average"] + "</td>" +
+            "</tr>";
+  });
+
+  html += "</tbody></table>";
+  container.innerHTML = html;
+
+  container.querySelectorAll(".clickable-row").forEach(row => {
+    row.addEventListener("click", () => {
+      const player = allData.find(p => p["Player"] === row.dataset.player);
+      openPlayerModal(player);
+    });
+  });
+}
+
+/* BOWLING */
+function renderBowling() {
+  const container = document.getElementById("bowling-table");
+  const data = [...allData].sort((a, b) => num(b["Wickets"]) - num(a["Wickets"]));
+
+  let html = "<table><thead><tr>" +
+             "<th>Player</th><th>Wickets</th><th>Average</th>" +
+             "</tr></thead><tbody>";
+
+  data.forEach(p => {
+    html += "<tr class='clickable-row' data-player='" + p["Player"] + "'>" +
+            "<td>" +
+            "<div class='player-name'>" + p["Player"] + "</div>" +
+            "<div class='player-number'>No. " + p["Number"] + "</div>" +
+            "</td>" +
+            "<td>" + p["Wickets"] + "</td>" +
+            "<td>" + p["Bowling Average"] + "</td>" +
+            "</tr>";
+  });
+
+  html += "</tbody></table>";
+  container.innerHTML = html;
+
+  container.querySelectorAll(".clickable-row").forEach(row => {
+    row.addEventListener("click", () => {
+      const player = allData.find(p => p["Player"] === row.dataset.player);
+      openPlayerModal(player);
+    });
+  });
+}
+
+/* FIELDING */
+function renderFielding() {
+  const container = document.getElementById("fielding-table");
+  const data = [...allData].sort((a, b) => victims(b) - victims(a));
+
+  let html = "<table><thead><tr>" +
+             "<th>Player</th><th>Victims</th><th>Catches</th>" +
+             "</tr></thead><tbody>";
+
+  data.forEach(p => {
+    html += "<tr class='clickable-row' data-player='" + p["Player"] + "'>" +
+            "<td>" +
+            "<div class='player-name'>" + p["Player"] + "</div>" +
+            "<div class='player-number'>No. " + p["Number"] + "</div>" +
+            "</td>" +
+            "<td>" + victims(p) + "</td>" +
+            "<td>" + p["Catches"] + "</td>" +
+            "</tr>";
+  });
+
+  html += "</tbody></table>";
+  container.innerHTML = html;
+
+  container.querySelectorAll(".clickable-row").forEach(row => {
+    row.addEventListener("click", () => {
+      const player = allData.find(p => p["Player"] === row.dataset.player);
+      openPlayerModal(player);
+    });
+  });
+}
+
+/* MILESTONES */
 function renderMilestones() {
   renderMilestoneClubs({
     title: "Runs milestone clubs",
@@ -189,11 +264,11 @@ function renderMilestones() {
 }
 
 function renderMilestoneClubs({ title, field, milestones, threshold, container }) {
-  let html = `<h3>${title}</h3>`;
+  let html = "<h3>" + title + "</h3>";
 
   const sortedMilestones = [...milestones].sort((a, b) => a - b);
 
-  html += `<div class="milestone-grid">`;
+  html += "<div class='milestone-grid'>";
 
   sortedMilestones.forEach(m => {
     const achieved = allData.filter(p => {
@@ -203,24 +278,22 @@ function renderMilestoneClubs({ title, field, milestones, threshold, container }
       return maxMilestone === m;
     });
 
-    html += `<div class="milestone-club-box"><h4>${m} Club</h4>`;
+    html += "<div class='milestone-club-box'><h4>" + m + " Club</h4>";
 
     if (achieved.length === 0) {
-      html += `<p>No players yet.</p>`;
+      html += "<p>No players yet.</p>";
     } else {
-      achieved
-        .sort((a, b) => num(b[field]) - num(a[field]))
-        .forEach(p => {
-          html += `<p>${p["Player"]} – ${num(p[field])}</p>`;
-        });
+      achieved.sort((a, b) => num(b[field]) - num(a[field])).forEach(p => {
+        html += "<p>" + p["Player"] + " – " + num(p[field]) + "</p>";
+      });
     }
 
-    html += `</div>`;
+    html += "</div>";
   });
 
-  html += `</div>`;
+  html += "</div>";
 
-  html += `<h3>Current players approaching</h3>`;
+  html += "<h3>Current players approaching</h3>";
 
   let anyApproaching = false;
 
@@ -235,36 +308,30 @@ function renderMilestoneClubs({ title, field, milestones, threshold, container }
     if (approaching.length > 0) {
       anyApproaching = true;
 
-      html += `<div class="milestone-approach-box"><h4>Approaching ${m}</h4>`;
+      html += "<div class='milestone-approach-box'><h4>Approaching " + m + "</h4>";
 
-      approaching
-        .sort((a, b) => (m - num(a[field])) - (m - num(b[field])))
-        .forEach(p => {
-          const value = num(p[field]);
-          const toGo = m - value;
+      approaching.sort((a, b) => (m - num(a[field])) - (m - num(b[field]))).forEach(p => {
+        const value = num(p[field]);
+        const toGo = m - value;
 
-          html += `
-            <div class="approach-row">
-              <span>${p["Player"]} – ${value}</span>
-              <span class="to-go">${toGo} to go</span>
-            </div>
-          `;
-        });
+        html += "<div class='approach-row'>" +
+                "<span>" + p["Player"] + " – " + value + "</span>" +
+                "<span class='to-go'>" + toGo + " to go</span>" +
+                "</div>";
+      });
 
-      html += `</div>`;
+      html += "</div>";
     }
   });
 
   if (!anyApproaching) {
-    html += `<p>No current players within range.</p>`;
+    html += "<p>No current players within range.</p>";
   }
 
   container.innerHTML = html;
 }
 
-/* ============================================================
-   AI TEAMS
-   ============================================================ */
+/* AI TEAMS */
 function renderAITeams() {
   const used = new Set();
 
@@ -326,69 +393,64 @@ function renderAITeams() {
 function renderTeam(id, title, players) {
   const container = document.getElementById(id);
 
-  let html = `<div class="ai-team-box"><h3>${title}</h3>`;
+  let html = "<div class='ai-team-box'><h3>" + title + "</h3>";
 
   const batters = players.slice(0, 5);
   const keeper = players.slice(5, 6);
   const bowlers = players.slice(6, 11);
 
-  html += `<div class="ai-team-section"><h4>Batters</h4>`;
+  html += "<div class='ai-team-section'><h4>Batters</h4>";
   batters.forEach((entry, i) => {
     const p = entry.player;
-    html += `
-      <div class="ai-player-row" data-player="${p["Player"]}">
-        <div class="ai-player-left">
-          <div class="ai-player-name">${i + 1}. ${p["Player"]}</div>
-          <div class="ai-player-role">Batter</div>
-        </div>
-        <div class="ai-player-right">
-          ${p["Runs"]} runs<br>
-          Avg ${p["Average"]}
-        </div>
-      </div>
-    `;
+    html += "<div class='ai-player-row' data-player='" + p["Player"] + "'>" +
+            "<div class='ai-player-left'>" +
+            "<div class='ai-player-name'>" + (i + 1) + ". " + p["Player"] + "</div>" +
+            "<div class='ai-player-role'>Batter</div>" +
+            "</div>" +
+            "<div class='ai-player-right'>" +
+            p["Runs"] + " runs — Avg " + p["Average"] +
+            "</div>" +
+            "</div>";
   });
-  html += `</div>`;
+  html += "</div>";
 
-  html += `<div class="ai-team-section"><h4>Wicket Keeper</h4>`;
+  html += "<div class='ai-team-section'><h4>Wicket Keeper</h4>";
   keeper.forEach(entry => {
     const p = entry.player;
     const victimsPM = num(p["Matches"]) > 0 ? (victims(p) / num(p["Matches"])).toFixed(2) : "0.00";
-    html += `
-      <div class="ai-player-row" data-player="${p["Player"]}">
-        <div class="ai-player-left">
-          <div class="ai-player-name">6. ${p["Player"]}</div>
-          <div class="ai-player-role">Wicket Keeper</div>
-        </div>
-        <div class="ai-player-right">
-          ${victims(p)} victims<br>
-          ${victimsPM} per match
-        </div>
-      </div>
-    `;
+    html += "<div class='ai-player-row' data-player='" + p["Player"] + "'>" +
+            "<div class='ai-player-left'>" +
+            "<div class='ai-player-name'>6. " + p["Player"] + "</div>" +
+            "<div class='ai-player-role'>Wicket Keeper</div>" +
+            "</div>" +
+            "<div class='ai-player-right'>" +
+            victims(p) + " victims — " + victimsPM + " per match
+                     "</div>" +
+            "</div>";
   });
-  html += `</div>`;
+  html += "</div>";
 
-  html += `<div class="ai-team-section"><h4>Bowlers</h4>`;
+  /* Bowlers */
+  html += "<div class='ai-team-section'><h4>Bowlers</h4>";
   bowlers.forEach((entry, i) => {
     const p = entry.player;
-    html += `
-      <div class="ai-player-row" data-player="${p["Player"]}">
-        <div class="ai-player-left">
-          <div class="ai-player-name">${7 + i}. ${p["Player"]}</div>
-          <div class="ai-player-role">Bowler</div>
-        </div>
-        <div class="ai-player-right">
-          ${p["Wickets"]} wickets<br>
-          Avg ${p["Bowling Average"]}
-        </div>
-      </div>
-    `;
+    html += "<div class='ai-player-row' data-player='" + p["Player"] + "'>" +
+            "<div class='ai-player-left'>" +
+            "<div class='ai-player-name'>" + (7 + i) + ". " + p["Player"] + "</div>" +
+            "<div class='ai-player-role'>Bowler</div>" +
+            "</div>" +
+            "<div class='ai-player-right'>" +
+            p["Wickets"] + " wickets — Avg " + p["Bowling Average"] +
+            "</div>" +
+            "</div>";
   });
-  html += `</div></div>`;
+  html += "</div>";
+
+  html += "</div>"; /* close ai-team-box */
 
   container.innerHTML = html;
 
+  /* Modal click behaviour */
   container.querySelectorAll(".ai-player-row").forEach(row => {
     row.addEventListener("click", () => {
       const player = allData.find(p => p["Player"] === row.dataset.player);
@@ -397,9 +459,7 @@ function renderTeam(id, title, players) {
   });
 }
 
-/* ============================================================
-   INIT
-   ============================================================ */
+/* INIT */
 async function init() {
   allData = await loadCSV();
 
