@@ -580,56 +580,99 @@ document.querySelectorAll(".record-box").forEach(box=>{
 });
 
 /* BATTING */
-function renderBatting(){
-  const container=document.getElementById("batting-table");
-  const cols=["Player","Matches","Innings","Runs","Average","High Score","Fifties","Hundreds"];
-  const data=[...allData].sort((a,b)=>num(b["Runs"])-num(a["Runs"]));
-  let html="<table><thead><tr>";
-  cols.forEach(c=>html+=`<th>${c}</th>`);html+="</tr></thead><tbody>";
-  data.forEach(p=>{
-    html+="<tr>";
-    cols.forEach(c=>html+=`<td>${p[c]||""}</td>`);
-    html+="</tr>";
+function renderBatting() {
+  const container = document.getElementById("batting-table");
+  const data = [...allData].sort((a, b) => num(b["Runs"]) - num(a["Runs"]));
+
+  let html = "<table><thead><tr>";
+  html += "<th>Player</th><th>No.</th><th>Runs</th><th>Average</th>";
+  html += "</tr></thead><tbody>";
+
+  data.forEach(p => {
+    html += `
+      <tr class="clickable-row" data-player="${p["Player"]}">
+        <td>${p["Player"]}</td>
+        <td>${p["Number"]}</td>
+        <td>${p["Runs"]}</td>
+        <td>${p["Average"]}</td>
+      </tr>
+    `;
   });
-  html+="</tbody></table>";
-  container.innerHTML=html;
+
+  html += "</tbody></table>";
+  container.innerHTML = html;
+
+  document.querySelectorAll("#batting-table .clickable-row").forEach(row => {
+    row.addEventListener("click", () => {
+      const player = allData.find(p => p["Player"] === row.dataset.player);
+      openPlayerModal(player);
+    });
+  });
 }
 
 /* BOWLING */
-function renderBowling(){
-  const container=document.getElementById("bowling-table");
-  const cols=["Player","Overs","Wickets","Bowling Average","Economy","Best"];
-  const data=[...allData].sort((a,b)=>num(b["Wickets"])-num(a["Wickets"]));
-  let html="<table><thead><tr>";
-  cols.forEach(c=>html+=`<th>${c}</th>`);html+="</tr></thead><tbody>";
-  data.forEach(p=>{
-    html+="<tr>";
-    cols.forEach(c=>html+=`<td>${p[c]||""}</td>`);
-    html+="</tr>";
+function renderBowling() {
+  const container = document.getElementById("bowling-table");
+  const data = [...allData].sort((a, b) => num(b["Wickets"]) - num(a["Wickets"]));
+
+  let html = "<table><thead><tr>";
+  html += "<th>Player</th><th>No.</th><th>Wickets</th><th>Average</th>";
+  html += "</tr></thead><tbody>";
+
+  data.forEach(p => {
+    html += `
+      <tr class="clickable-row" data-player="${p["Player"]}">
+        <td>${p["Player"]}</td>
+        <td>${p["Number"]}</td>
+        <td>${p["Wickets"]}</td>
+        <td>${p["Bowling Average"]}</td>
+      </tr>
+    `;
   });
-  html+="</tbody></table>";
-  container.innerHTML=html;
+
+  html += "</tbody></table>";
+  container.innerHTML = html;
+
+  document.querySelectorAll("#bowling-table .clickable-row").forEach(row => {
+    row.addEventListener("click", () => {
+      const player = allData.find(p => p["Player"] === row.dataset.player);
+      openPlayerModal(player);
+    });
+  });
 }
 
+
 /* FIELDING */
-function renderFielding(){
-  const container=document.getElementById("fielding-table");
-  const cols=["Player","Catches","Stumpings","Victims","Current"];
-  const data=[...allData].sort((a,b)=>victims(b)-victims(a));
-  let html="<table><thead><tr>";
-  cols.forEach(c=>html+=`<th>${c}</th>`);html+="</tr></thead><tbody>";
-  data.forEach(p=>{
-    html+="<tr>";
-    html+=`<td>${p["Player"]}</td>`;
-    html+=`<td>${p["Catches"]}</td>`;
-    html+=`<td>${p["Stumpings"]}</td>`;
-    html+=`<td>${victims(p)}</td>`;
-    html+=`<td>${p["Current"]}</td>`;
-    html+="</tr>";
+function renderFielding() {
+  const container = document.getElementById("fielding-table");
+  const data = [...allData].sort((a, b) => victims(b) - victims(a));
+
+  let html = "<table><thead><tr>";
+  html += "<th>Player</th><th>No.</th><th>Victims</th><th>Catches</th>";
+  html += "</tr></thead><tbody>";
+
+  data.forEach(p => {
+    html += `
+      <tr class="clickable-row" data-player="${p["Player"]}">
+        <td>${p["Player"]}</td>
+        <td>${p["Number"]}</td>
+        <td>${victims(p)}</td>
+        <td>${p["Catches"]}</td>
+      </tr>
+    `;
   });
-  html+="</tbody></table>";
-  container.innerHTML=html;
+
+  html += "</tbody></table>";
+  container.innerHTML = html;
+
+  document.querySelectorAll("#fielding-table .clickable-row").forEach(row => {
+    row.addEventListener("click", () => {
+      const player = allData.find(p => p["Player"] === row.dataset.player);
+      openPlayerModal(player);
+    });
+  });
 }
+
 
 /* MILESTONES */
 function renderMilestones(){
