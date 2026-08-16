@@ -99,7 +99,7 @@ function renderPlayers() {
       p["Matches"] + " matches • " +
       p["Runs"] + " runs • " +
       p["Wickets"] + " wickets • " +
-      victims(p) + " victims" +
+      victims(p) + " victims — " + victimsPM + " per match"
       "</div>";
 
     card.addEventListener("click", function(){
