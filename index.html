@@ -425,3 +425,35 @@ header em {
     Teams B and C select the next best remaining performers, ranked by XI batting average,
     bowling average and wicketkeeping victims. Career length remains a modest tie-breaker,
     and no player appears twice.
+  </div>
+
+  <div class="ai-teams-grid" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:25px;">
+    <div id="team-a"></div>
+    <div id="team-b"></div>
+    <div id="team-c"></div>
+  </div>
+</div>
+
+<!-- ============================================================
+     MODAL
+============================================================ -->
+<div id="player-modal">
+  <div id="player-modal-content">
+    <div class="modal-header">
+      <span id="modal-close">&times;</span>
+      <h2 id="modal-player-name"></h2>
+      <div id="modal-player-number"></div>
+      <div id="modal-player-role" class="modal-role-badge"></div>
+    </div>
+    <div id="modal-stats"></div>
+  </div>
+</div>
+
+<footer style="text-align:center;padding:30px;margin-top:40px;color:#555;">
+  <b>BRITISH POLICE CRICKET CLUB</b><br>
+  <span>Statistics from the BPCC archive · Updated live</span>
+</footer>
+
+<script src="script.js"></script>
+</body>
+</html>
