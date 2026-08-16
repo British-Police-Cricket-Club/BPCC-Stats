@@ -688,7 +688,14 @@ function renderTeam(id,title,players){
 
 /* INIT */
 async function init(){
-  allData=await loadCSV();
+  allData = await loadCSV();
+
+  // Hide all sections first
+  document.querySelectorAll(".section").forEach(sec => sec.classList.remove("active"));
+
+  // Show only Overview
+  document.getElementById("overview").classList.add("active");
+
   setupNav();
   renderOverview();
   renderPlayers();
@@ -700,6 +707,7 @@ async function init(){
 }
 
 init();
+
 
 </script>
 </body>
