@@ -756,19 +756,16 @@ function renderMilestones() {
 function renderMilestoneClubs({ title, field, milestones, threshold, container }) {
   let html = `<h3>${title}</h3>`;
 
-  // Sort milestones ascending so we can find the highest one each player qualifies for
   const sortedMilestones = [...milestones].sort((a, b) => a - b);
 
-  // Build milestone club boxes
+  // --- MILESTONE CLUB GRID ---
   html += `<div class="milestone-grid">`;
 
   sortedMilestones.forEach(m => {
-    // Players whose maximum milestone is exactly this one
     const achieved = allData.filter(p => {
       const value = num(p[field]);
       if (value < m) return false;
 
-      // Find highest milestone they qualify for
       const maxMilestone = sortedMilestones.filter(ms => value >= ms).pop();
       return maxMilestone === m;
     });
@@ -789,10 +786,12 @@ function renderMilestoneClubs({ title, field, milestones, threshold, container }
     html += `</div>`;
   });
 
-  html += `</div>`; // end milestone-grid
+  html += `</div>`; // end grid
 
-  // Approaching milestones (current players only)
-  html += `<div class="approaching-section">`;
+  // --- APPROACHING SECTION ---
+  html += `<h3>Current players approaching</h3>`;
+
+  let anyApproaching = false;
 
   sortedMilestones.forEach(m => {
     const approaching = allData.filter(p => {
@@ -803,6 +802,8 @@ function renderMilestoneClubs({ title, field, milestones, threshold, container }
     });
 
     if (approaching.length > 0) {
+      anyApproaching = true;
+
       html += `<div class="milestone-approach-box">
                  <h4>Approaching ${m}</h4>`;
 
@@ -823,10 +824,13 @@ function renderMilestoneClubs({ title, field, milestones, threshold, container }
     }
   });
 
-  html += `</div>`; // end approaching-section
+  if (!anyApproaching) {
+    html += `<p>No current players within range.</p>`;
+  }
 
   container.innerHTML = html;
 }
+
 
 /* AI TEAMS */
 function renderAITeams(){
