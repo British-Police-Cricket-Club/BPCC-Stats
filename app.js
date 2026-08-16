@@ -125,12 +125,15 @@ function openPlayerModal(p) {
   const stats = document.getElementById("modal-stats");
   stats.innerHTML = "";
 
-  HEADERS.forEach(function(h){
-    const row = document.createElement("div");
-    row.className = "modal-stat-row";
-    row.innerHTML = "<h4>" + h + "</h4><p>" + (p[h] || "") + "</p>";
-    stats.appendChild(row);
-  });
+  // Build modal stats (exclude Player + Number)
+  HEADERS
+    .filter(h => h !== "Player" && h !== "Number")
+    .forEach(function(h){
+      const row = document.createElement("div");
+      row.className = "modal-stat-row";
+      row.innerHTML = "<h4>" + h + "</h4><p>" + (p[h] || "") + "</p>";
+      stats.appendChild(row);
+    });
 
   document.getElementById("player-modal").style.display = "flex";
 }
