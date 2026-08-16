@@ -432,75 +432,56 @@
 </div>
 
 <script>
-const DATA_URL =
-  "https://docs.google.com/spreadsheets/d/e/2PACX-1vQlS2BceCsyAkRFmAuwA0QDJR8wPjuLZyquKAeszxD2-FM7gFTzEQrVTqPxtph-z55FZNU01tMnpvQv/pub?output=csv";
+const DATA_URL="https://docs.google.com/spreadsheets/d/e/2PACX-1vQlS2BceCsyAkRFmAuwA0QDJR8wPjuLZyquKAeszxD2-FM7gFTzEQrVTqPxtph-z55FZNU01tMnpvQv/pub?output=csv";
 
-const HEADERS = [
-  "Player","Number","Years","Matches","Innings","Runs","Average","High Score",
-  "Fifties","Hundreds","Overs","Wickets","Bowling Average","Economy","Best",
-  "Catches","Stumpings","Current"
-];
+const HEADERS=["Player","Number","Years","Matches","Innings","Runs","Average","High Score","Fifties","Hundreds","Overs","Wickets","Bowling Average","Economy","Best","Catches","Stumpings","Current"];
 
-let allData = [];
+let allData=[];
 
-async function loadCSV() {
-  const res = await fetch(DATA_URL);
-  const text = await res.text();
-  const lines = text.trim().split("\n");
-  const headers = lines[0].split(",").map(h => h.trim());
-
-  return lines.slice(1).map(line => {
-    const cols = line.split(",");
-    const obj = {};
-    headers.forEach((h, i) => obj[h] = (cols[i] || "").trim());
+async function loadCSV(){
+  const res=await fetch(DATA_URL);
+  const text=await res.text();
+  const lines=text.trim().split("\n");
+  const headers=lines[0].split(",").map(h=>h.trim());
+  return lines.slice(1).map(line=>{
+    const cols=line.split(",");
+    const obj={};
+    headers.forEach((h,i)=>obj[h]=(cols[i]||"").trim());
     return obj;
   });
 }
 
-function num(v) {
-  const n = parseFloat(v);
-  return isNaN(n) ? 0 : n;
-}
-
-function victims(p) {
-  return num(p["Catches"]) + num(p["Stumpings"]);
-}
+function num(v){const n=parseFloat(v);return isNaN(n)?0:n;}
+function victims(p){return num(p["Catches"])+num(p["Stumpings"]);}
 
 /* ROLE DETECTION */
-function getRole(p) {
-  const runs = num(p["Runs"]);
-  const wickets = num(p["Wickets"]);
-  const catches = num(p["Catches"]);
-  const stumpings = num(p["Stumpings"]);
-
-  if (stumpings > 0 || catches > 1) return "Wicketkeeper";
-  if (wickets >= 1) return "Bowler";
-  if (runs >= 100) return "Batter";
-  if (runs >= 100 && wickets >= 10) return "All-rounder";
-  return "Player";
+function getRole(p){
+  const runs=num(p["Runs"]);
+  const wickets=num(p["Wickets"]);
+  const catches=num(p["Catches"]);
+  const stumpings=num(p["Stumpings"]);
+  if(stumpings>0||catches>30)return"Wicketkeeper";
+  if(wickets>=40)return"Bowler";
+  if(runs>=1000)return"Batter";
+  if(runs>=500&&wickets>=20)return"All-rounder";
+  return"Player";
 }
 
 /* PLAYERS PAGE */
-function renderPlayers() {
-  const container = document.getElementById("players-grid");
-  container.innerHTML = "";
+function renderPlayers(){
+  const container=document.getElementById("players-grid");
+  container.innerHTML="";
+  const q=document.getElementById("player-search").value.toLowerCase();
+  const sorted=[...allData].sort((a,b)=>a["Player"].localeCompare(b["Player"]));
 
-  const q = document.getElementById("player-search").value.toLowerCase();
+  sorted.forEach(p=>{
+    if(!p["Player"].toLowerCase().includes(q))return;
+    const card=document.createElement("div");
+    card.className="player-card";
+    const status=p["Current"]==="Yes"?"Current Player":"Retired";
+    const role=getRole(p);
 
-  const sorted = [...allData].sort((a, b) =>
-    a["Player"].localeCompare(b["Player"])
-  );
-
-  sorted.forEach((p) => {
-    if (!p["Player"].toLowerCase().includes(q)) return;
-
-    const card = document.createElement("div");
-    card.className = "player-card";
-
-    const status = p["Current"] === "Yes" ? "Current Player" : "Retired";
-    const role = getRole(p);
-
-    card.innerHTML = `
+    card.innerHTML=`
       <div class="status">${status}</div>
       <h3>${p["Player"]}</h3>
       <span class="role-badge">${role}</span>
@@ -508,259 +489,185 @@ function renderPlayers() {
         ${p["Matches"]} matches • ${p["Runs"]} runs • ${p["Wickets"]} wickets • ${victims(p)} victims
       </div>
     `;
-
-    card.addEventListener("click", () => openPlayerModal(p));
+    card.addEventListener("click",()=>openPlayerModal(p));
     container.appendChild(card);
   });
 }
 
-document.getElementById("player-search").addEventListener("input", renderPlayers);
+document.getElementById("player-search").addEventListener("input",renderPlayers);
 
 /* MODAL */
-function openPlayerModal(p) {
-  document.getElementById("modal-player-name").textContent = p["Player"];
-  document.getElementById("modal-player-number").textContent = "Player No: " + p["Number"];
-  document.getElementById("modal-player-role").textContent = getRole(p);
+function openPlayerModal(p){
+  document.getElementById("modal-player-name").textContent=p["Player"];
+  document.getElementById("modal-player-number").textContent="Player No: "+p["Number"];
+  document.getElementById("modal-player-role").textContent=getRole(p);
 
-  const stats = document.getElementById("modal-stats");
-  stats.innerHTML = "";
+  const stats=document.getElementById("modal-stats");
+  stats.innerHTML="";
 
-  HEADERS.forEach(h => {
-    const row = document.createElement("div");
-    row.className = "modal-stat-row";
-    row.innerHTML = `
-      <h4>${h}</h4>
-      <p>${p[h] || ""}</p>
-    `;
+  HEADERS.forEach(h=>{
+    const row=document.createElement("div");
+    row.className="modal-stat-row";
+    row.innerHTML=`<h4>${h}</h4><p>${p[h]||""}</p>`;
     stats.appendChild(row);
   });
 
-  document.getElementById("player-modal").style.display = "flex";
+  document.getElementById("player-modal").style.display="flex";
 }
 
-
-document.getElementById("modal-close").addEventListener("click", () => {
-  document.getElementById("player-modal").style.display = "none";
-});
-
-window.addEventListener("click", (e) => {
-  if (e.target.id === "player-modal") {
-    document.getElementById("player-modal").style.display = "none";
-  }
-});
+document.getElementById("modal-close").addEventListener("click",()=>document.getElementById("player-modal").style.display="none");
+window.addEventListener("click",e=>{if(e.target.id==="player-modal")document.getElementById("player-modal").style.display="none";});
 
 /* NAVIGATION */
-function setupNav() {
-  const buttons = document.querySelectorAll(".nav-bar button");
-  buttons.forEach(btn => {
-    btn.addEventListener("click", () => {
-      const section = btn.getAttribute("data-section");
-
-      document.querySelectorAll(".section").forEach(sec =>
-        sec.classList.remove("active")
-      );
-
+function setupNav(){
+  const buttons=document.querySelectorAll(".nav-bar button");
+  buttons.forEach(btn=>{
+    btn.addEventListener("click",()=>{
+      const section=btn.getAttribute("data-section");
+      document.querySelectorAll(".section").forEach(sec=>sec.classList.remove("active"));
       document.getElementById(section).classList.add("active");
-
-      buttons.forEach(b => b.classList.remove("active"));
+      buttons.forEach(b=>b.classList.remove("active"));
       btn.classList.add("active");
     });
   });
 }
 
 /* OVERVIEW */
-function renderOverview() {
-  document.getElementById("total-players").textContent = allData.length;
-  document.getElementById("total-appearances").textContent =
-    allData.reduce((s, p) => s + num(p["Matches"]), 0);
-  document.getElementById("total-runs").textContent =
-    allData.reduce((s, p) => s + num(p["Runs"]), 0);
-  document.getElementById("total-wickets").textContent =
-    allData.reduce((s, p) => s + num(p["Wickets"]), 0);
+function renderOverview(){
+  document.getElementById("total-players").textContent=allData.length;
+  document.getElementById("total-appearances").textContent=allData.reduce((s,p)=>s+num(p["Matches"]),0);
+  document.getElementById("total-runs").textContent=allData.reduce((s,p)=>s+num(p["Runs"]),0);
+  document.getElementById("total-wickets").textContent=allData.reduce((s,p)=>s+num(p["Wickets"]),0);
 }
 
 /* RECORD BOX LINKS */
-document.querySelectorAll(".record-box").forEach(box => {
-  box.addEventListener("click", () => {
-    const target = box.getAttribute("data-section");
-
-    document.querySelectorAll(".section").forEach(sec =>
-      sec.classList.remove("active")
-    );
-
+document.querySelectorAll(".record-box").forEach(box=>{
+  box.addEventListener("click",()=>{
+    const target=box.getAttribute("data-section");
+    document.querySelectorAll(".section").forEach(sec=>sec.classList.remove("active"));
     document.getElementById(target).classList.add("active");
-
-    document.querySelectorAll(".nav-bar button").forEach(btn =>
-      btn.classList.toggle("active", btn.getAttribute("data-section") === target)
-    );
-
-    window.scrollTo({ top: 0, behavior: "smooth" });
+    document.querySelectorAll(".nav-bar button").forEach(btn=>btn.classList.toggle("active",btn.getAttribute("data-section")===target));
+    window.scrollTo({top:0,behavior:"smooth"});
   });
 });
 
 /* BATTING */
-function renderBatting() {
-  const container = document.getElementById("batting-table");
-  const cols = ["Player","Matches","Innings","Runs","Average","High Score","Fifties","Hundreds"];
-
-  const data = [...allData].sort((a, b) => num(b["Runs"]) - num(a["Runs"]));
-
-  let html = "<table><thead><tr>";
-  cols.forEach(c => html += `<th>${c}</th>`);
-  html += "</tr></thead><tbody>";
-
-  data.forEach(p => {
-    html += "<tr>";
-    cols.forEach(c => html += `<td>${p[c] || ""}</td>`);
-    html += "</tr>";
+function renderBatting(){
+  const container=document.getElementById("batting-table");
+  const cols=["Player","Matches","Innings","Runs","Average","High Score","Fifties","Hundreds"];
+  const data=[...allData].sort((a,b)=>num(b["Runs"])-num(a["Runs"]));
+  let html="<table><thead><tr>";
+  cols.forEach(c=>html+=`<th>${c}</th>`);html+="</tr></thead><tbody>";
+  data.forEach(p=>{
+    html+="<tr>";
+    cols.forEach(c=>html+=`<td>${p[c]||""}</td>`);
+    html+="</tr>";
   });
-
-  html += "</tbody></table>";
-  container.innerHTML = html;
+  html+="</tbody></table>";
+  container.innerHTML=html;
 }
 
 /* BOWLING */
-function renderBowling() {
-  const container = document.getElementById("bowling-table");
-  const cols = ["Player","Overs","Wickets","Bowling Average","Economy","Best"];
-
-  const data = [...allData].sort((a, b) => num(b["Wickets"]) - num(a["Wickets"]));
-
-  let html = "<table><thead><tr>";
-  cols.forEach(c => html += `<th>${c}</th>`);
-  html += "</tr></thead><tbody>";
-
-  data.forEach(p => {
-    html += "<tr>";
-    cols.forEach(c => html += `<td>${p[c] || ""}</td>`);
-    html += "</tr>";
+function renderBowling(){
+  const container=document.getElementById("bowling-table");
+  const cols=["Player","Overs","Wickets","Bowling Average","Economy","Best"];
+  const data=[...allData].sort((a,b)=>num(b["Wickets"])-num(a["Wickets"]));
+  let html="<table><thead><tr>";
+  cols.forEach(c=>html+=`<th>${c}</th>`);html+="</tr></thead><tbody>";
+  data.forEach(p=>{
+    html+="<tr>";
+    cols.forEach(c=>html+=`<td>${p[c]||""}</td>`);
+    html+="</tr>";
   });
-
-  html += "</tbody></table>";
-  container.innerHTML = html;
+  html+="</tbody></table>";
+  container.innerHTML=html;
 }
 
 /* FIELDING */
-function renderFielding() {
-  const container = document.getElementById("fielding-table");
-  const cols = ["Player","Catches","Stumpings","Victims","Current"];
-
-  const data = [...allData].sort((a, b) => victims(b) - victims(a));
-
-  let html = "<table><thead><tr>";
-  cols.forEach(c => html += `<th>${c}</th>`);
-  html += "</tr></thead><tbody>";
-
-  data.forEach(p => {
-    html += "<tr>";
-    html += `<td>${p["Player"]}</td>`;
-    html += `<td>${p["Catches"]}</td>`;
-    html += `<td>${p["Stumpings"]}</td>`;
-    html += `<td>${victims(p)}</td>`;
-    html += `<td>${p["Current"]}</td>`;
-    html += "</tr>";
+function renderFielding(){
+  const container=document.getElementById("fielding-table");
+  const cols=["Player","Catches","Stumpings","Victims","Current"];
+  const data=[...allData].sort((a,b)=>victims(b)-victims(a));
+  let html="<table><thead><tr>";
+  cols.forEach(c=>html+=`<th>${c}</th>`);html+="</tr></thead><tbody>";
+  data.forEach(p=>{
+    html+="<tr>";
+    html+=`<td>${p["Player"]}</td>`;
+    html+=`<td>${p["Catches"]}</td>`;
+    html+=`<td>${p["Stumpings"]}</td>`;
+    html+=`<td>${victims(p)}</td>`;
+    html+=`<td>${p["Current"]}</td>`;
+    html+="</tr>";
   });
-
-  html += "</tbody></table>";
-  container.innerHTML = html;
+  html+="</tbody></table>";
+  container.innerHTML=html;
 }
 
 /* MILESTONES */
-function renderMilestones() {
-  renderMilestoneCategory(allData, "Runs", battingMilestones, 20, document.getElementById("batting-milestones"));
-  renderMilestoneCategory(allData, "Wickets", bowlingMilestones, 2, document.getElementById("bowling-milestones"));
-  renderMilestoneCategory(allData, "Catches", catchesMilestones, 2, document.getElementById("catches-milestones"));
+function renderMilestones(){
+  renderMilestoneCategory(allData,"Runs",[100,250,500,1000,1500,2000,2500,3000,3500],20,document.getElementById("batting-milestones"));
+  renderMilestoneCategory(allData,"Wickets",[20,30,40,50,60,70,80,90,100],2,document.getElementById("bowling-milestones"));
+  renderMilestoneCategory(allData,"Catches",[10,20,30,40,50],2,document.getElementById("catches-milestones"));
 }
 
-function renderMilestoneCategory(data, field, milestones, threshold, container) {
-  const achieved = [];
-  const approaching = [];
-
-  data.forEach(p => {
-    const value = num(p[field]);
-    milestones.forEach(m => {
-      if (value >= m) achieved.push(`${p["Player"]} – ${value} ${field} (≥ ${m})`);
-      else if (m - value > 0 && m - value <= threshold)
-        approaching.push(`${p["Player"]} – ${value} ${field} (approaching ${m})`);
+function renderMilestoneCategory(data,field,milestones,threshold,container){
+  const achieved=[],approaching=[];
+  data.forEach(p=>{
+    const value=num(p[field]);
+    milestones.forEach(m=>{
+      if(value>=m)achieved.push(`${p["Player"]} – ${value} ${field} (≥ ${m})`);
+      else if(m-value>0&&m-value<=threshold)approaching.push(`${p["Player"]} – ${value} ${field} (approaching ${m})`);
     });
   });
-
-  let html = "<p><strong>Achieved:</strong></p>";
-  html += achieved.length ? achieved.map(a => `<p>${a}</p>`).join("") : "<p>None yet.</p>";
-
-  html += "<p><strong>Approaching:</strong></p>";
-  html += approaching.length ? approaching.map(a => `<p>${a}</p>`).join("") : "<p>None currently approaching.</p>";
-
-  container.innerHTML = html;
+  let html="<p><strong>Achieved:</strong></p>";
+  html+=achieved.length?achieved.map(a=>`<p>${a}</p>`).join(""):"<p>None yet.</p>";
+  html+="<p><strong>Approaching:</strong></p>";
+  html+=approaching.length?approaching.map(a=>`<p>${a}</p>`).join(""):"<p>None currently approaching.</p>";
+  container.innerHTML=html;
 }
 
 /* AI TEAMS */
-function renderAITeams() {
-  const used = new Set();
+function renderAITeams(){
+  const used=new Set();
 
-  function victimsPerMatch(p) {
-    const m = num(p["Matches"]);
-    return m > 0 ? victims(p) / m : 0;
+  function victimsPerMatch(p){
+    const m=num(p["Matches"]);
+    return m>0?victims(p)/m:0;
   }
 
-  const batSorted = [...allData].sort((a, b) =>
-    num(b["Runs"]) - num(a["Runs"]) ||
-    num(b["Average"]) - num(a["Average"]) ||
-    num(b["Matches"]) - num(a["Matches"])
-  );
+  const batSorted=[...allData].sort((a,b)=>num(b["Runs"])-num(a["Runs"])||num(b["Average"])-num(a["Average"])||num(b["Matches"])-num(a["Matches"]));
+  const bowlSorted=[...allData].sort((a,b)=>num(b["Wickets"])-num(a["Wickets"])||num(a["Bowling Average"])-num(b["Bowling Average"])||num(b["Matches"])-num(a["Matches"]));
+  const keepSorted=[...allData].sort((a,b)=>victimsPerMatch(b)-victimsPerMatch(a)||num(b["Matches"])-num(a["Matches"]));
 
-  const bowlSorted = [...allData].sort((a, b) =>
-    num(b["Wickets"]) - num(a["Wickets"]) ||
-    num(a["Bowling Average"]) - num(b["Bowling Average"]) ||
-    num(b["Matches"]) - num(a["Matches"])
-  );
-
-  const keepSorted = [...allData].sort((a, b) =>
-    victimsPerMatch(b) - victimsPerMatch(a) ||
-    num(b["Matches"]) - num(a["Matches"])
-  );
-
-  function pick(sorted, count, role) {
-    const team = [];
-    for (const p of sorted) {
-      if (team.length >= count) break;
-      if (!used.has(p["Player"])) {
-        team.push({ player: p, role });
+  function pick(sorted,count,role){
+    const team=[];
+    for(const p of sorted){
+      if(team.length>=count)break;
+      if(!used.has(p["Player"])){
+        team.push({player:p,role});
         used.add(p["Player"]);
       }
     }
     return team;
   }
 
-  const teamA = [
-    ...pick(batSorted, 5, "Batter"),
-    ...pick(keepSorted, 1, "Wicketkeeper"),
-    ...pick(bowlSorted, 5, "Bowler")
-  ];
+  const teamA=[...pick(batSorted,5,"Batter"),...pick(keepSorted,1,"Wicketkeeper"),...pick(bowlSorted,5,"Bowler")];
 
-  function build(label) {
-    return [
-      ...pick(batSorted, 5, "Batter"),
-      ...pick(keepSorted, 1, "Wicketkeeper"),
-      ...pick(bowlSorted, 5, "Bowler")
-    ];
-  }
+  function build(){return[...pick(batSorted,5,"Batter"),...pick(keepSorted,1,"Wicketkeeper"),...pick(bowlSorted,5,"Bowler")];}
 
-  renderTeam("team-a", "Team A – Best XI", teamA);
-  renderTeam("team-b", "Team B – Next Best XI", build("Team B"));
-  renderTeam("team-c", "Team C – Next Best XI", build("Team C"));
+  renderTeam("team-a","Team A – Best XI",teamA);
+  renderTeam("team-b","Team B – Next Best XI",build());
+  renderTeam("team-c","Team C – Next Best XI",build());
 }
 
-function renderTeam(id, title, players) {
-  const container = document.getElementById(id);
-
-  let html = `<h3>${title}</h3><table><thead><tr>
+function renderTeam(id,title,players){
+  const container=document.getElementById(id);
+  let html=`<h3>${title}</h3><table><thead><tr>
     <th>Player</th><th>Matches</th><th>Runs</th><th>Average</th>
     <th>Wickets</th><th>Bowling Avg</th><th>Victims</th>
   </tr></thead><tbody>`;
-
-  players.forEach(({ player }) => {
-    html += `<tr>
+  players.forEach(({player})=>{
+    html+=`<tr>
       <td>${player["Player"]} <span class="role-badge">${getRole(player)}</span></td>
       <td>${player["Matches"]}</td>
       <td>${player["Runs"]}</td>
@@ -770,14 +677,13 @@ function renderTeam(id, title, players) {
       <td>${victims(player)}</td>
     </tr>`;
   });
-
-  html += "</tbody></table>";
-  container.innerHTML = html;
+  html+="</tbody></table>";
+  container.innerHTML=html;
 }
 
 /* INIT */
-async function init() {
-  allData = await loadCSV();
+async function init(){
+  allData=await loadCSV();
   setupNav();
   renderOverview();
   renderPlayers();
@@ -789,6 +695,7 @@ async function init() {
 }
 
 init();
+
 </script>
 </body>
 </html>
