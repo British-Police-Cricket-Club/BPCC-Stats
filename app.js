@@ -23,7 +23,7 @@ async function loadCSV() {
   return lines.slice(1).map(line => {
     const cols = line.split(",");
     const obj = {};
-    headers.forEach((h, i) => {
+    HEADERS.forEach((h, i) => {
       obj[h] = (cols[i] || "").trim();
     });
     return obj;
