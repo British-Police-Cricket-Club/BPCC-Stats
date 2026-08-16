@@ -372,10 +372,14 @@ function renderMilestoneClubs(title, field, milestones, threshold, container) {
   html += "<div class='milestone-grid'>";
 
   milestones.forEach(function(m){
-    const achieved = allData.filter(function(p){
-      const value = num(p[field]);
-      return value >= m;
-    });
+    const achieved = allData.filter(p => {
+  const value = num(p[field]);
+  if (value < m) return false;
+
+  // Check if player qualifies for a higher milestone
+  const higher = milestones.find(x => x > m && value >= x);
+  return !higher;
+});
 
     html += "<div class='milestone-club-box'>";
     html += "<h4>" + m + " Club</h4>";
