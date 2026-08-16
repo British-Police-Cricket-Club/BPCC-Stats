@@ -333,6 +333,45 @@
     font-size: 13px;
     color: #555;
   }
+
+.milestone-club-box {
+  background: #f0f4ff;
+  border: 1px solid #ccc;
+  padding: 12px;
+  margin: 12px 0;
+  border-radius: 6px;
+}
+
+.milestone-club-box h4 {
+  margin: 0 0 8px 0;
+  color: #001f3f;
+}
+
+.milestone-approach-box {
+  background: #fff7e6;
+  border: 1px solid #e6c200;
+  padding: 12px;
+  margin: 12px 0;
+  border-radius: 6px;
+}
+
+.milestone-approach-box h4 {
+  margin: 0 0 8px 0;
+  color: #b58900;
+}
+
+.approach-row {
+  display: flex;
+  justify-content: space-between;
+  padding: 6px 0;
+  border-bottom: 1px solid #eee;
+}
+
+.to-go {
+  font-weight: bold;
+  color: #cc0000;
+}
+  
 </style>
 </head>
 
@@ -675,27 +714,84 @@ function renderFielding() {
 
 
 /* MILESTONES */
-function renderMilestones(){
-  renderMilestoneCategory(allData,"Runs",[100,250,500,1000,1500,2000,2500,3000,3500],20,document.getElementById("batting-milestones"));
-  renderMilestoneCategory(allData,"Wickets",[20,30,40,50,60,70,80,90,100],2,document.getElementById("bowling-milestones"));
-  renderMilestoneCategory(allData,"Catches",[10,20,30,40,50],2,document.getElementById("catches-milestones"));
+/* MILESTONES – Fugitives‑style grouped milestone clubs */
+function renderMilestones() {
+  renderMilestoneClubs({
+    title: "Runs milestone clubs",
+    field: "Runs",
+    milestones: [100, 250, 500, 1000, 1500, 2000, 2500, 3000, 3500],
+    threshold: 20,
+    container: document.getElementById("batting-milestones")
+  });
+
+  renderMilestoneClubs({
+    title: "Bowling milestone clubs",
+    field: "Wickets",
+    milestones: [20, 30, 40, 50, 60, 70, 80, 90, 100],
+    threshold: 2,
+    container: document.getElementById("bowling-milestones")
+  });
+
+  renderMilestoneClubs({
+    title: "Catches milestone clubs",
+    field: "Catches",
+    milestones: [10, 20, 30, 40, 50],
+    threshold: 2,
+    container: document.getElementById("catches-milestones")
+  });
 }
 
-function renderMilestoneCategory(data,field,milestones,threshold,container){
-  const achieved=[],approaching=[];
-  data.forEach(p=>{
-    const value=num(p[field]);
-    milestones.forEach(m=>{
-      if(value>=m)achieved.push(`${p["Player"]} – ${value} ${field} (≥ ${m})`);
-      else if(m-value>0&&m-value<=threshold)approaching.push(`${p["Player"]} – ${value} ${field} (approaching ${m})`);
-    });
+
+function renderMilestoneClubs({ title, field, milestones, threshold, container }) {
+  let html = `<h3>${title}</h3>`;
+
+  milestones.forEach(m => {
+    const achieved = allData.filter(p => num(p[field]) >= m);
+    const approaching = allData.filter(p =>
+      p["Current"] === "Yes" &&
+      num(p[field]) < m &&
+      (m - num(p[field])) <= threshold
+    );
+
+    html += `<div class="milestone-club-box">
+               <h4>${m} Club</h4>`;
+
+    if (achieved.length === 0) {
+      html += `<p>No players yet.</p>`;
+    } else {
+      achieved
+        .sort((a, b) => num(b[field]) - num(a[field]))
+        .forEach(p => {
+          html += `<p>${p["Player"]} – ${num(p[field])}</p>`;
+        });
+    }
+
+    html += `</div>`;
+
+    if (approaching.length > 0) {
+      html += `<div class="milestone-approach-box">
+                 <h4>Approaching ${m}</h4>`;
+
+      approaching
+        .sort((a, b) => (m - num(a[field])) - (m - num(b[field])))
+        .forEach(p => {
+          const current = num(p[field]);
+          const toGo = m - current;
+
+          html += `
+            <div class="approach-row">
+              <span>${p["Player"]} – ${current}</span>
+              <span class="to-go">${toGo} to go</span>
+            </div>`;
+        });
+
+      html += `</div>`;
+    }
   });
-  let html="<p><strong>Achieved:</strong></p>";
-  html+=achieved.length?achieved.map(a=>`<p>${a}</p>`).join(""):"<p>None yet.</p>";
-  html+="<p><strong>Approaching:</strong></p>";
-  html+=approaching.length?approaching.map(a=>`<p>${a}</p>`).join(""):"<p>None currently approaching.</p>";
-  container.innerHTML=html;
+
+  container.innerHTML = html;
 }
+
 
 /* AI TEAMS */
 function renderAITeams(){
