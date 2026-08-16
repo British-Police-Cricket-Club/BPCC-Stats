@@ -26,7 +26,7 @@ body {
 }
 
 /* ============================================================
-   HEADER
+   HEADER — UPDATED
 ============================================================ */
 header {
   background: var(--bpcc-navy);
@@ -36,20 +36,34 @@ header {
   align-items: center;
 }
 
+header .brand {
+  display: flex;
+  align-items: center;
+  gap: 15px; /* spacing between logo and text */
+}
+
 header img {
-  height: 50px;
-  margin-right: 15px;
+  height: 60px; /* slightly larger logo */
 }
 
 header h1 {
-  font-size: 20px;
+  font-size: 26px;        /* bigger title */
   font-family: Playfair Display, serif;
   margin: 0;
+  line-height: 1.2;
 }
 
 header em {
   color: var(--bpcc-gold);
-  font-size: 14px;
+  font-size: 16px;        /* bigger subtitle */
+  display: block;
+  margin-top: 4px;
+}
+
+header .brand div {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
 }
 
 /* ============================================================
@@ -166,20 +180,46 @@ header em {
   color: var(--bpcc-blue);
 }
 
+/* Section buttons */
 .summary-card.summary-ai {
   background: var(--bpcc-navy);
   border: 1px solid var(--bpcc-gold);
   cursor: pointer;
 }
 
-.summary-card.summary-ai h3,
-.summary-card.summary-ai p {
+.summary-card.summary-ai h3 {
+  font-size: 20px; /* bigger */
   color: var(--bpcc-gold);
+}
+
+.summary-card.summary-ai p {
+  font-size: 13px; /* smaller */
+  color: var(--bpcc-gold);
+  opacity: 0.85;
 }
 
 .summary-card.summary-ai:hover {
   transform: translateY(-3px);
   box-shadow: 0 6px 16px rgba(0,0,0,0.25);
+}
+
+/* Overview text */
+.overview-subtle {
+  text-align: center;
+  font-size: 13px;
+  color: #666;
+  margin-top: 10px;
+  letter-spacing: 1px;
+}
+
+.overview-strong {
+  text-align: center;
+  font-size: 22px;
+  font-weight: 700;
+  color: var(--bpcc-blue);
+  margin-top: 4px;
+  margin-bottom: 25px;
+  font-family: "Playfair Display", serif;
 }
 
 /* ============================================================
@@ -422,6 +462,7 @@ tbody tr:hover {
 <!-- OVERVIEW -->
 <section id="overview" class="section active">
 
+  <!-- Totals -->
   <div class="summary">
     <div class="summary-card">
       <h3>Total players</h3>
@@ -441,6 +482,11 @@ tbody tr:hover {
     </div>
   </div>
 
+  <!-- Overview text -->
+  <p class="overview-subtle">EXPLORE THE ARCHIVE</p>
+  <p class="overview-strong">Start with a record</p>
+
+  <!-- Section buttons -->
   <div class="summary">
 
     <div class="summary-card summary-ai record-box" data-section="players">
@@ -460,7 +506,7 @@ tbody tr:hover {
 
     <div class="summary-card summary-ai record-box" data-section="milestones">
       <h3>Milestones</h3>
-      <p>Landmarks & approaching achievements</p>
+      <p>Landmarks & achievements</p>
     </div>
 
     <div class="summary-card summary-ai record-box" data-section="ai-teams">
