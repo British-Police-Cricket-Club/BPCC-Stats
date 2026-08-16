@@ -4,9 +4,9 @@
 const DATA_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vQlS2BceCsyAkRFmAuwA0QDJR8wPjuLZyquKAeszxD2-FM7gFTzEQrVTqPxtph-z55FZNU01tMnpvQv/pub?output=csv";
 
 const HEADERS = [
-  "Player","Number","Years","Matches","Innings","Runs","Average","High Score",
-  "Fifties","Hundreds","Overs","Wickets","Bowling Average","Economy","Best",
-  "Catches","Stumpings","Current"
+  "Player","Number","Years","Matches","Innings","Runs","Average",
+  "High Score","Fifties","Hundreds","Overs","Wickets",
+  "Bowling Average","Economy","Best","Catches","Stumpings","Current"
 ];
 
 let allData = [];
@@ -176,12 +176,21 @@ function setupNav() {
 ============================================================ */
 function renderOverview() {
   document.getElementById("total-players").textContent = allData.length;
+
   document.getElementById("total-appearances").textContent =
-    allData.reduce(function(s, p){ return s + num(p["Matches"]); }, 0);
+    allData.reduce(function(sum, p){
+      return sum + num(p["Matches"]);
+    }, 0);
+
   document.getElementById("total-runs").textContent =
-    allData.reduce(function(s, p){ return s + num(p["Runs"]); }, 0);
+    allData.reduce(function(sum, p){
+      return sum + num(p["Runs"]);
+    }, 0);
+
   document.getElementById("total-wickets").textContent =
-    allData.reduce(function(s, p){ return s + num(p["Wickets"]); }, 0);
+    allData.reduce(function(sum, p){
+      return sum + num(p["Wickets"]);
+    }, 0);
 }
 
 /* ============================================================
@@ -189,26 +198,36 @@ function renderOverview() {
 ============================================================ */
 function renderBatting() {
   const container = document.getElementById("batting-table");
+
   const data = allData.slice().sort(function(a, b){
     return num(b["Runs"]) - num(a["Runs"]);
   });
 
-  let html = "<table><thead><tr>" +
-             "<th>Player</th><th>Runs</th><th>Average</th>" +
-             "</tr></thead><tbody>";
+  let html = "";
+  html += "<table>";
+  html += "<thead>";
+  html += "<tr>";
+  html += "<th>Player</th>";
+  html += "<th>Runs</th>";
+  html += "<th>Average</th>";
+  html += "</tr>";
+  html += "</thead>";
+  html += "<tbody>";
 
   data.forEach(function(p){
-    html += "<tr class='clickable-row' data-player='" + p["Player"] + "'>" +
-            "<td>" +
-            "<div class='player-name'>" + p["Player"] + "</div>" +
-            "<div class='player-number'>No. " + p["Number"] + "</div>" +
-            "</td>" +
-            "<td>" + p["Runs"] + "</td>" +
-            "<td>" + p["Average"] + "</td>" +
-            "</tr>";
+    html += "<tr class='clickable-row' data-player='" + p["Player"] + "'>";
+    html += "<td>";
+    html += "<div class='player-name'>" + p["Player"] + "</div>";
+    html += "<div class='player-number'>No. " + p["Number"] + "</div>";
+    html += "</td>";
+    html += "<td>" + p["Runs"] + "</td>";
+    html += "<td>" + p["Average"] + "</td>";
+    html += "</tr>";
   });
 
-  html += "</tbody></table>";
+  html += "</tbody>";
+  html += "</table>";
+
   container.innerHTML = html;
 
   container.querySelectorAll(".clickable-row").forEach(function(row){
@@ -226,26 +245,36 @@ function renderBatting() {
 ============================================================ */
 function renderBowling() {
   const container = document.getElementById("bowling-table");
+
   const data = allData.slice().sort(function(a, b){
     return num(b["Wickets"]) - num(a["Wickets"]);
   });
 
-  let html = "<table><thead><tr>" +
-             "<th>Player</th><th>Wickets</th><th>Average</th>" +
-             "</tr></thead><tbody>";
+  let html = "";
+  html += "<table>";
+  html += "<thead>";
+  html += "<tr>";
+  html += "<th>Player</th>";
+  html += "<th>Wickets</th>";
+  html += "<th>Average</th>";
+  html += "</tr>";
+  html += "</thead>";
+  html += "<tbody>";
 
   data.forEach(function(p){
-    html += "<tr class='clickable-row' data-player='" + p["Player"] + "'>" +
-            "<td>" +
-            "<div class='player-name'>" + p["Player"] + "</div>" +
-            "<div class='player-number'>No. " + p["Number"] + "</div>" +
-            "</td>" +
-            "<td>" + p["Wickets"] + "</td>" +
-            "<td>" + p["Bowling Average"] + "</td>" +
-            "</tr>";
+    html += "<tr class='clickable-row' data-player='" + p["Player"] + "'>";
+    html += "<td>";
+    html += "<div class='player-name'>" + p["Player"] + "</div>";
+    html += "<div class='player-number'>No. " + p["Number"] + "</div>";
+    html += "</td>";
+    html += "<td>" + p["Wickets"] + "</td>";
+    html += "<td>" + p["Bowling Average"] + "</td>";
+    html += "</tr>";
   });
 
-  html += "</tbody></table>";
+  html += "</tbody>";
+  html += "</table>";
+
   container.innerHTML = html;
 
   container.querySelectorAll(".clickable-row").forEach(function(row){
@@ -263,26 +292,36 @@ function renderBowling() {
 ============================================================ */
 function renderFielding() {
   const container = document.getElementById("fielding-table");
+
   const data = allData.slice().sort(function(a, b){
     return victims(b) - victims(a);
   });
 
-  let html = "<table><thead><tr>" +
-             "<th>Player</th><th>Victims</th><th>Catches</th>" +
-             "</tr></thead><tbody>";
+  let html = "";
+  html += "<table>";
+  html += "<thead>";
+  html += "<tr>";
+  html += "<th>Player</th>";
+  html += "<th>Victims</th>";
+  html += "<th>Catches</th>";
+  html += "</tr>";
+  html += "</thead>";
+  html += "<tbody>";
 
   data.forEach(function(p){
-    html += "<tr class='clickable-row' data-player='" + p["Player"] + "'>" +
-            "<td>" +
-            "<div class='player-name'>" + p["Player"] + "</div>" +
-            "<div class='player-number'>No. " + p["Number"] + "</div>" +
-            "</td>" +
-            "<td>" + victims(p) + "</td>" +
-            "<td>" + p["Catches"] + "</td>" +
-            "</tr>";
+    html += "<tr class='clickable-row' data-player='" + p["Player"] + "'>";
+    html += "<td>";
+    html += "<div class='player-name'>" + p["Player"] + "</div>";
+    html += "<div class='player-number'>No. " + p["Number"] + "</div>";
+    html += "</td>";
+    html += "<td>" + victims(p) + "</td>";
+    html += "<td>" + p["Catches"] + "</td>";
+    html += "</tr>";
   });
 
-  html += "</tbody></table>";
+  html += "</tbody>";
+  html += "</table>";
+
   container.innerHTML = html;
 
   container.querySelectorAll(".clickable-row").forEach(function(row){
@@ -294,6 +333,7 @@ function renderFielding() {
     });
   });
 }
+
 /* ============================================================
    MILESTONES (largest → smallest)
 ============================================================ */
@@ -324,18 +364,21 @@ function renderMilestones() {
 }
 
 function renderMilestoneClubs(title, field, milestones, threshold, container) {
-  let html = "<h3 style='font-family:Playfair Display,serif;color:#0b1a33;margin-top:30px;'>" + title + "</h3>";
+  let html = "";
+  html += "<h3 style='font-family:Playfair Display,serif;color:#0b1a33;margin-top:30px;'>";
+  html += title;
+  html += "</h3>";
 
   html += "<div class='milestone-grid'>";
 
   milestones.forEach(function(m){
     const achieved = allData.filter(function(p){
       const value = num(p[field]);
-      if (value < m) return false;
-      return true;
+      return value >= m;
     });
 
-    html += "<div class='milestone-club-box'><h4>" + m + " Club</h4>";
+    html += "<div class='milestone-club-box'>";
+    html += "<h4>" + m + " Club</h4>";
 
     if (achieved.length === 0) {
       html += "<p>No players yet.</p>";
@@ -352,7 +395,9 @@ function renderMilestoneClubs(title, field, milestones, threshold, container) {
 
   html += "</div>";
 
-  html += "<h3 style='font-family:Playfair Display,serif;color:#0b1a33;margin-top:40px;'>Current players approaching</h3>";
+  html += "<h3 style='font-family:Playfair Display,serif;color:#0b1a33;margin-top:40px;'>";
+  html += "Current players approaching";
+  html += "</h3>";
 
   let any = false;
 
@@ -367,7 +412,8 @@ function renderMilestoneClubs(title, field, milestones, threshold, container) {
     if (approaching.length > 0) {
       any = true;
 
-      html += "<div class='milestone-approach-box'><h4>Approaching " + m + "</h4>";
+      html += "<div class='milestone-approach-box'>";
+      html += "<h4>Approaching " + m + "</h4>";
 
       approaching.sort(function(a, b){
         return (m - num(a[field])) - (m - num(b[field]));
@@ -375,10 +421,10 @@ function renderMilestoneClubs(title, field, milestones, threshold, container) {
         const value = num(p[field]);
         const toGo = m - value;
 
-        html += "<div class='approach-row'>" +
-                "<span>" + p["Player"] + " – " + value + "</span>" +
-                "<span class='to-go'>" + toGo + " to go</span>" +
-                "</div>";
+        html += "<div class='approach-row'>";
+        html += "<span>" + p["Player"] + " – " + value + "</span>";
+        html += "<span class='to-go'>" + toGo + " to go</span>";
+        html += "</div>";
       });
 
       html += "</div>";
@@ -454,61 +500,72 @@ function renderAITeams() {
 function renderTeam(id, title, players) {
   const container = document.getElementById(id);
 
-  let html = "<div class='ai-team-box'><h3>" + title + "</h3>";
+  let html = "";
+  html += "<div class='ai-team-box'>";
+  html += "<h3>" + title + "</h3>";
 
   const batters = players.slice(0, 5);
   const keeper = players.slice(5, 6);
   const bowlers = players.slice(6, 11);
 
   /* Batters */
-  html += "<div class='ai-team-section'><h4>Batters</h4>";
+  html += "<div class='ai-team-section'>";
+  html += "<h4>Batters</h4>";
+
   batters.forEach(function(entry, i){
     const p = entry.player;
-    html += "<div class='ai-player-row' data-player='" + p["Player"] + "'>" +
-            "<div class='ai-player-left'>" +
-            "<div class='ai-player-name'>" + (i + 1) + ". " + p["Player"] + "</div>" +
-            "<div class='ai-player-role'>Batter</div>" +
-            "</div>" +
-            "<div class='ai-player-right'>" +
-            p["Runs"] + " runs — Avg " + p["Average"] +
-            "</div>" +
-            "</div>";
+    html += "<div class='ai-player-row' data-player='" + p["Player"] + "'>";
+    html += "<div class='ai-player-left'>";
+    html += "<div class='ai-player-name'>" + (i + 1) + ". " + p["Player"] + "</div>";
+    html += "<div class='ai-player-role'>Batter</div>";
+    html += "</div>";
+    html += "<div class='ai-player-right'>";
+    html += p["Runs"] + " runs — Avg " + p["Average"];
+    html += "</div>";
+    html += "</div>";
   });
+
   html += "</div>";
 
   /* Keeper */
-  html += "<div class='ai-team-section'><h4>Wicket Keeper</h4>";
+  html += "<div class='ai-team-section'>";
+  html += "<h4>Wicket Keeper</h4>";
+
   keeper.forEach(function(entry){
     const p = entry.player;
     const m = num(p["Matches"]);
     const victimsPM = (m > 0) ? (victims(p) / m).toFixed(2) : "0.00";
 
-    html += "<div class='ai-player-row' data-player='" + p["Player"] + "'>" +
-            "<div class='ai-player-left'>" +
-            "<div class='ai-player-name'>6. " + p["Player"] + "</div>" +
-            "<div class='ai-player-role'>Wicket Keeper</div>" +
-            "</div>" +
-            "<div class='ai-player-right'>" +
-            victims(p) + " victims — " + victimsPM + " per match" +
-            "</div>" +
-            "</div>";
+    html += "<div class='ai-player-row' data-player='" + p["Player"] + "'>";
+    html += "<div class='ai-player-left'>";
+    html += "<div class='ai-player-name'>6. " + p["Player"] + "</div>";
+    html += "<div class='ai-player-role'>Wicket Keeper</div>";
+    html += "</div>";
+    html += "<div class='ai-player-right'>";
+    html += victims(p) + " victims — " + victimsPM + " per match";
+    html += "</div>";
+    html += "</div>";
   });
+
   html += "</div>";
 
   /* Bowlers */
-  html += "<div class='ai-team-section'><h4>Bowlers</h4>";
+  html += "<div class='ai-team-section'>";
+  html += "<h4>Bowlers</h4>";
+
   bowlers.forEach(function(entry, i){
     const p = entry.player;
-    html += "<div class='ai-player-row' data-player='" + p["Player"] + "'>" +
-            "<div class='ai-player-left'>" +
-            "<div class='ai-player-name'>" + (7 + i) + ". " + p["Player"] + "</div>" +
-            "<div class='ai-player-role'>Bowler</div>" +
-            "</div>" +
-            "<div class='ai-player-right'>" +
-            p["Wickets"] + " wickets — Avg " + p["Bowling Average"] +
-            "</div>" +
-            "</div>";
+    html += "<div class='ai-player-row' data-player='" + p["Player"] + "'>";
+    html += "<div class='ai-player-left'>";
+    html += "<div class='ai-player-name'>" + (7 + i) + ". " + p["Player"] + "</div>";
+    html += "<div class='ai-player-role'>Bowler</div>";
+    html += "</div>";
+    html += "<div class='ai-player-right'>";
+    html += p["Wickets"] + " wickets — Avg " + p["Bowling Average"];
+    html += "</div>";
+    html += "</div>";
   });
+
   html += "</div>";
 
   html += "</div>";
@@ -534,6 +591,7 @@ async function init() {
   document.querySelectorAll(".section").forEach(function(sec){
     sec.classList.remove("active");
   });
+
   document.getElementById("overview").classList.add("active");
 
   heroTitle.innerHTML = heroTitles["overview"];
