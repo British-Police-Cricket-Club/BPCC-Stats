@@ -132,38 +132,6 @@
     gap: 15px;
     margin-top: 15px;
   }
-/* Overview record boxes */
-.record-links {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 15px;
-  margin-top: 20px;
-}
-
-.record-box {
-  background: #f0f4ff;
-  border: 1px solid #ccc;
-  padding: 15px;
-  text-align: center;
-  cursor: pointer;
-  border-radius: 6px;
-  transition: 0.2s;
-}
-
-.record-box:hover {
-  background: #e3edff;
-}
-
-.record-box h3 {
-  margin: 0;
-  color: #001f3f;
-}
-
-.record-box p {
-  margin: 5px 0 0 0;
-  font-size: 13px;
-  color: #555;
-}
 
   .player-card {
     background: #f0f4ff;
@@ -195,6 +163,27 @@
     font-weight: bold;
   }
 
+  /* Role badges */
+  .role-badge {
+    display: inline-block;
+    background: #004080;
+    color: white;
+    padding: 3px 8px;
+    border-radius: 12px;
+    font-size: 11px;
+    margin-top: 6px;
+  }
+
+  .modal-role-badge {
+    display: inline-block;
+    background: #004080;
+    color: white;
+    padding: 6px 12px;
+    border-radius: 14px;
+    font-size: 14px;
+    margin: 10px 0;
+  }
+
   /* Popup modal */
   #player-modal {
     display: none;
@@ -217,45 +206,45 @@
   }
 
   #modal-close {
-  position: absolute;
-  right: 15px;
-  top: 10px;
-  font-size: 20px;
-  cursor: pointer;
-  background: #cc0000;
-  color: white;
-  padding: 6px 10px;
-  border-radius: 4px;
-  font-weight: bold;
-}
-#modal-close:hover {
-  background: #ff3333;
-}
+    position: absolute;
+    right: 15px;
+    top: 10px;
+    font-size: 20px;
+    cursor: pointer;
+    background: #cc0000;
+    color: white;
+    padding: 6px 10px;
+    border-radius: 4px;
+    font-weight: bold;
+  }
+
+  #modal-close:hover {
+    background: #ff3333;
+  }
 
   .modal-header {
-  background: #001f3f;
-  color: white;
-  padding: 15px;
-  border-radius: 6px;
-  margin-bottom: 15px;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  height: 120px;
-  text-align: center;
-}
+    background: #001f3f;
+    color: white;
+    padding: 15px;
+    border-radius: 6px;
+    margin-bottom: 15px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    height: 140px;
+    text-align: center;
+  }
 
-#modal-player-name {
-  font-size: 26px;
-  font-weight: bold;
-  margin: 5px 0;
-}
+  #modal-player-name {
+    font-size: 28px;
+    font-weight: bold;
+    margin: 5px 0;
+  }
 
-#modal-player-number {
-  font-size: 18px;
-  margin: 0;
-}
-
+  #modal-player-number {
+    font-size: 18px;
+    margin: 0;
+  }
 
   .modal-stats-grid {
     display: grid;
@@ -293,6 +282,39 @@
   .section.active {
     display: block;
   }
+
+  /* Record boxes */
+  .record-links {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 15px;
+    margin-top: 20px;
+  }
+
+  .record-box {
+    background: #f0f4ff;
+    border: 1px solid #ccc;
+    padding: 15px;
+    text-align: center;
+    cursor: pointer;
+    border-radius: 6px;
+    transition: 0.2s;
+  }
+
+  .record-box:hover {
+    background: #e3edff;
+  }
+
+  .record-box h3 {
+    margin: 0;
+    color: #001f3f;
+  }
+
+  .record-box p {
+    margin: 5px 0 0 0;
+    font-size: 13px;
+    color: #555;
+  }
 </style>
 </head>
 
@@ -322,15 +344,15 @@
       <div class="summary-card"><h3>Total Club Wickets</h3><p id="total-wickets">–</p></div>
     </div>
 
-    <p style="margin-top:25px; font-size:10px; color:#555; text-align:center;">
-      Explore the Archive
+    <p style="margin-top:25px; font-size:13px; color:#555; text-align:center;">
+      explore the archive
     </p>
 
     <p style="margin-top:5px; font-size:20px; color:#001f3f; text-align:center; font-weight:bold;">
-      Start With a Record
+      start with a record
     </p>
 
-    <div class="record-links" style="display:grid; grid-template-columns: repeat(3, 1fr); gap:15px; margin-top:20px;">
+    <div class="record-links">
       <div class="record-box" data-section="batting"><h3>Batting</h3><p>Career records</p></div>
       <div class="record-box" data-section="bowling"><h3>Bowling</h3><p>Career records</p></div>
       <div class="record-box" data-section="fielding"><h3>Fielding</h3><p>Career records</p></div>
@@ -359,6 +381,7 @@
         <h2>Complete Career Record</h2>
         <p id="modal-player-name"></p>
         <p id="modal-player-number"></p>
+        <p id="modal-player-role" class="modal-role-badge"></p>
       </div>
 
       <div id="modal-stats" class="modal-stats-grid"></div>
@@ -413,7 +436,7 @@
 </div>
 
 <script>
-/* FULL CLEANED JS BELOW */
+/* FULL CLEANED JS WITH ROLE BADGES */
 
 const DATA_URL =
   "https://docs.google.com/spreadsheets/d/e/2PACX-1vQlS2BceCsyAkRFmAuwA0QDJR8wPjuLZyquKAeszxD2-FM7gFTzEQrVTqPxtph-z55FZNU01tMnpvQv/pub?output=csv";
@@ -453,13 +476,27 @@ function victims(player) {
   return num(player["Catches"]) + num(player["Stumpings"]);
 }
 
+/* ROLE DETECTION */
+function getRole(p) {
+  const runs = num(p["Runs"]);
+  const wickets = num(p["Wickets"]);
+  const catches = num(p["Catches"]);
+  const stumpings = num(p["Stumpings"]);
+
+  if (stumpings > 0 || catches > 30) return "Wicketkeeper";
+  if (wickets >= 40) return "Bowler";
+  if (runs >= 1000) return "Batter";
+  if (runs >= 500 && wickets >= 20) return "All-rounder";
+  return "Player";
+}
+
+/* PLAYERS (alphabetical + role badges) */
 function renderPlayers() {
   const container = document.getElementById("players-grid");
   container.innerHTML = "";
 
   const q = document.getElementById("player-search").value.toLowerCase();
 
-  // Sort alphabetically
   const sorted = [...allData].sort((a, b) =>
     a["Player"].localeCompare(b["Player"])
   );
@@ -473,10 +510,12 @@ function renderPlayers() {
 
     const status = p["Current"] === "Yes" ? "Current Player" : "Retired";
     const victimsCount = victims(p);
+    const role = getRole(p);
 
     card.innerHTML = `
       <div class="status">${status}</div>
       <h3>${p["Player"]}</h3>
+      <span class="role-badge">${role}</span>
       <div class="stats-line">
         ${p["Matches"]} matches • ${p["Runs"]} runs • ${p["Wickets"]} wickets • ${victimsCount} victims
       </div>
@@ -489,6 +528,7 @@ function renderPlayers() {
 
 document.getElementById("player-search").addEventListener("input", renderPlayers);
 
+/* NAVIGATION */
 function setupNav() {
   const buttons = document.querySelectorAll(".nav-bar button");
   buttons.forEach(btn => {
@@ -503,6 +543,7 @@ function setupNav() {
   });
 }
 
+/* OVERVIEW */
 function renderOverview() {
   document.getElementById("total-players").textContent = allData.length;
   document.getElementById("total-appearances").textContent =
@@ -517,72 +558,4 @@ document.querySelectorAll(".record-box").forEach(box => {
   box.addEventListener("click", () => {
     const target = box.getAttribute("data-section");
 
-    document.querySelectorAll(".section").forEach(sec => sec.classList.remove("active"));
-    document.getElementById(target).classList.add("active");
-
-    document.querySelectorAll(".nav-bar button").forEach(btn => {
-      btn.classList.toggle("active", btn.getAttribute("data-section") === target);
-    });
-
-    window.scrollTo({ top: 0, behavior: "smooth" });
-  });
-});
-
-function openPlayerModal(p) {
-  document.getElementById("modal-player-name").textContent = p["Player"];
-  document.getElementById("modal-player-number").textContent = "Player No: " + p["Number"];
-
-  const statsContainer = document.getElementById("modal-stats");
-  statsContainer.innerHTML = "";
-
-  HEADERS.forEach(h => {
-    const box = document.createElement("div");
-    box.className = "modal-stat-box";
-    box.innerHTML = `<h4>${h}</h4><p>${p[h] || ""}</p>`;
-    statsContainer.appendChild(box);
-  });
-
-  document.getElementById("player-modal").style.display = "block";
-}
-
-document.getElementById("modal-close").addEventListener("click", () => {
-  document.getElementById("player-modal").style.display = "none";
-});
-
-window.addEventListener("click", (e) => {
-  if (e.target.id === "player-modal") {
-    document.getElementById("player-modal").style.display = "none";
-  }
-});
-
-function renderBatting() {
-  const container = document.getElementById("batting-table");
-  const cols = ["Player","Matches","Innings","Runs","Average","High Score","Fifties","Hundreds"];
-
-  const data = [...allData].sort((a, b) => num(b["Runs"]) - num(a["Runs"]));
-
-  let html = "<table><thead><tr>";
-  cols.forEach(c => html += `<th>${c}</th>`);
-  html += "</tr></thead><tbody>";
-
-  data.forEach(p => {
-    html += "<tr>";
-    cols.forEach(c => html += `<td>${p[c] || ""}</td>`);
-    html += "</tr>";
-  });
-
-  html += "</tbody></table>";
-  container.innerHTML = html;
-}
-
-function renderBowling() {
-  const container = document.getElementById("bowling-table");
-  const cols = ["Player","Overs","Wickets","Bowling Average","Economy","Best"];
-
-  const data = [...allData].sort((a, b) => num(b["Wickets"]) - num(a["Wickets"]));
-
-  let html = "<table><thead><tr>";
-  cols.forEach(c => html += `<th>${c}</th>`);
-  html += "</tr></thead><tbody>";
-
-  data.forEach(p
+    document.querySelectorAll(".section").forEach(sec => sec.classList.remove("
