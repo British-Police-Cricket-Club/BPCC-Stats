@@ -99,7 +99,7 @@ function renderPlayers() {
       p["Matches"] + " matches • " +
       p["Runs"] + " runs • " +
       p["Wickets"] + " wickets • " +
-      victims(p) + " victims — " + victimsPM + " per match"
+      victims(p) + " victims" +
       "</div>";
 
     card.addEventListener("click", function(){
@@ -294,28 +294,41 @@ function renderFielding() {
     });
   });
 }
-
 /* ============================================================
    MILESTONES
 ============================================================ */
 function renderMilestones() {
-  renderMilestoneClubs("Runs milestone clubs", "Runs",
-    [250,500,1000,1500,2000,2500,3000,3500], 20,
-    document.getElementById("batting-milestones"));
+  renderMilestoneClubs(
+    "Runs milestone clubs",
+    "Runs",
+    [250,500,1000,1500,2000,2500,3000,3500],
+    20,
+    document.getElementById("batting-milestones")
+  );
 
-  renderMilestoneClubs("Bowling milestone clubs", "Wickets",
-    [20,30,40,50,60,70,80,90,100], 2,
-    document.getElementById("bowling-milestones"));
+  renderMilestoneClubs(
+    "Bowling milestone clubs",
+    "Wickets",
+    [20,30,40,50,60,70,80,90,100],
+    2,
+    document.getElementById("bowling-milestones")
+  );
 
-  renderMilestoneClubs("Catches milestone clubs", "Catches",
-    [10,20,30,40,50], 2,
-    document.getElementById("catches-milestones"));
+  renderMilestoneClubs(
+    "Catches milestone clubs",
+    "Catches",
+    [10,20,30,40,50],
+    2,
+    document.getElementById("catches-milestones")
+  );
 }
 
 function renderMilestoneClubs(title, field, milestones, threshold, container) {
   let html = "<h3>" + title + "</h3>";
 
-  const sorted = milestones.slice().sort(function(a, b){ return a - b; });
+  const sorted = milestones.slice().sort(function(a, b){
+    return a - b;
+  });
 
   html += "<div class='milestone-grid'>";
 
@@ -475,18 +488,38 @@ function renderTeam(id, title, players) {
     const m = num(p["Matches"]);
     const victimsPM = (m > 0) ? (victims(p) / m).toFixed(2) : "0.00";
 
-    html += "<div class='ai-player-row' data-player='" + p
-                 "</div>" +
+    html += "<div class='ai-player-row' data-player='" + p["Player"] + "'>" +
+            "<div class='ai-player-left'>" +
+            "<div class='ai-player-name'>6. " + p["Player"] + "</div>" +
+            "<div class='ai-player-role'>Wicket Keeper</div>" +
+            "</div>" +
+            "<div class='ai-player-right'>" +
+            victims(p) + " victims — " + victimsPM + " per match" +
+            "</div>" +
             "</div>";
   });
   html += "</div>";
 
-  /* Close team box */
+  /* Bowlers */
+  html += "<div class='ai-team-section'><h4>Bowlers</h4>";
+  bowlers.forEach(function(entry, i){
+    const p = entry.player;
+    html += "<div class='ai-player-row' data-player='" + p["Player"] + "'>" +
+            "<div class='ai-player-left'>" +
+            "<div class='ai-player-name'>" + (7 + i) + ". " + p["Player"] + "</div>" +
+            "<div class='ai-player-role'>Bowler</div>" +
+            "</div>" +
+            "<div class='ai-player-right'>" +
+            p["Wickets"] + " wickets — Avg " + p["Bowling Average"] +
+            "</div>" +
+            "</div>";
+  });
+  html += "</div>";
+
   html += "</div>";
 
   container.innerHTML = html;
 
-  /* Modal click behaviour */
   container.querySelectorAll(".ai-player-row").forEach(function(row){
     row.addEventListener("click", function(){
       const player = allData.find(function(p){
@@ -503,7 +536,6 @@ function renderTeam(id, title, players) {
 async function init() {
   allData = await loadCSV();
 
-  /* Default section */
   document.querySelectorAll(".section").forEach(function(sec){
     sec.classList.remove("active");
   });
@@ -523,4 +555,3 @@ async function init() {
 }
 
 init();
-
