@@ -108,7 +108,7 @@ nav button:hover{
 }
 
 /* ============================================================
-   HERO
+   HERO (dynamic title)
    ============================================================ */
 
 .hero{
@@ -192,7 +192,7 @@ nav button:hover{
 }
 
 /* ============================================================
-   CONTENT WRAPPER (Fugitives-style)
+   CONTENT WRAPPER
    ============================================================ */
 
 .content{
@@ -301,7 +301,7 @@ nav button:hover{
 }
 
 /* ============================================================
-   TABLES (Batting / Bowling / Fielding)
+   TABLES
    ============================================================ */
 
 table{
@@ -433,6 +433,20 @@ tr:hover{ background:#e3edff; }
 }
 
 /* ============================================================
+   AI TEAMS NOTICE BOX
+   ============================================================ */
+
+.ai-notice{
+  background:#fff7e6;
+  border:1px solid #e6c200;
+  padding:18px;
+  border-radius:6px;
+  margin-bottom:25px;
+  font-size:14px;
+  line-height:1.6;
+}
+
+/* ============================================================
    MODAL — restored tabular layout
    ============================================================ */
 
@@ -547,7 +561,7 @@ footer b{
 
 <section class="hero">
   <small>THE COMPLETE CLUB RECORD</small>
-  <h2>Every player.<br><i>Every number.</i></h2>
+  <h2 id="hero-title">Every officer.<br><i>Every number.</i></h2>
   <p>Career records across all BPCC fixtures, updated directly from the club archive.</p>
 </section>
 
@@ -624,6 +638,11 @@ footer b{
 
   <div id="ai-teams" class="section">
     <h2>AI Teams</h2>
+
+    <div class="ai-notice">
+      AI-generated, unofficial selections. Team A uses the original elite qualification thresholds. Teams B and C select the next best remaining performers, ranked by XI batting average, bowling average and wicketkeeping victims. Career length remains a modest tie-breaker, and no player appears twice.
+    </div>
+
     <div class="ai-teams-grid">
       <div id="team-a" class="ai-team-box"></div>
       <div id="team-b" class="ai-team-box"></div>
@@ -661,6 +680,21 @@ async function loadCSV(){
 function num(v){const n=parseFloat(v);return isNaN(n)?0:n;}
 function victims(p){return num(p["Catches"])+num(p["Stumpings"]);}
 
+/* ============================================================
+   SECTION SWITCHING + HERO TITLE UPDATES + SUMMARY CONTROL
+   ============================================================ */
+
+const heroTitle = document.getElementById("hero-title");
+const summaryCards = document.getElementById("summary-cards");
+
+const heroTitles = {
+  overview: "Every officer.<br><i>Every number.</i>",
+  players: "Player directory<br><i>& profiles</i>",
+  batting: "Career batting<br><i>records</i>",
+  bowling: "Career bowling<br><i>records</i>",
+  fielding: "Career fielding<br><i>records</i>",
+  milestones: "Landmarks<br><i>& approaching achievements   
+   
 /* ROLE DETECTION */
 function getRole(p){
   const runs = num(p["Runs"]);
@@ -678,7 +712,6 @@ function getRole(p){
 
   return "Player";
 }
-
 
 /* PLAYERS PAGE */
 function renderPlayers(){
