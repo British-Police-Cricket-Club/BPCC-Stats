@@ -65,7 +65,7 @@
     background: #004080;
   }
 
-  h2 {
+  .section h2 {
     margin-top: 20px;
     color: #001f3f;
   }
@@ -233,12 +233,20 @@
   padding: 20px;
   text-align: center;
   position: relative;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: center;   /* centers vertically */
+  align-items: center;       /* centers horizontally */
+  min-height: 140px;         /* gives breathing room */
 }
+
 
 #modal-player-name {
   font-size: 26px;
   font-weight: bold;
   margin: 0;
+  color: white !important;
 }
 
 #modal-player-number {
