@@ -433,6 +433,7 @@ table td:nth-child(4) {
   border-radius: 8px;
   font-weight: 700;
   font-size: 18px;
+  margin: 0 0 6px 0;
   margin-bottom: 10px;
   text-align: center;
 }
@@ -440,7 +441,7 @@ table td:nth-child(4) {
   .milestone-stat {
   font-weight: 600;
   color: var(--bpcc-blue);
-  text-align: right;
+  text-align: left;
 }
   
 .milestone-grid {
@@ -451,10 +452,10 @@ table td:nth-child(4) {
 }
   
   .milestone-approach-box {
-  background: white;
-  border: 1px solid #e3e6ef;
-  border-radius: 12px;
-  padding: 15px 18px;
+  background: #fff7e6;
+  border: 1px solid #e6c200;
+  border-radius: 6px;
+  padding: 10px 12px;
   margin-bottom: 25px;
   box-shadow: 0 2px 6px rgba(0,0,0,0.08);
 }
@@ -462,14 +463,15 @@ table td:nth-child(4) {
 .approach-row {
   display: flex;
   justify-content: space-between;
-  padding: 6px 0;
+  align-items: center;
+  padding: 4px 0;
   font-size: 15px;
 }
   
 .to-go {
-  font-weight: 700;
+  font-weight: bold;
   color: var(--bpcc-gold);
-  margin-left: 12px;
+  margin-left: auto;
 }
 
 
@@ -1134,7 +1136,7 @@ function renderMilestoneClubs(title, field, milestones, threshold, container) {
     html += `<div class="milestone-club-box"><h4>${m} Club</h4>`;
 
     if (achieved.length === 0) {
-      html += "<p>No Players Yet.</p>";
+      html += `<p>No Players Yet.</p>`;
     } else {
       achieved
         .sort((a, b) => num(b[field]) - num(a[field]))
@@ -1147,7 +1149,7 @@ function renderMilestoneClubs(title, field, milestones, threshold, container) {
         });
     }
 
-    html += "</div>";
+    html += `</div>`;
   });
 
   html += `</div><h3>Current Players Approaching</h3>`;
@@ -1181,14 +1183,20 @@ function renderMilestoneClubs(title, field, milestones, threshold, container) {
             </div>`;
         });
 
-      html += "</div>";
+      html += `</div>`;
     }
   });
 
-  if (!any) html += "<p>No current players within range.</p>";
+  if (!any) {
+    html += `
+      <div class="milestone-approach-box">
+        <p>No current players within range.</p>
+      </div>`;
+  }
 
   container.innerHTML = html;
 }
+
 /* ============================================================
    AI TEAMS (Optimised)
 ============================================================ */
