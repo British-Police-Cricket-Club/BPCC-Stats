@@ -241,9 +241,42 @@ header .brand div {
   transition: 0.25s ease;
 }
 
+  .player-card h3,
+.player-name {
+  color: var(--bpcc-blue);
+  font-weight: 700;
+}
+
+
 .player-card:hover {
   transform: translateY(-4px);
   box-shadow: 0 3px 10px rgba(0,0,0,0.2);
+}
+#player-search {
+  border: 2px solid var(--bpcc-gold);
+  background: #fffef5;
+  font-size: 16px;
+  padding: 14px;
+  border-radius: 10px;
+  outline: none;
+  transition: 0.25s ease;
+}
+
+#player-search:focus {
+  border-color: var(--bpcc-blue);
+  background: white;
+  box-shadow: 0 0 8px rgba(230,193,90,0.5);
+}
+  
+.status {
+  background: var(--bpcc-gold);
+  color: var(--bpcc-navy);
+  padding: 4px 8px;
+  border-radius: 6px;
+  font-size: 12px;
+  font-weight: 600;
+  display: inline-block;
+  margin-bottom: 8px;
 }
 
 /* ============================================================
@@ -289,6 +322,25 @@ tbody tr:hover {
   color: #777;
 }
 
+  .milestone-club-box {
+  background: white;
+  border-radius: 12px;
+  padding: 15px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+  border: 1px solid #e3e6ef;
+}
+
+.milestone-club-box h4 {
+  background: var(--bpcc-gold-gradient);
+  color: var(--bpcc-navy);
+  padding: 8px 12px;
+  border-radius: 8px;
+  font-size: 18px;
+  margin-bottom: 10px;
+  text-align: center;
+}
+
+
 /* ============================================================
    AI TEAMS
 ============================================================ */
@@ -327,6 +379,37 @@ tbody tr:hover {
   color: #555;
   text-align: right;
 }
+  .ai-team-box {
+  background: white;
+  border-radius: 14px;
+  padding: 20px;
+  box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+  border: 1px solid #e3e6ef;
+}
+
+.ai-team-box h3 {
+  color: var(--bpcc-blue);
+  font-size: 24px;
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+  .ai-team-section {
+  margin-bottom: 20px;
+  padding-bottom: 15px;
+  border-bottom: 3px solid var(--bpcc-gold);
+}
+
+.ai-team-section:last-child {
+  border-bottom: none;
+}
+  
+.ai-team-box:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 6px 18px rgba(0,0,0,0.15);
+  transition: 0.25s ease;
+}
+
 
 /* ============================================================
    MODAL
@@ -345,21 +428,34 @@ tbody tr:hover {
   background: white;
   width: 90%;
   max-width: 650px;
-  border-radius: 14px;
-  padding: 25px;
+  border-radius: 16px;
+  padding: 0; /* header sits flush */
   max-height: 85vh;
   overflow-y: auto;
+  box-shadow: 0 6px 20px rgba(0,0,0,0.25);
   border: 3px solid var(--bpcc-gold);
 }
 
 .modal-header {
   background: var(--bpcc-blue);
   color: white;
-  padding: 16px 20px;
+  padding: 20px;
+  border-bottom: 4px solid var(--bpcc-gold);
   position: sticky;
   top: 0;
   z-index: 10;
-  border-bottom: 3px solid var(--bpcc-gold);
+}
+
+#modal-player-name {
+  font-size: 24px;
+  font-weight: 700;
+  color: var(--bpcc-gold);
+}
+
+#modal-player-number,
+#modal-player-role {
+  font-size: 14px;
+  opacity: 0.9;
 }
 
 #modal-close {
@@ -367,6 +463,12 @@ tbody tr:hover {
   font-size: 28px;
   cursor: pointer;
   color: var(--bpcc-gold);
+  transition: 0.2s ease;
+}
+
+#modal-close:hover {
+  color: white;
+  transform: scale(1.1);
 }
 
 #modal-stats {
@@ -374,6 +476,33 @@ tbody tr:hover {
   grid-template-columns: repeat(4, 1fr);
   gap: 15px;
   margin-top: 20px;
+}
+  .modal-stat-row {
+  background: #f7f9fc;
+  border: 1px solid #e3e6ef;
+  border-radius: 12px;
+  padding: 14px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.08);
+  transition: 0.2s ease;
+}
+
+.modal-stat-row:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+}
+
+.modal-stat-row h4 {
+  margin: 0 0 6px 0;
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--bpcc-navy);
+}
+
+.modal-stat-row p {
+  margin: 0;
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--bpcc-blue);
 }
 
 /* ============================================================
