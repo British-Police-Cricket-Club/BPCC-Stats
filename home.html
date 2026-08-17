@@ -313,7 +313,7 @@ tbody tr:hover {
 }
 
 table td:nth-child(1) {
-  text-align: left;
+  text-align: middle;
 }
 
 table td:nth-child(2),
@@ -412,7 +412,7 @@ table td:nth-child(4) {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 8px 10px;
+  padding: 10px 0;
   border-bottom: 2px solid #eee;
 }
 
@@ -426,6 +426,15 @@ table td:nth-child(4) {
   color: #555;
   text-align: right;
 }
+
+  .ai-player-right {
+  text-align: right;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--bpcc-blue);
+  min-width: 140px; /* consistent alignment */
+}
+
 .ai-team-box {
   background: white;
   border-radius: 12px;
@@ -449,7 +458,7 @@ table td:nth-child(4) {
 }
 
   .ai-team-section {
-  margin-bottom: 20px;
+  margin-bottom: 10px;
   padding-bottom: 15px;
   padding: 18px;
   border-bottom: 3px solid var(--bpcc-gold);
@@ -457,6 +466,7 @@ table td:nth-child(4) {
 
 .ai-team-section:last-child {
   border-bottom: none;
+  margin-bottom: 0;
 }
   
 .ai-team-box:hover {
@@ -465,6 +475,12 @@ table td:nth-child(4) {
   transition: 0.25s ease;
 }
 
+  .ai-player-role {
+  font-size: 9px;
+  font-weight: 600;
+  color: var(--bpcc-navy);
+  opacity: 0.8;
+}
 
 /* ============================================================
    MODAL
