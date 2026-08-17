@@ -708,8 +708,7 @@ table td:nth-child(4) {
     gap: 20px;
   }
 
-  @media (max-width: 768px) {
-  #player-search {
+   #player-search {
     margin-left: auto;
     margin-right: auto;
   }
@@ -754,8 +753,40 @@ table td:nth-child(4) {
     transform: translateY(-4px);
   }
   
+  .  /* Make milestone boxes full-width and consistent */
   .milestone-grid {
-    grid-template-columns: repeat(2, 1fr);
+    grid-template-columns: repeat (2, 1fr);   /* 2 columns on mobile */
+    gap: 12px;
+  }
+
+  .milestone-club-box {
+    padding: 10px 14px;           /* tighter, consistent */
+  }
+
+  /* Fix alignment inside each milestone entry */
+  .milestone-entry {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+  }
+
+  .milestone-entry span {
+    display: inline-block;
+  }
+
+  /* Prevent long names from pushing stats down */
+  .milestone-name {
+    flex: 1;
+    font-weight: 700;
+    color: var(--bpcc-navy);
+  }
+
+  .milestone-stat {
+    flex-shrink: 0;               /* stat stays right-aligned */
+    font-weight: 600;
+    color: var(--bpcc-blue);
+    margin-left: 10px;
   }
 }
 
