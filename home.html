@@ -413,9 +413,17 @@ table td:nth-child(4) {
   border: 1px solid #e3e6ef;
 }
 
-.milestone-player-name {
+  .milestone-entry {
+  display: flex;
+  justify-content: space-between;   /* name left, stat right */
+  align-items: center;
+  padding: 4px 0;                   /* tighter rows */
+}
+
+.milestone-name {
   font-weight: 700;          /* bold */
   color: var(--bpcc-navy);
+  text-align: right;
 }
 
 .milestone-club-box h4 {
@@ -427,6 +435,12 @@ table td:nth-child(4) {
   font-size: 18px;
   margin-bottom: 10px;
   text-align: center;
+}
+
+  .milestone-stat {
+  font-weight: 600;
+  color: var(--bpcc-blue);
+  text-align: right;
 }
   
 .milestone-grid {
@@ -788,22 +802,22 @@ table td:nth-child(4) {
 
     <div class="summary-card summary-ai record-box" data-section="batting">
       <h3>Batting</h3>
-      <p>Career batting records</p>
+      <p>Career Batting Records</p>
     </div>
 
     <div class="summary-card summary-ai record-box" data-section="bowling">
       <h3>Bowling</h3>
-      <p>Career bowling records</p>
+      <p>Career Bowling Records</p>
     </div>
 
     <div class="summary-card summary-ai record-box" data-section="milestones">
       <h3>Milestones</h3>
-      <p>Landmarks & achievements</p>
+      <p>Landmarks & Achievements</p>
     </div>
 
     <div class="summary-card summary-ai record-box" data-section="ai-teams">
       <h3>AI Teams</h3>
-      <p>AI-generated XI selections</p>
+      <p>AI-Generated XI Selections</p>
     </div>
 
   </div>
@@ -819,25 +833,25 @@ table td:nth-child(4) {
 
 <!-- BATTING -->
 <section id="batting" class="section">
-  <h2>Career batting records</h2>
+  <h2>Career Batting Records</h2>
   <div id="batting-table"></div>
 </section>
 
 <!-- BOWLING -->
 <section id="bowling" class="section">
-  <h2>Career bowling records</h2>
+  <h2>Career Bowling Records</h2>
   <div id="bowling-table"></div>
 </section>
 
 <!-- FIELDING -->
 <section id="fielding" class="section">
-  <h2>Career fielding records</h2>
+  <h2>Career Fielding Records</h2>
   <div id="fielding-table"></div>
 </section>
 
 <!-- MILESTONES -->
 <section id="milestones" class="section">
-  <h2>Landmarks & approaching achievements</h2>
+  <h2>Landmarks & Approaching Achievements</h2>
   <div id="batting-milestones"></div>
   <div id="bowling-milestones"></div>
   <div id="catches-milestones"></div>
@@ -845,7 +859,7 @@ table td:nth-child(4) {
 
 <!-- AI TEAMS -->
 <section id="ai-teams" class="section">
-  <h2>AI-generated XI selections</h2>
+  <h2>AI-Generated XI Selections</h2>
 
   <p class="ai-teams-note">
     AI-generated, unofficial selections. AI 1st XI uses the original elite qualification thresholds.
@@ -930,11 +944,11 @@ const victims = p => num(p["Catches"]) + num(p["Stumpings"]);
 const heroTitles = {
   "overview": "Every Player.<br><i>Every Number.</i>",
   "players": "Player Directory<br><i>& profiles</i>",
-  "batting": "Career Batting<br><i>records</i>",
-  "bowling": "Career Bowling<br><i>records</i>",
-  "fielding": "Career Fielding<br><i>records</i>",
+  "batting": "Career Batting<br><i>Records</i>",
+  "bowling": "Career Bowling<br><i>Records</i>",
+  "fielding": "Career Fielding<br><i>Records</i>",
   "milestones": "Landmarks<br><i>& Approaching Achievements</i>",
-  "ai-teams": "AI-generated XIs<br><i>XI selections</i>"
+  "ai-teams": "AI-Generated XIs<br><i>XI Selections</i>"
 };
 
 /* ============================================================
@@ -1122,14 +1136,21 @@ function renderMilestoneClubs(title, field, milestones, threshold, container) {
     if (achieved.length === 0) {
       html += "<p>No Players Yet.</p>";
     } else {
-      achieved.sort((a, b) => num(b[field]) - num(a[field]))
-        .forEach(p => html += `<p>${p["Player"]} – ${num(p[field])}</p>`);
+      achieved
+        .sort((a, b) => num(b[field]) - num(a[field]))
+        .forEach(p => {
+          html += `
+            <p class="milestone-entry">
+              <span class="milestone-name">${p["Player"]}</span>
+              <span class="milestone-stat">${num(p[field])}</span>
+            </p>`;
+        });
     }
 
     html += "</div>";
   });
 
-  html += "</div><h3>Current Players Approaching</h3>";
+  html += `</div><h3>Current Players Approaching</h3>`;
 
   let any = false;
 
@@ -1143,19 +1164,22 @@ function renderMilestoneClubs(title, field, milestones, threshold, container) {
 
     if (approaching.length > 0) {
       any = true;
+
       html += `<div class="milestone-approach-box"><h4>Approaching ${m}</h4>`;
 
-      approaching.sort((a, b) =>
-        (m - num(a[field])) - (m - num(b[field]))
-      ).forEach(p => {
-        const value = num(p[field]);
-        const toGo = m - value;
-        html += `
-          <div class="approach-row">
-            <span>${p["Player"]} – ${value}</span>
-            <span class="to-go">${toGo} to go</span>
-          </div>`;
-      });
+      approaching
+        .sort((a, b) => (m - num(a[field])) - (m - num(b[field])))
+        .forEach(p => {
+          const value = num(p[field]);
+          const toGo = m - value;
+
+          html += `
+            <div class="approach-row">
+              <span class="milestone-name">${p["Player"]}</span>
+              <span class="milestone-stat">${value}</span>
+              <span class="to-go">${toGo} to go</span>
+            </div>`;
+        });
 
       html += "</div>";
     }
@@ -1165,7 +1189,6 @@ function renderMilestoneClubs(title, field, milestones, threshold, container) {
 
   container.innerHTML = html;
 }
-
 /* ============================================================
    AI TEAMS (Optimised)
 ============================================================ */
