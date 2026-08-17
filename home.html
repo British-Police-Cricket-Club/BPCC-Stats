@@ -662,7 +662,6 @@ function getRole(p) {
   if (runs >= 100) return "Batter";
   return "Player";
 }
-
 /* ============================================================
    PLAYERS PAGE (FAST)
 ============================================================ */
@@ -701,93 +700,6 @@ document.getElementById("players-grid").addEventListener("click", e => {
   const player = allData.find(p => p["Player"] === card.dataset.player);
   openPlayerModal(player);
 });
-
-/* ============================================================
-   MODAL
-============================================================ */
-function openPlayerModal(p) {
-  document.getElementById("modal-player-name").textContent = p["Player"];
-  document.getElementById("modal-player-number").textContent = "Player No: " + p["Number"];
-  document.getElementById("modal-player-role").textContent = getRole(p);
-
-  const stats = document.getElementById("modal-stats");
-  stats.innerHTML = HEADERS
-    .filter(h => h !== "Player" && h !== "Number")
-    .map(h => `
-      <div class="modal-stat-row">
-        <h4>${h}</h4>
-        <p>${p[h] || ""}</p>
-      </div>
-    `).join("");
-
-  document.getElementById("player-modal").style.display = "flex";
-}
-
-document.getElementById("modal-close").onclick = () =>
-  document.getElementById("player-modal").style.display = "none";
-
-window.onclick = e => {
-  if (e.target.id === "player-modal") {
-    document.getElementById("player-modal").style.display = "none";
-  }
-};
-
-/* ============================================================
-   NAVIGATION (OPTIMISED)
-============================================================ */
-function setupNav() {
-  const navButtons = document.querySelectorAll(".nav-bar button");
-  const bottomButtons = document.querySelectorAll(".bottom-tab-bar button");
-
-  function showSection(section) {
-    document.querySelectorAll(".section").forEach(sec =>
-      sec.classList.toggle("active", sec.id === section)
-    );
-
-    navButtons.forEach(b =>
-      b.classList.toggle("on", b.dataset.section === section)
-    );
-
-    bottomButtons.forEach(b =>
-      b.classList.toggle("active", b.dataset.section === section)
-    );
-
-    heroTitle.innerHTML = heroTitles[section];
-
-    const showOverview = (section === "overview");
-    overviewTotals.style.display = showOverview ? "" : "none";
-    overviewButtons.style.display = showOverview ? "" : "none";
-    overviewText.forEach(el => el.style.display = showOverview ? "" : "none");
-
-    window.scrollTo({ top: 0, behavior: "smooth" });
-  }
-
-  navButtons.forEach(btn =>
-    btn.addEventListener("click", () => showSection(btn.dataset.section))
-  );
-
-  bottomButtons.forEach(btn =>
-    btn.addEventListener("click", () =>
-      document.querySelector(`.nav-bar button[data-section="${btn.dataset.section}"]`).click()
-    )
-  );
-}
-
-/* ============================================================
-   OVERVIEW TOTALS
-============================================================ */
-function renderOverview() {
-  document.getElementById("total-players").textContent = allData.length;
-
-  document.getElementById("total-appearances").textContent =
-    allData.reduce((sum, p) => sum + num(p["Matches"]), 0);
-
-  document.getElementById("total-runs").textContent =
-    allData.reduce((sum, p) => sum + num(p["Runs"]), 0);
-
-  document.getElementById("total-wickets").textContent =
-    allData.reduce((sum, p) => sum + num(p["Wickets"]), 0);
-}
 
 /* ============================================================
    TABLE RENDERERS (FAST)
@@ -877,9 +789,8 @@ document.body.addEventListener("click", e => {
   const player = allData.find(p => p["Player"] === row.dataset.player);
   openPlayerModal(player);
 });
-
 /* ============================================================
-   MILESTONES (unchanged but optimised)
+   MILESTONES
 ============================================================ */
 function renderMilestones() {
   renderMilestoneClubs(
@@ -967,7 +878,7 @@ function renderMilestoneClubs(title, field, milestones, threshold, container) {
 }
 
 /* ============================================================
-   AI TEAMS (unchanged but optimised)
+   AI TEAMS (Optimised)
 ============================================================ */
 function renderAITeams() {
   const used = new Set();
@@ -1063,6 +974,173 @@ function renderTeam(id, title, players) {
               <div class="ai-player-left">
                 <div class="ai-player-name">6. ${p["Player"]}</div>
                 <div class="ai-player-role">Wicket Keeper</div>
+              </div>
+              <div class="ai-player-right">
+                ${victims(p)} victims — ${victimsPM} per match
+              </div>
+            </div>`;
+        }).join("")}
+      </div>
+
+      <div class="ai-team-section">
+        <h4>Bowlers</h4>
+        ${bowlers.map((entry, i) => {
+          const p = entry.player;
+          return `
+            <div class="ai-player-row" data-player="${p["Player"]}">
+              <div class="ai-player-left">
+                <div class="ai-player-name">${7+i}. ${p["Player"]}</div>
+                <div class="ai-player-role">Bowler</div>
+              </div>
+              <div class="ai-player-right">
+                ${p["Wickets"]} wickets — Avg ${p["Bowling Average"]}
+              </div>
+            </div>`;
+        }).join("")}
+      </div>
+    </div>
+  `;
+
+  container.innerHTML = html;
+
+  container.querySelectorAll(".ai-player-row").forEach(row => {
+    row.addEventListener("click", () => {
+      const player = allData.find(p => p["Player"] === row.dataset.player);
+      openPlayerModal(player);
+    });
+  });
+}
+/* ============================================================
+   MODAL (Optimised)
+============================================================ */
+function openPlayerModal(p) {
+  document.getElementById("modal-player-name").textContent = p["Player"];
+  document.getElementById("modal-player-number").textContent = "Player No: " + p["Number"];
+  document.getElementById("modal-player-role").textContent = getRole(p);
+
+  const stats = document.getElementById("modal-stats");
+  stats.innerHTML = HEADERS
+    .filter(h => h !== "Player" && h !== "Number")
+    .map(h => `
+      <div class="modal-stat-row">
+        <h4>${h}</h4>
+        <p>${p[h] || ""}</p>
+      </div>
+    `).join("");
+
+  document.getElementById("player-modal").style.display = "flex";
+}
+
+document.getElementById("modal-close").onclick = () =>
+  document.getElementById("player-modal").style.display = "none";
+
+window.onclick = e => {
+  if (e.target.id === "player-modal") {
+    document.getElementById("player-modal").style.display = "none";
+  }
+};
+
+
+/* ============================================================
+   NAVIGATION (Optimised)
+============================================================ */
+function setupNav() {
+  const navButtons = document.querySelectorAll(".nav-bar button");
+  const bottomButtons = document.querySelectorAll(".bottom-tab-bar button");
+
+  function showSection(section) {
+
+    /* Switch visible section */
+    document.querySelectorAll(".section").forEach(sec =>
+      sec.classList.toggle("active", sec.id === section)
+    );
+
+    /* Highlight nav bar */
+    navButtons.forEach(b =>
+      b.classList.toggle("on", b.dataset.section === section)
+    );
+
+    /* Highlight bottom bar */
+    bottomButtons.forEach(b =>
+      b.classList.toggle("active", b.dataset.section === section)
+    );
+
+    /* Update hero title */
+    heroTitle.innerHTML = heroTitles[section];
+
+    /* Show/hide overview blocks */
+    const showOverview = (section === "overview");
+
+    overviewTotals.style.display = showOverview ? "" : "none";
+    overviewButtons.style.display = showOverview ? "" : "none";
+    overviewText.forEach(el => el.style.display = showOverview ? "" : "none");
+
+    /* Scroll to top */
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  }
+
+  /* Top nav buttons */
+  navButtons.forEach(btn =>
+    btn.addEventListener("click", () => showSection(btn.dataset.section))
+  );
+
+  /* Bottom tab bar buttons */
+  bottomButtons.forEach(btn =>
+    btn.addEventListener("click", () =>
+      document.querySelector(`.nav-bar button[data-section="${btn.dataset.section}"]`).click()
+    )
+  );
+}
+
+
+/* ============================================================
+   RECORD BOX CLICK → NAVIGATION
+============================================================ */
+document.querySelectorAll(".record-box").forEach(box => {
+  box.addEventListener("click", () => {
+    const section = box.getAttribute("data-section");
+    const btn = document.querySelector(`.nav-bar button[data-section="${section}"]`);
+    if (btn) btn.click();
+  });
+});
+
+
+/* ============================================================
+   INIT (Optimised)
+============================================================ */
+async function init() {
+
+  /* Load CSV */
+  allData = await loadCSV();
+
+  /* Default section */
+  document.querySelectorAll(".section").forEach(sec =>
+    sec.classList.remove("active")
+  );
+  document.getElementById("overview").classList.add("active");
+
+  /* Default hero */
+  heroTitle.innerHTML = heroTitles["overview"];
+
+  /* Show overview blocks */
+  overviewTotals.style.display = "";
+  overviewButtons.style.display = "";
+  overviewText.forEach(el => el.style.display = "");
+
+  /* Setup navigation */
+  setupNav();
+
+  /* Render all pages */
+  renderOverview();
+  renderPlayers();
+  renderBatting();
+  renderBowling();
+  renderFielding();
+  renderMilestones();
+  renderAITeams();
+}
+
+init();
   </script>
 </body>
 </html>
