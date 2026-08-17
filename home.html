@@ -255,7 +255,7 @@ header .brand div {
 /* ============================================================
    PLAYER GRID
 ============================================================ */
-.player-grid {
+#players-grid.player-grid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   gap: 25px;
@@ -714,7 +714,7 @@ table td:nth-child(4) {
   }
 }
  
-  .player-grid {
+  #players-grid.player-grid {
     grid-template-columns: 1fr;
   }
 
@@ -732,6 +732,15 @@ table td:nth-child(4) {
 
   .section {
     padding-bottom: 80px;
+  }
+  
+.section > h2 {
+    position: sticky;
+    top: 0;
+    z-index: 50;
+    background: #fff;          /* prevents text overlap */
+    padding-top: 10px;
+    padding-bottom: 10px;
   }
 
   .bottom-tab-bar {
@@ -752,7 +761,12 @@ table td:nth-child(4) {
     color: var(--bpcc-gold);
     transform: translateY(-4px);
   }
-  
+ 
+  #bottom-bar,
+  .bottom-bar {
+    display: none !important;
+  }
+
   .  /* Make milestone boxes full-width and consistent */
   .milestone-grid {
     grid-template-columns: 1fr;   /* 1 column on mobile */
@@ -780,6 +794,7 @@ table td:nth-child(4) {
     flex: 1;
     font-weight: 700;
     color: var(--bpcc-navy);
+    text-align: left;
   }
 
   .milestone-stat {
@@ -787,6 +802,7 @@ table td:nth-child(4) {
     font-weight: 600;
     color: var(--bpcc-blue);
     margin-left: 10px;
+    text-align: right;
   }
 }
 
