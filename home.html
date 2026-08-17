@@ -318,16 +318,22 @@ tbody tr:hover {
   vertical-align: middle;
 }
 
-table td:nth-child(1) {
+/* Player column */
+table td:first-child {
   text-align: left;
 }
 
-table td:nth-child(2),
-table td:nth-child(3),
-table td:nth-child(4) {
-  text-align: middle;
+/* All numeric/stat columns */
+table td:not(:first-child) {
+  text-align: right;
+}
+table th {
+  text-align: right;
 }
 
+table th:first-child {
+  text-align: left;
+}
 
 /* ============================================================
    MILESTONES
@@ -601,6 +607,7 @@ table td:nth-child(4) {
     padding: 12px;
     margin: 0 15px 20px 15px;
     width: calc(100% - 30px);
+    box-sizing: border-box;
   }
  
   .player-grid {
