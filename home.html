@@ -260,6 +260,9 @@ header .brand div {
   border-radius: 10px;
   outline: none;
   transition: 0.25s ease;
+  max-width: 1100px;
+  margin: 0 auto 25px auto;
+  display: block;
 }
 
 #player-search:focus {
@@ -305,6 +308,20 @@ tbody td {
 tbody tr:hover {
   background: #f2f4f8;
 }
+  table td {
+  vertical-align: middle;
+}
+
+table td:nth-child(1) {
+  text-align: left;
+}
+
+table td:nth-child(2),
+table td:nth-child(3),
+table td:nth-child(4) {
+  text-align: right;
+}
+
 
 /* ============================================================
    MILESTONES
@@ -335,9 +352,39 @@ tbody tr:hover {
   color: var(--bpcc-navy);
   padding: 8px 12px;
   border-radius: 8px;
+  font-weight: 700;
   font-size: 18px;
   margin-bottom: 10px;
   text-align: center;
+}
+  
+.milestone-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 25px;
+  margin-bottom: 30px;
+}
+  
+  .milestone-approach-box {
+  background: white;
+  border: 1px solid #e3e6ef;
+  border-radius: 12px;
+  padding: 15px 18px;
+  margin-bottom: 25px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.08);
+}
+  
+.approach-row {
+  display: flex;
+  justify-content: space-between;
+  padding: 6px 0;
+  font-size: 15px;
+}
+  
+.to-go {
+  font-weight: 700;
+  color: var(--bpcc-gold);
+  margin-left: 12px;
 }
 
 
@@ -366,7 +413,7 @@ tbody tr:hover {
   justify-content: space-between;
   align-items: center;
   padding: 8px 10px;
-  border-bottom: 1px solid #eee;
+  border-bottom: 2px solid #eee;
 }
 
 .ai-player-name {
@@ -379,24 +426,32 @@ tbody tr:hover {
   color: #555;
   text-align: right;
 }
-  .ai-team-box {
+.ai-team-box {
   background: white;
-  border-radius: 14px;
-  padding: 20px;
-  box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+  border-radius: 12px;
   border: 1px solid #e3e6ef;
+  box-shadow: 0 3px 10px rgba(0,0,0,0.12);
+  overflow: hidden; /* ensures header radius blends cleanly */
+  margin-bottom: 30px;
 }
 
 .ai-team-box h3 {
-  color: var(--bpcc-blue);
-  font-size: 24px;
+  background: var(--bpcc-gradient); /* BPCC blue gradient */
+  color: var(--bpcc-gold);          /* gold text */
+  padding: 14px 18px;
+  border-radius: 12px 12px 0 0;     /* rounded top only */
+  font-size: 22px;
+  font-family: "Playfair Display", serif;
   text-align: center;
-  margin-bottom: 20px;
+  text-shadow: 0 0 6px rgba(255, 215, 0, 0.4);
+  margin: 0;                        /* remove default margin */
+  border-bottom: 3px solid var(--bpcc-gold); /* gold underline */
 }
 
   .ai-team-section {
   margin-bottom: 20px;
   padding-bottom: 15px;
+  padding: 18px;
   border-bottom: 3px solid var(--bpcc-gold);
 }
 
@@ -557,6 +612,12 @@ tbody tr:hover {
   .bottom-tab-bar button.active {
     color: var(--bpcc-gold);
     transform: translateY(-4px);
+  }
+}
+  
+  @media (max-width: 768px) {
+  .milestone-grid {
+    grid-template-columns: repeat(2, 1fr);
   }
 }
 
