@@ -309,6 +309,7 @@ header .brand div {
    TABLES
 ============================================================ */
 table {
+  table-layout: fixed;
   width: 100%;
   border-collapse: collapse;
   background: white;
@@ -332,26 +333,35 @@ tbody tr:hover {
   background: #f2f4f8;
 }
   table td {
+  padding: 12px 10px;
   vertical-align: middle;
 }
 
 /* Player column */
 table td:first-child {
+  width: 40%;
   text-align: left;
 }
 
 /* All numeric/stat columns */
 table td:not(:first-child) {
-  padding-right: 10px;
+  padding-right: 12px;
   text-align: right;
 }
 table th {
   text-align: right;
+  padding: 14px 10px;        /* taller header */
+  font-size: 16px;           /* slightly larger text */
+  font-weight: 700;
+  background: #f4f6fa;       /* subtle header background */
+  border-bottom: 2px solid var(--bpcc-gold);
   vertical-align: middle;
+  box-shadow: inset 0 -2px 0 var(--bpcc-gold);
 }
 
 table th:first-child {
-  padding-left: 10px;
+  padding-left: 12px;
+  width: 40%;
   text-align: left;
 }
 
@@ -361,6 +371,15 @@ table th:first-child {
 
 table tbody tr:nth-child(even) {
   background: #ffffff;
+}
+
+table th:nth-child(2),
+table td:nth-child(2),
+table th:nth-child(3),
+table td:nth-child(3),
+table th:nth-child(4),
+table td:nth-child(4) {
+  width: 20%;                /* Stat columns */
 }
 
 /* ============================================================
