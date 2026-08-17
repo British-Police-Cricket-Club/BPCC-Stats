@@ -245,7 +245,13 @@ header .brand div {
   margin-top: 6px;
 }
 
-
+.tap-message {
+  font-size: 14px;
+  color: var(--bpcc-blue);
+  margin-top: -6px;
+  margin-bottom: 12px;
+  font-style: italic;
+}
 /* ============================================================
    PLAYER GRID
 ============================================================ */
@@ -793,6 +799,9 @@ table td:nth-child(4) {
   <!-- Overview text -->
   <p class="overview-subtle">EXPLORE THE ARCHIVE</p>
   <p class="overview-strong">Start with a record</p>
+  <p class="tap-message">
+  All player names are tappable to display full stat records (except in the milestones page).
+</p>
 
   <!-- Section buttons -->
   <div class="summary">
@@ -974,16 +983,16 @@ function renderPlayers() {
   const container = document.getElementById("players-grid");
   const q = document.getElementById("player-search").value.toLowerCase();
 
-  const sorted = allData.filter(p =>
-    p["Player"].toLowerCase().includes(q)
-  ).sort((a, b) => a["Player"].localeCompare(b["Player"]));
+  const sorted = allData
+    .filter(p => p["Player"].toLowerCase().includes(q))
+    .sort((a, b) => a["Player"].localeCompare(b["Player"]));
 
   container.innerHTML = sorted.map(p => {
     const status = (p["Current"] === "Yes") ? "Current Player" : "Retired";
     const role = getRole(p);
 
     return `
-      <div class="player-card" data-player="${p["Player"]}">
+      <div class="player-card" data-name="${p["Player"]}" data-player="${p["Player"]}">
         <div class="status">${status}</div>
         <h3>${p["Player"]}</h3>
         <span class="role-badge">${role}</span>
@@ -998,7 +1007,10 @@ function renderPlayers() {
   }).join("");
 }
 
-/* Delegated click listener (faster) */
+/* Search bar listener — triggers full re-render */
+document.getElementById("player-search").addEventListener("input", renderPlayers);
+
+/* Delegated click listener (fast + reliable) */
 document.getElementById("players-grid").addEventListener("click", e => {
   const card = e.target.closest(".player-card");
   if (!card) return;
