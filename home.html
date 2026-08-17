@@ -247,12 +247,13 @@ header .brand div {
   font-weight: 700;
 }
 
-
 .player-card:hover {
   transform: translateY(-4px);
   box-shadow: 0 3px 10px rgba(0,0,0,0.2);
 }
 #player-search {
+  width: 100%
+  margin: 0 auto 25px auto;
   border: 2px solid var(--bpcc-gold);
   background: #fffef5;
   font-size: 16px;
@@ -261,14 +262,19 @@ header .brand div {
   outline: none;
   transition: 0.25s ease;
   max-width: 1100px;
-  margin: 0 auto 25px auto;
   display: block;
+  box-sizing: border-box;
 }
 
 #player-search:focus {
   border-color: var(--bpcc-blue);
   background: white;
   box-shadow: 0 0 8px rgba(230,193,90,0.5);
+}
+
+#players {
+  max-width: 1100px;
+  margin: auto;
 }
   
 .status {
@@ -591,6 +597,12 @@ table td:nth-child(4) {
     gap: 20px;
   }
 
+  #player-search{
+    padding: 12px;
+    margin: 0 15px 20px 15px;
+    width: calc(100% - 30px);
+  }
+ 
   .player-grid {
     grid-template-columns: 1fr;
   }
@@ -629,9 +641,7 @@ table td:nth-child(4) {
     color: var(--bpcc-gold);
     transform: translateY(-4px);
   }
-}
   
-  @media (max-width: 768px) {
   .milestone-grid {
     grid-template-columns: repeat(2, 1fr);
   }
