@@ -248,9 +248,9 @@ header .brand div {
 .tap-message {
   font-size: 14px;
   color: var(--bpcc-blue);
-  margin-top: -6px;
-  margin-bottom: 12px;
-  font-style: italic;
+  margin-top: -4px;
+  margin-bottom: 16px;
+  font-style: bold;
 }
 /* ============================================================
    PLAYER GRID
@@ -442,6 +442,20 @@ table td:nth-child(4) {
   margin: 0 0 6px 0;
   margin-bottom: 10px;
   text-align: center;
+}
+
+  .milestone-club-box p {
+  white-space: nowrap;
+}
+
+.milestone-club-box p {
+  font-weight: 700;
+  color: var(--bpcc-navy);
+}
+
+.milestone-club-box p span:last-child {
+  font-weight: 600;
+  color: var(--bpcc-blue);
 }
 
   .milestone-stat {
@@ -771,6 +785,9 @@ table td:nth-child(4) {
 
 <section class="hero">
   <h2 id="hero-title">Every Player.<br><i>Every Number.</i></h2>
+  <p class="tap-message">
+  All player names are tappable to display full stat records (except in the milestones page).
+</p>
 </section>
 
 <!-- OVERVIEW -->
@@ -799,9 +816,7 @@ table td:nth-child(4) {
   <!-- Overview text -->
   <p class="overview-subtle">EXPLORE THE ARCHIVE</p>
   <p class="overview-strong">Start with a record</p>
-  <p class="tap-message">
-  All player names are tappable to display full stat records (except in the milestones page).
-</p>
+  
 
   <!-- Section buttons -->
   <div class="summary">
