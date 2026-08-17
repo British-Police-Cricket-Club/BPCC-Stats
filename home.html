@@ -158,7 +158,7 @@ header .brand div {
 
 .summary-card {
   background: white;
-  padding: 20px;
+  padding: 18px 22px;
   border-radius: 14px;
   text-align: center;
   box-shadow: 0 4px 12px rgba(0,0,0,0.08);
@@ -173,11 +173,13 @@ header .brand div {
   margin-bottom: 6px;
 }
 
-.summary-card p {
-  font-family: "Inter", system-ui, sans-serif;
+.summary-card p,
+.overview-total p {
+  font-family: "Quicksand", sans-serif;
   font-size: 22px;
   font-weight: 600;
   color: var(--bpcc-blue);
+  text-shadow: 00 6px rgba(230,193,90,0.35);
 }
 
 /* Section buttons */
@@ -221,6 +223,21 @@ header .brand div {
   margin-bottom: 25px;
   font-family: "Playfair Display", serif;
 }
+
+  .overview-total h3,
+.summary-card h3 {
+  font-size: 22px;          /* bigger title */
+  font-weight: 700;
+  color: var(--bpcc-navy);
+}
+
+.overview-total p,
+.summary-card p {
+  font-size: 32px;          /* bigger numbers */
+  font-weight: 700;
+  margin-top: 6px;
+}
+
 
 /* ============================================================
    PLAYER GRID
