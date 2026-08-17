@@ -1100,6 +1100,22 @@ document.querySelectorAll(".record-box").forEach(box => {
     if (btn) btn.click();
   });
 });
+  
+/* ============================================================
+   OVERVIEW TOTALS (Required for init)
+============================================================ */
+function renderOverview() {
+  document.getElementById("total-players").textContent = allData.length;
+
+  document.getElementById("total-appearances").textContent =
+    allData.reduce((sum, p) => sum + num(p["Matches"]), 0);
+
+  document.getElementById("total-runs").textContent =
+    allData.reduce((sum, p) => sum + num(p["Runs"]), 0);
+
+  document.getElementById("total-wickets").textContent =
+    allData.reduce((sum, p) => sum + num(p["Wickets"]), 0);
+}
 
 
 /* ============================================================
